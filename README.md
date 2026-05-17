@@ -77,18 +77,53 @@ nanoml deploy
 
 **Zero Duplication:** All infrastructure centralized, cloud providers in single files.
 
-## What You Customize
+## What You Customize vs What's Provided
 
-- `data/*.py` - Load, clean, label, split data
-- `features/definitions.py` - Define features (declarative)
-- `training/*.py` - Model architecture & config
-- `serving/*.py` - Recommendation logic
+### Files You Implement (~15 files)
 
-**Framework auto-generates:**
-- Flink jobs from feature definitions
-- Airflow DAGs from components
-- Feast configs
-- Infrastructure deployment
+Users focus on ML business logic in these files:
+
+| File | Purpose | What You Define |
+|------|---------|-----------------|
+| **Data Pipeline** |
+| `data/loader.py` | Data ingestion | Where/how to load your dataset |
+| `data/cleaner.py` | Data cleaning | Your cleaning rules and transformations |
+| `data/labeling.py` | Label generation | How to create training labels |
+| `data/splitter.py` | Train/test split | Your split strategy |
+| **Features** |
+| `features/definitions.py` | Feature definitions | Features to compute (declarative) |
+| **Training** |
+| `training/model.py` | Model architecture | Your neural network/model structure |
+| `training/trainer.py` | Training logic | Hyperparameters, loss functions |
+| `training/config.py` | Training config | Batch size, learning rate, etc. |
+| **Evaluation** |
+| `evaluation/metrics.py` | Metrics | Which metrics to track (accuracy, NDCG, etc.) |
+| **Serving** |
+| `serving/candidate_generation.py` | Candidate retrieval | Initial candidate pool logic |
+| `serving/ranking.py` | Ranking | Re-ranking algorithm |
+| `serving/postprocessing.py` | Post-processing | Deduplication, filtering rules |
+| `serving/recommendation.py` | Final endpoint | Assemble recommendation response |
+| **Config** |
+| `config.yaml` | Project config | Project name, cloud provider, settings |
+
+### Framework Auto-Generates (100+ files)
+
+NanoML automatically generates from your definitions:
+
+- **Flink Jobs** - Streaming feature computation from `features/definitions.py`
+- **Feast Configs** - Feature store setup (feature_store.yaml, feature_definitions.py)
+- **Airflow DAGs** - Orchestration workflows from your components
+- **Infrastructure** - Docker Compose, K8s manifests, Terraform configs
+- **API Gateway** - REST endpoints for serving recommendations
+- **Monitoring** - MLflow experiments, lineage tracking
+
+**You never write:**
+- Flink job code
+- Airflow DAG code
+- Feast configuration
+- Docker/K8s configs
+- API server code
+- Monitoring setup
 
 ## Documentation
 
