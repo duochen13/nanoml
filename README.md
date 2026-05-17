@@ -30,13 +30,16 @@ cd my-recommender
 ### Quick Start (No Docker Required)
 
 ```bash
-# 1. Install framework
+# 1. Install framework and dashboard
 make setup
 
 # 2. Run example (shows placeholders)
 make run
 
-# 3. [Optional] See working demo with real results
+# 3. [Optional] Start visual dashboard
+make dashboard    # Opens at http://localhost:3001
+
+# 4. [Optional] See working demo with real results
 make demo    # Fill skeleton with working code
 make run     # Now shows actual ML pipeline results!
 ```
@@ -77,9 +80,11 @@ python examples/movie_recommendations/pipeline.py
 ### Start Frontend Dashboard
 
 ```bash
-# Install dependencies and start React dashboard
+# Easy way (after make setup)
+make dashboard
+
+# Or manually
 cd infrastructure/dashboard
-npm install
 npm start
 # Dashboard will be available at http://localhost:3001
 ```

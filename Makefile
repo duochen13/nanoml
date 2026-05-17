@@ -1,13 +1,14 @@
-.PHONY: setup run test demo demo-restore infra-up infra-down infra-status infra-test help
+.PHONY: setup run test demo demo-restore dashboard infra-up infra-down infra-status infra-test help
 
 help:
 	@echo "NanoML Framework Commands"
 	@echo ""
 	@echo "Quick Start (No Docker Required):"
-	@echo "  make setup         - Install NanoML and dependencies"
+	@echo "  make setup         - Install NanoML and dependencies (includes dashboard)"
 	@echo "  make run           - Run example (shows placeholders by default)"
 	@echo "  make demo          - Activate demo mode (fills skeleton with working code)"
 	@echo "  make demo-restore  - Restore skeleton code"
+	@echo "  make dashboard     - Start frontend dashboard (http://localhost:3001)"
 	@echo "  make test          - Run tests"
 	@echo ""
 	@echo "Full Infrastructure (Requires Docker):"
@@ -21,8 +22,13 @@ setup:
 	pip3 install -e ".[dev]"
 	@echo "✅ NanoML framework installed"
 	@echo ""
+	@echo "Installing dashboard dependencies..."
+	cd infrastructure/dashboard && npm install
+	@echo "✅ Dashboard dependencies installed"
+	@echo ""
 	@echo "Next steps:"
 	@echo "  • Quick start (no Docker): make run"
+	@echo "  • Start dashboard: make dashboard"
 	@echo "  • Full infrastructure: make infra-up"
 
 run:
@@ -40,6 +46,12 @@ test:
 	@echo "Running tests..."
 	python3 -m pytest tests/ -v --cov=nanoml
 	@echo "✅ Tests passed"
+
+dashboard:
+	@echo "Starting NanoML dashboard..."
+	@echo "Dashboard will be available at http://localhost:3001"
+	@echo ""
+	cd infrastructure/dashboard && npm start
 
 demo:
 	@echo "Activating demo mode..."
