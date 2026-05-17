@@ -34,6 +34,23 @@ make setup  # Install dependencies
 make run    # Start Docker Compose (11 services)
 ```
 
+### Run Model Training
+
+```bash
+# Run the full ML pipeline (data ingestion → training → serving)
+python examples/movie_recommendations/pipeline.py
+```
+
+### Start Frontend Dashboard
+
+```bash
+# Install dependencies and start React dashboard
+cd infrastructure/dashboard
+npm install
+npm start
+# Dashboard will be available at http://localhost:3000
+```
+
 ### Deploy to Cloud
 
 ```bash
