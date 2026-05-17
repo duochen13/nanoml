@@ -6,6 +6,23 @@ NanoML can run in **local mode** without any Docker infrastructure. This is perf
 - Quick prototyping
 - Running examples
 
+## Write Once, Run Anywhere
+
+**The same Python code runs both locally and in the cloud - zero changes required.**
+
+```python
+# This code works everywhere - local, Docker, AWS, GCP, Azure
+data.run(project_root / "data")
+features.run()
+training.run()
+```
+
+The framework automatically detects the environment and uses:
+- **Local mode:** Filesystem, console logging, in-memory state
+- **Cloud mode:** S3, Kafka, MLflow, distributed processing
+
+You write business logic once, the framework handles the infrastructure.
+
 ## Quick Start
 
 ```bash

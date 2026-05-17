@@ -102,6 +102,8 @@ nanoml deploy
 
 **TL;DR:** Docker is only required when deploying to cloud. Everything else runs locally without Docker.
 
+**Important:** The same Python code runs both locally and in the cloud - no changes needed!
+
 ---
 
 ## Architecture
@@ -172,6 +174,7 @@ NanoML automatically generates from your definitions:
 ## Documentation
 
 - [Local Development Mode](LOCAL_MODE.md) - Run without Docker
+- [Write Once, Run Anywhere](PORTABILITY.md) - Same code, local to cloud
 - [Design Document](docs/superpowers/specs/2026-05-17-nanoml-design.md)
 - [Implementation Plans](docs/superpowers/plans/)
 
