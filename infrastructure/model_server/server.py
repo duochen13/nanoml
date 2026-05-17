@@ -7,7 +7,7 @@ import torch
 import numpy as np
 from pathlib import Path
 
-app = FastAPI(title="NanoRec Model Server")
+app = FastAPI(title="NanoML Model Server")
 
 
 class PredictionRequest(BaseModel):

@@ -5,7 +5,7 @@ from generators.feast_config import FeastConfigGenerator
 
 
 SAMPLE_FEATURES = '''
-from nanorec.features import Feature, FeatureGroup
+from nanoml.features import Feature, FeatureGroup
 
 user_features = FeatureGroup(
     name="user_features",
@@ -54,7 +54,7 @@ def test_generate_feast_store_yaml(tmp_path):
     # Should be valid YAML
     config = yaml.safe_load(code)
 
-    assert config["project"] == "nanorec"
+    assert config["project"] == "nanoml"
     assert config["provider"] == "local"
     assert "online_store" in config
     assert "offline_store" in config
@@ -85,8 +85,8 @@ def test_get_output_paths(tmp_path):
     """get_output_path() returns correct paths for store vs features."""
     gen_store = FeastConfigGenerator(output_type="store")
     assert gen_store.get_output_path(tmp_path) == \
-        tmp_path / ".nanorec" / "generated" / "feast" / "feature_store.yaml"
+        tmp_path / ".nanoml" / "generated" / "feast" / "feature_store.yaml"
 
     gen_features = FeastConfigGenerator(output_type="features")
     assert gen_features.get_output_path(tmp_path) == \
-        tmp_path / ".nanorec" / "generated" / "feast" / "features.py"
+        tmp_path / ".nanoml" / "generated" / "feast" / "features.py"

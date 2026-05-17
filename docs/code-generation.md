@@ -1,21 +1,21 @@
-# Code Generation in NanoRec
+# Code Generation in NanoML
 
-NanoRec automatically generates infrastructure code from your high-level definitions. This document explains what gets generated and how.
+NanoML automatically generates infrastructure code from your high-level definitions. This document explains what gets generated and how.
 
 ## Overview
 
-When you run `nanorec generate`, NanoRec reads your user code and generates:
+When you run `nanoml generate`, NanoML reads your user code and generates:
 
 1. **Flink Streaming Jobs** - From `features/definitions.py`
 2. **Feast Configuration** - From `features/definitions.py`
 3. **Airflow DAGs** - From `components/*.py`
 
-All generated code is written to `.nanorec/generated/` and should not be edited manually.
+All generated code is written to `.nanoml/generated/` and should not be edited manually.
 
 ## Directory Structure
 
 ```
-.nanorec/generated/
+.nanoml/generated/
 ├── flink/
 │   └── streaming_features.py    # Flink job for feature computation
 ├── feast/
@@ -29,7 +29,7 @@ All generated code is written to `.nanorec/generated/` and should not be edited 
 
 **Input:** `features/definitions.py`
 
-**Output:** `.nanorec/generated/flink/streaming_features.py`
+**Output:** `.nanoml/generated/flink/streaming_features.py`
 
 The generator:
 1. Parses `FeatureGroup` definitions using AST
@@ -59,8 +59,8 @@ Generates a Flink job that:
 **Input:** `features/definitions.py`
 
 **Outputs:**
-- `.nanorec/generated/feast/feature_store.yaml`
-- `.nanorec/generated/feast/features.py`
+- `.nanoml/generated/feast/feature_store.yaml`
+- `.nanoml/generated/feast/features.py`
 
 The generator:
 1. Extracts unique entities from all `FeatureGroup` definitions
@@ -90,7 +90,7 @@ user_features = FeatureView(
 
 **Input:** `components/*.py`
 
-**Output:** `.nanorec/generated/airflow/pipeline_dag.py`
+**Output:** `.nanoml/generated/airflow/pipeline_dag.py`
 
 The generator:
 1. Parses component definitions (DataComponent, FeaturesComponent, etc.)
@@ -115,20 +115,20 @@ ingest >> compute
 ### Generate All Code
 
 ```bash
-nanorec generate
+nanoml generate
 ```
 
 ### Clean and Regenerate
 
 ```bash
-nanorec generate --clean
+nanoml generate --clean
 ```
 
 This removes all existing generated code before regenerating.
 
 ## When to Regenerate
 
-Run `nanorec generate` whenever you:
+Run `nanoml generate` whenever you:
 - Add/modify feature definitions
 - Add/modify components
 - Change dependencies between components
@@ -145,8 +145,8 @@ Run `nanorec generate` whenever you:
 If generated code doesn't work:
 
 1. Check the source definitions for errors
-2. Run `nanorec validate` to catch config issues
-3. Examine generated files in `.nanorec/generated/`
+2. Run `nanoml validate` to catch config issues
+3. Examine generated files in `.nanoml/generated/`
 4. File an issue if generation is incorrect
 
 Generated code includes comments showing:

@@ -1,4 +1,4 @@
-"""Generate code from NanoRec definitions."""
+"""Generate code from NanoML definitions."""
 
 import click
 from pathlib import Path
@@ -8,8 +8,8 @@ import os
 # Add project root to Python path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from nanorec.cli.main import cli
-from nanorec.core.config_loader import load_config
+from nanoml.cli.main import cli
+from nanoml.core.config_loader import load_config
 from core.generated_manager import GeneratedManager
 from generators.flink_job import FlinkJobGenerator
 from generators.feast_config import FeastConfigGenerator
@@ -30,21 +30,21 @@ def generate(clean: bool):
     - components/*.py -> Airflow DAGs
 
     Writes to:
-    - .nanorec/generated/flink/
-    - .nanorec/generated/feast/
-    - .nanorec/generated/airflow/
+    - .nanoml/generated/flink/
+    - .nanoml/generated/feast/
+    - .nanoml/generated/airflow/
     """
     # Find project root
     project_root = Path.cwd()
-    config_path = project_root / "nanorec.yaml"
+    config_path = project_root / "nanoml.yaml"
 
-    # Fallback to config.yaml if nanorec.yaml doesn't exist
+    # Fallback to config.yaml if nanoml.yaml doesn't exist
     if not config_path.exists():
         config_path = project_root / "config.yaml"
 
     if not config_path.exists():
-        click.echo("❌ No nanorec.yaml or config.yaml found in current directory", err=True)
-        click.echo("Run this command from a NanoRec project root", err=True)
+        click.echo("❌ No nanoml.yaml or config.yaml found in current directory", err=True)
+        click.echo("Run this command from a NanoML project root", err=True)
         raise click.Abort()
 
     # Load config

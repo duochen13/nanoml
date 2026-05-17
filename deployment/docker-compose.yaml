@@ -14,7 +14,7 @@ services:
       - ./volumes/localstack:/tmp/localstack
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - nanorec
+      - nanoml
 
   # Service 2: Message Queue (Kafka + Zookeeper)
   zookeeper:
@@ -26,7 +26,7 @@ services:
       - ./volumes/zookeeper/data:/var/lib/zookeeper/data
       - ./volumes/zookeeper/log:/var/lib/zookeeper/log
     networks:
-      - nanorec
+      - nanoml
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
@@ -43,7 +43,7 @@ services:
     volumes:
       - ./volumes/kafka:/var/lib/kafka/data
     networks:
-      - nanorec
+      - nanoml
 
   # Service 3: Stream Processing (Flink)
   flink-jobmanager:
@@ -56,7 +56,7 @@ services:
     volumes:
       - ./volumes/flink/jobs:/opt/flink/jobs
     networks:
-      - nanorec
+      - nanoml
 
   flink-taskmanager:
     image: flink:1.18
@@ -66,7 +66,7 @@ services:
     environment:
       - FLINK_PROPERTIES=jobmanager.rpc.address: flink-jobmanager
     networks:
-      - nanorec
+      - nanoml
 
   # Service 4: Feature Store (Feast - Postgres offline + Redis online)
   postgres:
@@ -78,7 +78,7 @@ services:
     volumes:
       - ./volumes/postgres:/var/lib/postgresql/data
     networks:
-      - nanorec
+      - nanoml
 
   redis:
     image: redis:7
@@ -87,7 +87,7 @@ services:
     volumes:
       - ./volumes/redis:/data
     networks:
-      - nanorec
+      - nanoml
 
   # Service 6: Experiment Tracking (MLflow)
   mlflow:
@@ -103,7 +103,7 @@ services:
     volumes:
       - ./volumes/mlflow:/mlflow
     networks:
-      - nanorec
+      - nanoml
 
   # Service 7: Model Serving
   model-server:
@@ -117,7 +117,7 @@ services:
     volumes:
       - ./volumes/models:/models
     networks:
-      - nanorec
+      - nanoml
 
   # Service 8: API Gateway
   api:
@@ -135,7 +135,7 @@ services:
       - FEAST_ONLINE_STORE=redis:6379
       - MLFLOW_TRACKING_URI=http://mlflow:5000
     networks:
-      - nanorec
+      - nanoml
 
   # Service 9: Orchestration (Airflow)
   airflow-webserver:
@@ -156,7 +156,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - nanorec
+      - nanoml
 
   airflow-scheduler:
     image: apache/airflow:2.8.0-python3.10
@@ -173,7 +173,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - nanorec
+      - nanoml
 
   # Service 10: Lineage Tracking (SHALLOW)
   lineage-api:
@@ -185,7 +185,7 @@ services:
     volumes:
       - ./volumes/lineage:/data
     networks:
-      - nanorec
+      - nanoml
 
   # Service 11: Frontend Dashboard (SHALLOW)
   dashboard:
@@ -203,10 +203,10 @@ services:
       - REACT_APP_MLFLOW_URL=http://mlflow:5000
       - REACT_APP_AIRFLOW_URL=http://airflow-webserver:8080
     networks:
-      - nanorec
+      - nanoml
 
 networks:
-  nanorec:
+  nanoml:
     driver: bridge
 
 volumes:

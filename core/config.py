@@ -4,10 +4,10 @@ import yaml
 
 
 class Config:
-    """NanoRec project configuration."""
+    """NanoML project configuration."""
 
     def __init__(self, data: dict[str, Any]):
-        self.name = data.get("name", "nanorec_project")
+        self.name = data.get("name", "nanoml_project")
         self.version = data.get("version", "0.1.0")
         self.description = data.get("description", "")
         self._data = data
@@ -20,10 +20,10 @@ class Config:
 
 
 def load_config(config_path: Path) -> Config:
-    """Load NanoRec configuration from nanorec.yaml.
+    """Load NanoML configuration from nanoml.yaml.
 
     Args:
-        config_path: Path to nanorec.yaml
+        config_path: Path to nanoml.yaml
 
     Returns:
         Config object

@@ -27,7 +27,7 @@ class MLStack(BaseStack):
         self.data_bucket = s3.Bucket(
             self,
             "DataBucket",
-            bucket_name="nanorec-data",
+            bucket_name="nanoml-data",
             removal_policy=RemovalPolicy.DESTROY,
             auto_delete_objects=True
         )
@@ -36,7 +36,7 @@ class MLStack(BaseStack):
         self.model_bucket = s3.Bucket(
             self,
             "ModelBucket",
-            bucket_name="nanorec-models",
+            bucket_name="nanoml-models",
             removal_policy=RemovalPolicy.DESTROY,
             auto_delete_objects=True
         )
@@ -59,7 +59,7 @@ class MLStack(BaseStack):
         self.sagemaker_domain = sagemaker.CfnDomain(
             self,
             "SageMakerDomain",
-            domain_name="nanorec-domain",
+            domain_name="nanoml-domain",
             auth_mode="IAM",
             default_user_settings=sagemaker.CfnDomain.UserSettingsProperty(
                 execution_role=self.sagemaker_role.role_arn

@@ -1,5 +1,5 @@
 """
-Comprehensive Integration Tests for NanoRec System.
+Comprehensive Integration Tests for NanoML System.
 
 This test suite validates all 5 implementation plans working together:
 - Plan 1: Core Framework (CLI, config, templates)
@@ -21,11 +21,11 @@ import pytest
 import yaml
 from click.testing import CliRunner
 
-# Add nanorec to path
+# Add nanoml to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from nanorec.cli.main import cli
-from nanorec.__version__ import __version__
+from nanoml.cli.main import cli
+from nanoml.__version__ import __version__
 
 
 # ============================================================================
@@ -76,7 +76,7 @@ class TestCoreFramework:
     """Test Plan 1: Core Framework."""
 
     def test_version_available(self):
-        """NanoRec version should be accessible."""
+        """NanoML version should be accessible."""
         assert __version__ is not None
         assert len(__version__) > 0
 
@@ -85,7 +85,7 @@ class TestCoreFramework:
         runner = CliRunner()
         result = runner.invoke(cli, ["--help"])
         assert result.exit_code == 0
-        assert "NanoRec" in result.output
+        assert "NanoML" in result.output
         assert "Production ML Recommendation Systems" in result.output
 
     def test_cli_version(self):
@@ -100,14 +100,14 @@ class TestCoreFramework:
         runner = CliRunner()
         result = runner.invoke(cli, ["init", "--help"])
         assert result.exit_code == 0
-        assert "Create a new NanoRec project" in result.output
+        assert "Create a new NanoML project" in result.output
 
     def test_validate_command_exists(self):
         """Validate command should be available."""
         runner = CliRunner()
         result = runner.invoke(cli, ["validate", "--help"])
         assert result.exit_code == 0
-        assert "Validate project configuration" in result.output
+        assert "Validate NanoML configuration file" in result.output
 
     def test_generate_command_exists(self):
         """Generate command should be available."""
@@ -143,9 +143,9 @@ class TestCoreFramework:
             assert (project_dir / "deployment").exists()
 
             # Verify generated dirs
-            assert (project_dir / ".nanorec").exists()
-            assert (project_dir / ".nanorec" / "generated").exists()
-            assert (project_dir / ".nanorec" / "cache").exists()
+            assert (project_dir / ".nanoml").exists()
+            assert (project_dir / ".nanoml" / "generated").exists()
+            assert (project_dir / ".nanoml" / "cache").exists()
 
     def test_validate_project_config(self, tmp_path):
         """Validate should accept valid project configs."""
@@ -165,7 +165,7 @@ class TestCoreFramework:
 
     def test_template_files_have_valid_syntax(self):
         """All template files should have valid syntax."""
-        templates_dir = Path(__file__).parent.parent.parent / "nanorec" / "templates" / "default" / "project"
+        templates_dir = Path(__file__).parent.parent.parent / "nanoml" / "templates" / "default" / "project"
 
         # Check Python templates
         for template_file in templates_dir.rglob("*.py.jinja2"):
@@ -196,12 +196,12 @@ class TestCodeGeneration:
         with runner.isolated_filesystem(temp_dir=tmp_path):
             # Create project
             runner.invoke(cli, ["init", "codegen-test"])
-            project_dir = Path("codegen-test")
+            project_dir = Path("codegen-test").resolve()
 
             # Add feature definitions
             features_file = project_dir / "features" / "definitions.py"
             features_file.write_text('''
-from nanorec.features import Feature, FeatureGroup
+from nanoml.features import Feature, FeatureGroup
 
 user_features = FeatureGroup(
     name="user_features",
@@ -239,7 +239,7 @@ item_features = FeatureGroup(
                 pytest.skip(f"Generate not fully implemented: {result.output}")
 
             # Check generated directory exists
-            gen_dir = test_project / ".nanorec" / "generated"
+            gen_dir = test_project / ".nanoml" / "generated"
             assert gen_dir.exists()
 
         finally:
@@ -257,7 +257,7 @@ item_features = FeatureGroup(
             if result.exit_code != 0:
                 pytest.skip("Generate not fully implemented")
 
-            flink_job = test_project / ".nanorec" / "generated" / "flink" / "streaming_features.py"
+            flink_job = test_project / ".nanoml" / "generated" / "flink" / "streaming_features.py"
             if not flink_job.exists():
                 pytest.skip("Flink generation not implemented")
 
@@ -285,7 +285,7 @@ item_features = FeatureGroup(
             if result.exit_code != 0:
                 pytest.skip("Generate not fully implemented")
 
-            feast_config = test_project / ".nanorec" / "generated" / "feast" / "feature_store.yaml"
+            feast_config = test_project / ".nanoml" / "generated" / "feast" / "feature_store.yaml"
             if not feast_config.exists():
                 pytest.skip("Feast generation not implemented")
 
@@ -308,7 +308,7 @@ item_features = FeatureGroup(
             if result.exit_code != 0:
                 pytest.skip("Generate not fully implemented")
 
-            airflow_dag = test_project / ".nanorec" / "generated" / "airflow" / "pipeline_dag.py"
+            airflow_dag = test_project / ".nanoml" / "generated" / "airflow" / "pipeline_dag.py"
             if not airflow_dag.exists():
                 pytest.skip("Airflow generation not implemented")
 
@@ -532,8 +532,8 @@ class TestAWSProvider:
     def test_aws_cdk_stack_exists(self):
         """AWS CDK stack should exist."""
         try:
-            from providers.aws.infrastructure.cdk_stack import NanoRecStack
-            assert NanoRecStack is not None
+            from providers.aws.infrastructure.cdk_stack import NanoMLStack
+            assert NanoMLStack is not None
         except ImportError:
             pytest.skip("CDK stack not implemented")
 
@@ -568,7 +568,7 @@ class TestFullWorkflow:
             result = runner.invoke(cli, ["init", "full-workflow-test"])
             assert result.exit_code == 0, f"Init failed: {result.output}"
 
-            project_dir = Path("full-workflow-test")
+            project_dir = Path("full-workflow-test").resolve()
             assert project_dir.exists()
 
             # Step 2: Validate initial config (Plan 1)
@@ -581,7 +581,7 @@ class TestFullWorkflow:
             # Step 3: Add feature definitions (Plan 3)
             features_file = project_dir / "features" / "definitions.py"
             features_file.write_text('''
-from nanorec.features import Feature, FeatureGroup
+from nanoml.features import Feature, FeatureGroup
 
 user_features = FeatureGroup(
     name="user_features",
@@ -604,7 +604,7 @@ user_features = FeatureGroup(
                     pytest.skip(f"Generate not fully implemented: {result.output}")
 
                 # Step 5: Verify generated artifacts
-                gen_dir = project_dir / ".nanorec" / "generated"
+                gen_dir = project_dir / ".nanoml" / "generated"
                 assert gen_dir.exists()
 
                 # Check that at least one generator ran
@@ -655,7 +655,7 @@ user_features = FeatureGroup(
 def test_generate_system_health_report(tmp_path):
     """Generate comprehensive system health report."""
     report = {
-        "nanorec_version": __version__,
+        "nanoml_version": __version__,
         "python_version": sys.version,
         "plans": {
             "plan_1_core_framework": {},
@@ -748,9 +748,9 @@ def test_generate_system_health_report(tmp_path):
 
     # Print summary
     print("\n" + "="*70)
-    print("NANOREC SYSTEM HEALTH REPORT")
+    print("NANOML SYSTEM HEALTH REPORT")
     print("="*70)
-    print(f"\nVersion: {report['nanorec_version']}")
+    print(f"\nVersion: {report['nanoml_version']}")
     print(f"\nInfrastructure Services: {running_services}/{len(services)} running")
     for name, status in report["infrastructure_services"].items():
         status_str = "✓" if status["available"] else "✗"

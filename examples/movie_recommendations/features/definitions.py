@@ -1,4 +1,4 @@
-from nanorec.features import Feature, FeatureGroup
+from nanoml.features import Feature, FeatureGroup
 
 
 # User features

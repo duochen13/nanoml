@@ -6,9 +6,9 @@ from cli.main import cli
 
 @pytest.fixture
 def full_project(tmp_path):
-    """Create a complete NanoRec project for testing."""
-    # nanorec.yaml
-    (tmp_path / "nanorec.yaml").write_text("""
+    """Create a complete NanoML project for testing."""
+    # nanoml.yaml
+    (tmp_path / "nanoml.yaml").write_text("""
 name: movie_recommendations
 version: 0.1.0
 description: Movie recommendation system
@@ -18,7 +18,7 @@ description: Movie recommendation system
     features_dir = tmp_path / "features"
     features_dir.mkdir()
     (features_dir / "definitions.py").write_text('''
-from nanorec.features import Feature, FeatureGroup
+from nanoml.features import Feature, FeatureGroup
 
 user_features = FeatureGroup(
     name="user_features",
@@ -47,7 +47,7 @@ movie_features = FeatureGroup(
     components_dir = tmp_path / "components"
     components_dir.mkdir()
     (components_dir / "pipeline.py").write_text('''
-from nanorec.components import DataComponent, FeaturesComponent, TrainingComponent
+from nanoml.components import DataComponent, FeaturesComponent, TrainingComponent
 
 data = DataComponent(
     name="data_ingestion",
@@ -85,7 +85,7 @@ def test_full_code_generation_workflow(full_project):
         assert result.exit_code == 0
 
         # Verify Flink job
-        flink_job = full_project / ".nanorec" / "generated" / "flink" / "streaming_features.py"
+        flink_job = full_project / ".nanoml" / "generated" / "flink" / "streaming_features.py"
         assert flink_job.exists()
 
         code = flink_job.read_text()
@@ -96,10 +96,10 @@ def test_full_code_generation_workflow(full_project):
         assert "def main():" in code
 
         # Verify Feast config
-        feast_store = full_project / ".nanorec" / "generated" / "feast" / "feature_store.yaml"
+        feast_store = full_project / ".nanoml" / "generated" / "feast" / "feature_store.yaml"
         assert feast_store.exists()
 
-        feast_features = full_project / ".nanorec" / "generated" / "feast" / "features.py"
+        feast_features = full_project / ".nanoml" / "generated" / "feast" / "features.py"
         assert feast_features.exists()
 
         features_code = feast_features.read_text()
@@ -109,7 +109,7 @@ def test_full_code_generation_workflow(full_project):
         assert "movie_features = FeatureView" in features_code
 
         # Verify Airflow DAG
-        airflow_dag = full_project / ".nanorec" / "generated" / "airflow" / "pipeline_dag.py"
+        airflow_dag = full_project / ".nanoml" / "generated" / "airflow" / "pipeline_dag.py"
         assert airflow_dag.exists()
 
         dag_code = airflow_dag.read_text()
@@ -137,7 +137,7 @@ def test_regeneration_idempotent(full_project):
         result1 = runner.invoke(cli, ["generate"])
         assert result1.exit_code == 0
 
-        flink_job = full_project / ".nanorec" / "generated" / "flink" / "streaming_features.py"
+        flink_job = full_project / ".nanoml" / "generated" / "flink" / "streaming_features.py"
         content1 = flink_job.read_text()
 
         # Second generation

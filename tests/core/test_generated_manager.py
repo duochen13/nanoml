@@ -4,11 +4,11 @@ from core.generated_manager import GeneratedManager
 
 
 def test_init_generated_directory(tmp_path):
-    """init() creates .nanorec/generated/ structure."""
+    """init() creates .nanoml/generated/ structure."""
     manager = GeneratedManager(tmp_path)
     manager.init()
 
-    generated_dir = tmp_path / ".nanorec" / "generated"
+    generated_dir = tmp_path / ".nanoml" / "generated"
     assert generated_dir.exists()
     assert (generated_dir / "__init__.py").exists()
     assert (generated_dir / "flink").exists()
@@ -27,7 +27,7 @@ def test_get_flink_dir(tmp_path):
     manager.init()
 
     flink_dir = manager.get_flink_dir()
-    assert flink_dir == tmp_path / ".nanorec" / "generated" / "flink"
+    assert flink_dir == tmp_path / ".nanoml" / "generated" / "flink"
     assert flink_dir.exists()
 
 
@@ -37,7 +37,7 @@ def test_get_feast_dir(tmp_path):
     manager.init()
 
     feast_dir = manager.get_feast_dir()
-    assert feast_dir == tmp_path / ".nanorec" / "generated" / "feast"
+    assert feast_dir == tmp_path / ".nanoml" / "generated" / "feast"
     assert feast_dir.exists()
 
 
@@ -47,7 +47,7 @@ def test_get_airflow_dir(tmp_path):
     manager.init()
 
     airflow_dir = manager.get_airflow_dir()
-    assert airflow_dir == tmp_path / ".nanorec" / "generated" / "airflow"
+    assert airflow_dir == tmp_path / ".nanoml" / "generated" / "airflow"
     assert airflow_dir.exists()
 
 

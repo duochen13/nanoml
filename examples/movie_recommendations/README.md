@@ -1,6 +1,6 @@
-# Movie Recommendations with NanoRec
+# Movie Recommendations with NanoML
 
-A complete end-to-end example demonstrating NanoRec's capabilities using the MovieLens dataset.
+A complete end-to-end example demonstrating NanoML's capabilities using the MovieLens dataset.
 
 ## Overview
 
@@ -24,7 +24,7 @@ This example builds a movie recommendation system that:
 ### Prerequisites
 
 - Python 3.9+
-- NanoRec installed (`pip install -e /path/to/nanorec`)
+- NanoML installed (`pip install -e /path/to/nanoml`)
 - (Optional) Docker and Docker Compose for infrastructure services
 
 ### Run the Example
@@ -61,7 +61,7 @@ The pipeline orchestrates all 5 components in sequence.
 
 ```
 movie_recommendations/
-├── nanorec.yaml               # Project config
+├── nanoml.yaml               # Project config
 ├── data/
 │   ├── download.py            # Dataset downloader
 │   ├── movies.csv             # Movie metadata
@@ -188,7 +188,7 @@ This example uses **simplified implementations** for demonstration:
 Edit `features/definitions.py` and regenerate:
 
 ```bash
-nanorec generate
+nanoml generate
 ```
 
 ### Change Model
@@ -250,14 +250,14 @@ cd ../.. && make infra-down
 
 - Implement full feature computation with Flink
 - Train production-grade recommendation models
-- Deploy to AWS using `nanorec deploy --provider aws` (when available)
+- Deploy to AWS using `nanoml deploy --provider aws` (when available)
 - Scale up with larger datasets (MovieLens 25M)
 - Add real-time recommendation updates
 - Implement A/B testing framework
 
 ## Learn More
 
-- [NanoRec Documentation](../../docs/)
+- [NanoML Documentation](../../docs/)
 - [Feature Engineering Guide](../../docs/superpowers/)
 - [Component Development](../../docs/superpowers/)
 

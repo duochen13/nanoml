@@ -6,7 +6,7 @@ from typing import List, Optional
 import sqlite3
 from datetime import datetime
 
-app = FastAPI(title="NanoRec Lineage API")
+app = FastAPI(title="NanoML Lineage API")
 
 
 class Artifact(BaseModel):

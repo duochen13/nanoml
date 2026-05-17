@@ -4,7 +4,7 @@ from generators.flink_job import FlinkJobGenerator
 
 
 SAMPLE_FEATURES = '''
-from nanorec.features import Feature, FeatureGroup
+from nanoml.features import Feature, FeatureGroup
 
 user_features = FeatureGroup(
     name="user_features",
@@ -77,11 +77,11 @@ def test_generate_flink_job_code(tmp_path):
 
 
 def test_get_output_path(tmp_path):
-    """get_output_path() returns .nanorec/generated/flink/streaming_features.py."""
+    """get_output_path() returns .nanoml/generated/flink/streaming_features.py."""
     gen = FlinkJobGenerator()
     output = gen.get_output_path(tmp_path)
 
-    assert output == tmp_path / ".nanorec" / "generated" / "flink" / "streaming_features.py"
+    assert output == tmp_path / ".nanoml" / "generated" / "flink" / "streaming_features.py"
 
 
 def test_full_flink_generation(tmp_path):

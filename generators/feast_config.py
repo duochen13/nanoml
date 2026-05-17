@@ -102,12 +102,12 @@ class FeastConfigGenerator(BaseGenerator):
         """Get output path for Feast config.
 
         Args:
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
 
         Returns:
             Path to feature_store.yaml or features.py
         """
-        feast_dir = project_root / ".nanorec" / "generated" / "feast"
+        feast_dir = project_root / ".nanoml" / "generated" / "feast"
 
         if self.output_type == "store":
             return feast_dir / "feature_store.yaml"

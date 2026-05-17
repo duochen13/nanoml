@@ -1,5 +1,5 @@
 from click.testing import CliRunner
-from nanorec.cli.main import cli
+from nanoml.cli.main import cli
 
 
 def test_cli_help():
@@ -8,7 +8,7 @@ def test_cli_help():
     result = runner.invoke(cli, ["--help"])
 
     assert result.exit_code == 0
-    assert "NanoRec" in result.output
+    assert "NanoML" in result.output
     assert "init" in result.output
     assert "validate" in result.output
 

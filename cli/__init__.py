@@ -1,1 +1,1 @@
-"""CLI commands for NanoRec."""
+"""CLI commands for NanoML."""

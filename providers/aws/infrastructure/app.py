@@ -15,8 +15,8 @@ def main():
     )
 
     # Create stacks
-    networking = NetworkingStack(app, "NanoRec-Networking", env=env)
-    ml = MLStack(app, "NanoRec-ML", vpc=networking.vpc, env=env)
+    networking = NetworkingStack(app, "NanoML-Networking", env=env)
+    ml = MLStack(app, "NanoML-ML", vpc=networking.vpc, env=env)
 
     app.synth()
 

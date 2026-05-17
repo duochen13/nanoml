@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Deploy all 11 NanoRec infrastructure services locally via Docker Compose with client wrappers and health checks.
+**Goal:** Deploy all 11 NanoML infrastructure services locally via Docker Compose with client wrappers and health checks.
 
 **Architecture:** Docker Compose orchestrates 13 containers (11 logical services). Each service has a Python client wrapper in `infrastructure/<service>/client.py` for type-safe access. Health check utilities validate all services are running. Shallow services (Lineage, Dashboard) get minimal implementation.
 
@@ -117,7 +117,7 @@ Expected: FAIL (file doesn't exist)
 Create: `deployment/.env.example`
 
 ```bash
-# NanoRec Local Infrastructure Environment Variables
+# NanoML Local Infrastructure Environment Variables
 
 # LocalStack (S3 emulation)
 LOCALSTACK_SERVICES=s3
@@ -172,7 +172,7 @@ services:
       - ./volumes/localstack:/tmp/localstack
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - nanorec
+      - nanoml
 
   # Service 2: Message Queue (Kafka + Zookeeper)
   zookeeper:
@@ -184,7 +184,7 @@ services:
       - ./volumes/zookeeper/data:/var/lib/zookeeper/data
       - ./volumes/zookeeper/log:/var/lib/zookeeper/log
     networks:
-      - nanorec
+      - nanoml
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
@@ -201,7 +201,7 @@ services:
     volumes:
       - ./volumes/kafka:/var/lib/kafka/data
     networks:
-      - nanorec
+      - nanoml
 
   # Service 3: Stream Processing (Flink)
   flink-jobmanager:
@@ -214,7 +214,7 @@ services:
     volumes:
       - ./volumes/flink/jobs:/opt/flink/jobs
     networks:
-      - nanorec
+      - nanoml
 
   flink-taskmanager:
     image: flink:1.18
@@ -224,7 +224,7 @@ services:
     environment:
       - FLINK_PROPERTIES=jobmanager.rpc.address: flink-jobmanager
     networks:
-      - nanorec
+      - nanoml
 
   # Service 4: Feature Store (Feast - Postgres offline + Redis online)
   postgres:
@@ -236,7 +236,7 @@ services:
     volumes:
       - ./volumes/postgres:/var/lib/postgresql/data
     networks:
-      - nanorec
+      - nanoml
 
   redis:
     image: redis:7
@@ -245,7 +245,7 @@ services:
     volumes:
       - ./volumes/redis:/data
     networks:
-      - nanorec
+      - nanoml
 
   # Service 6: Experiment Tracking (MLflow)
   mlflow:
@@ -261,10 +261,10 @@ services:
     volumes:
       - ./volumes/mlflow:/mlflow
     networks:
-      - nanorec
+      - nanoml
 
 networks:
-  nanorec:
+  nanoml:
     driver: bridge
 
 volumes:
@@ -295,7 +295,7 @@ Modify: `deployment/docker-compose.yaml` (add after mlflow service)
     volumes:
       - ./volumes/models:/models
     networks:
-      - nanorec
+      - nanoml
 
   # Service 8: API Gateway
   api:
@@ -313,7 +313,7 @@ Modify: `deployment/docker-compose.yaml` (add after mlflow service)
       - FEAST_ONLINE_STORE=redis:6379
       - MLFLOW_TRACKING_URI=http://mlflow:5000
     networks:
-      - nanorec
+      - nanoml
 
   # Service 9: Orchestration (Airflow)
   airflow-webserver:
@@ -334,7 +334,7 @@ Modify: `deployment/docker-compose.yaml` (add after mlflow service)
     depends_on:
       - postgres
     networks:
-      - nanorec
+      - nanoml
 
   airflow-scheduler:
     image: apache/airflow:2.8.0-python3.10
@@ -351,7 +351,7 @@ Modify: `deployment/docker-compose.yaml` (add after mlflow service)
     depends_on:
       - postgres
     networks:
-      - nanorec
+      - nanoml
 
   # Service 10: Lineage Tracking (SHALLOW)
   lineage-api:
@@ -363,7 +363,7 @@ Modify: `deployment/docker-compose.yaml` (add after mlflow service)
     volumes:
       - ./volumes/lineage:/data
     networks:
-      - nanorec
+      - nanoml
 
   # Service 11: Frontend Dashboard (SHALLOW)
   dashboard:
@@ -381,7 +381,7 @@ Modify: `deployment/docker-compose.yaml` (add after mlflow service)
       - REACT_APP_MLFLOW_URL=http://mlflow:5000
       - REACT_APP_AIRFLOW_URL=http://airflow-webserver:8080
     networks:
-      - nanorec
+      - nanoml
 ```
 
 - [ ] **Step 6: Create volume directories**
@@ -443,10 +443,10 @@ def test_storage_upload_download(storage_client, tmp_path):
     """Should upload and download files."""
     # Create test file
     test_file = tmp_path / "test.txt"
-    test_file.write_text("Hello NanoRec")
+    test_file.write_text("Hello NanoML")
 
     # Upload
-    bucket = "nanorec-test"
+    bucket = "nanoml-test"
     key = "test/test.txt"
     storage_client.create_bucket(bucket)
     storage_client.upload_file(str(test_file), bucket, key)
@@ -455,7 +455,7 @@ def test_storage_upload_download(storage_client, tmp_path):
     download_path = tmp_path / "downloaded.txt"
     storage_client.download_file(bucket, key, str(download_path))
 
-    assert download_path.read_text() == "Hello NanoRec"
+    assert download_path.read_text() == "Hello NanoML"
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
@@ -562,11 +562,11 @@ set -e
 
 ENDPOINT="http://localhost:4566"
 
-echo "Creating default NanoRec buckets..."
+echo "Creating default NanoML buckets..."
 
-aws --endpoint-url=$ENDPOINT s3 mb s3://nanorec-data || true
-aws --endpoint-url=$ENDPOINT s3 mb s3://nanorec-models || true
-aws --endpoint-url=$ENDPOINT s3 mb s3://nanorec-artifacts || true
+aws --endpoint-url=$ENDPOINT s3 mb s3://nanoml-data || true
+aws --endpoint-url=$ENDPOINT s3 mb s3://nanoml-models || true
+aws --endpoint-url=$ENDPOINT s3 mb s3://nanoml-artifacts || true
 
 echo "✅ Buckets created"
 ```
@@ -646,7 +646,7 @@ Expected: FAIL (module not found)
 Create: `core/health.py`
 
 ```python
-"""Health check utilities for NanoRec infrastructure services."""
+"""Health check utilities for NanoML infrastructure services."""
 
 import requests
 import socket
@@ -675,7 +675,7 @@ class ServiceHealth:
 
 
 class HealthChecker:
-    """Check health of NanoRec infrastructure services."""
+    """Check health of NanoML infrastructure services."""
 
     def __init__(self, timeout: int = 5):
         """
@@ -731,7 +731,7 @@ class HealthChecker:
 
     def check_all_services(self) -> Dict[str, ServiceHealth]:
         """
-        Check health of all NanoRec services.
+        Check health of all NanoML services.
 
         Returns:
             Dictionary mapping service name to health status
@@ -804,7 +804,7 @@ git commit -m "feat: add health check utilities for infrastructure services"
 Create: `tests/integration/test_infrastructure.py`
 
 ```python
-"""Integration tests for NanoRec infrastructure services."""
+"""Integration tests for NanoML infrastructure services."""
 
 import pytest
 from core.health import HealthChecker, ServiceStatus
@@ -867,7 +867,7 @@ Create: `Makefile` (if doesn't exist) or modify existing:
 .PHONY: infra-up infra-down infra-status infra-test help
 
 help:
-	@echo "NanoRec Infrastructure Commands"
+	@echo "NanoML Infrastructure Commands"
 	@echo ""
 	@echo "  make infra-up      - Start all infrastructure services"
 	@echo "  make infra-down    - Stop all infrastructure services"
@@ -875,14 +875,14 @@ help:
 	@echo "  make infra-test    - Run infrastructure integration tests"
 
 infra-up:
-	@echo "Starting NanoRec infrastructure..."
+	@echo "Starting NanoML infrastructure..."
 	docker-compose -f deployment/docker-compose.yaml up -d
 	@echo "Waiting for services to be ready..."
 	sleep 10
 	@python -c "from core.health import HealthChecker; hc = HealthChecker(); print('✅ All services healthy' if hc.wait_for_services() else '❌ Some services unhealthy')"
 
 infra-down:
-	@echo "Stopping NanoRec infrastructure..."
+	@echo "Stopping NanoML infrastructure..."
 	docker-compose -f deployment/docker-compose.yaml down -v
 	@echo "✅ All services stopped"
 
@@ -966,7 +966,7 @@ import torch
 import numpy as np
 from pathlib import Path
 
-app = FastAPI(title="NanoRec Model Server")
+app = FastAPI(title="NanoML Model Server")
 
 
 class PredictionRequest(BaseModel):
@@ -1038,12 +1038,12 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 Create: `infrastructure/api_gateway/app.py`
 
 ```python
-"""NanoRec API Gateway."""
+"""NanoML API Gateway."""
 
 from fastapi import FastAPI
 from infrastructure.api_gateway.routes import router
 
-app = FastAPI(title="NanoRec API Gateway")
+app = FastAPI(title="NanoML API Gateway")
 
 app.include_router(router)
 
@@ -1058,7 +1058,7 @@ async def health():
 async def root():
     """Root endpoint."""
     return {
-        "name": "NanoRec API Gateway",
+        "name": "NanoML API Gateway",
         "version": "0.1.0",
         "docs": "/docs"
     }
@@ -1173,7 +1173,7 @@ from typing import List, Optional
 import sqlite3
 from datetime import datetime
 
-app = FastAPI(title="NanoRec Lineage API")
+app = FastAPI(title="NanoML Lineage API")
 
 
 class Artifact(BaseModel):
@@ -1233,7 +1233,7 @@ Create: `infrastructure/dashboard/package.json`
 
 ```json
 {
-  "name": "nanorec-dashboard",
+  "name": "nanoml-dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -1257,7 +1257,7 @@ import React from 'react';
 function App() {
   return (
     <div style={{ padding: '20px' }}>
-      <h1>NanoRec Dashboard</h1>
+      <h1>NanoML Dashboard</h1>
       <p>SHALLOW: Basic visualization placeholder</p>
       <ul>
         <li><a href="http://localhost:5000" target="_blank">MLflow UI</a></li>
@@ -1280,7 +1280,7 @@ Create: `infrastructure/dashboard/src/index.html`
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NanoRec Dashboard</title>
+    <title>NanoML Dashboard</title>
   </head>
   <body>
     <div id="root"></div>
@@ -1292,16 +1292,16 @@ Create: `infrastructure/dashboard/src/index.html`
 
 ```bash
 # Build model server
-docker build -t nanorec/model-server:latest infrastructure/model_server/
+docker build -t nanoml/model-server:latest infrastructure/model_server/
 
 # Build API gateway
-docker build -t nanorec/api-gateway:latest infrastructure/api_gateway/
+docker build -t nanoml/api-gateway:latest infrastructure/api_gateway/
 
 # Build lineage API
-docker build -t nanorec/lineage-api:latest infrastructure/lineage/
+docker build -t nanoml/lineage-api:latest infrastructure/lineage/
 
 # Build dashboard
-docker build -t nanorec/dashboard:latest infrastructure/dashboard/
+docker build -t nanoml/dashboard:latest infrastructure/dashboard/
 ```
 
 - [ ] **Step 6: Restart infrastructure with custom services**
@@ -1564,9 +1564,9 @@ git commit -m "feat: add Kafka, MLflow, and Feast client wrappers"
 Create: `infrastructure/README.md`
 
 ```markdown
-# NanoRec Infrastructure Services
+# NanoML Infrastructure Services
 
-This directory contains the 11 infrastructure services that power NanoRec.
+This directory contains the 11 infrastructure services that power NanoML.
 
 ## Services
 
@@ -1636,7 +1636,7 @@ Modify: `README.md` (add after "Quick Start" section)
 ```markdown
 ## Infrastructure
 
-NanoRec includes 11 infrastructure services (9 core + 2 shallow):
+NanoML includes 11 infrastructure services (9 core + 2 shallow):
 
 **Core Services:**
 1. Storage (S3) - LocalStack locally, AWS S3 in cloud
@@ -1687,7 +1687,7 @@ build/
 
 # Data
 deployment/volumes/
-.nanorec/
+.nanoml/
 
 # Git
 .git/

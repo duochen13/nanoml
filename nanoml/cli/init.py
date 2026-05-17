@@ -8,7 +8,7 @@ from typing import Optional
 import click
 from jinja2 import Environment, FileSystemLoader
 
-from nanorec.cli.main import cli
+from nanoml.cli.main import cli
 
 
 @cli.command()
@@ -21,13 +21,13 @@ from nanorec.cli.main import cli
 )
 @click.option(
     "--description",
-    default="A NanoRec recommendation system",
+    default="A NanoML recommendation system",
     help="Project description",
     show_default=True
 )
 def init(project_name: str, template: str, description: str):
     """
-    Create a new NanoRec project.
+    Create a new NanoML project.
 
     PROJECT_NAME must be lowercase with hyphens (e.g., my-recommender)
     """
@@ -65,7 +65,7 @@ def init(project_name: str, template: str, description: str):
         raise click.Abort()
 
     # Create project
-    click.echo(f"Creating NanoRec project: {project_name}")
+    click.echo(f"Creating NanoML project: {project_name}")
 
     try:
         _scaffold_project(
@@ -145,6 +145,6 @@ def _scaffold_project(
                 shutil.copy2(template_path, target_path)
 
     # Create empty directories that need to exist
-    (project_dir / ".nanorec").mkdir(exist_ok=True)
-    (project_dir / ".nanorec" / "generated").mkdir(exist_ok=True)
-    (project_dir / ".nanorec" / "cache").mkdir(exist_ok=True)
+    (project_dir / ".nanoml").mkdir(exist_ok=True)
+    (project_dir / ".nanoml" / "generated").mkdir(exist_ok=True)
+    (project_dir / ".nanoml" / "cache").mkdir(exist_ok=True)

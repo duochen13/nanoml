@@ -1,1 +1,1 @@
-"""NanoRec components for movie recommendations."""
+"""NanoML components for movie recommendations."""

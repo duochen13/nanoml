@@ -20,7 +20,7 @@ class NetworkingStack(BaseStack):
         # VPC with public and private subnets
         self.vpc = ec2.Vpc(
             self,
-            "NanoRecVPC",
+            "NanoMLVPC",
             ip_addresses=ec2.IpAddresses.cidr(cidr),
             max_azs=2,
             nat_gateways=1,

@@ -1,6 +1,6 @@
-# NanoRec Infrastructure Services
+# NanoML Infrastructure Services
 
-This directory contains the 11 infrastructure services that power NanoRec.
+This directory contains the 11 infrastructure services that power NanoML.
 
 ## Services
 

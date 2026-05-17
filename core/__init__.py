@@ -1,1 +1,1 @@
-"""NanoRec core utilities."""
+"""NanoML core utilities."""

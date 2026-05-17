@@ -1,4 +1,4 @@
-"""Feature definitions for NanoRec."""
+"""Feature definitions for NanoML."""
 
 from dataclasses import dataclass
 from typing import List

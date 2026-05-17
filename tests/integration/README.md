@@ -1,4 +1,4 @@
-# NanoRec Integration Tests
+# NanoML Integration Tests
 
 Comprehensive integration tests validating all 5 implementation plans working together.
 
@@ -104,16 +104,16 @@ pytest tests/integration/ -v
 **Fix Time:** 5 minutes
 
 **Problem:**
-- `nanorec init` creates `config.yaml`
-- `nanorec generate` expects `nanorec.yaml`
+- `nanoml init` creates `config.yaml`
+- `nanoml generate` expects `nanoml.yaml`
 
 **Workaround:**
 ```bash
-mv config.yaml nanorec.yaml
+mv config.yaml nanoml.yaml
 ```
 
 **Permanent Fix:**
-Update `nanorec/cli/generate.py` to support both filenames.
+Update `nanoml/cli/generate.py` to support both filenames.
 
 ### Issue #2: Docker Compose Path (NON-BLOCKING)
 **Severity:** Low
@@ -199,13 +199,13 @@ docker run -v $(pwd):/app -w /app python:3.9 \
 
 ### End-to-End Workflows
 1. **Project Creation → Validation**
-   - Create project with `nanorec init`
-   - Validate config with `nanorec validate`
+   - Create project with `nanoml init`
+   - Validate config with `nanoml validate`
    - Verify project structure
 
 2. **Code Generation**
    - Add feature definitions
-   - Run `nanorec generate`
+   - Run `nanoml generate`
    - Verify Flink, Feast, Airflow artifacts
 
 3. **Infrastructure Integration**
@@ -238,7 +238,7 @@ Tests pass if:
 
 ### Tests Failing with Import Errors
 ```bash
-# Make sure NanoRec is installed in development mode
+# Make sure NanoML is installed in development mode
 pip install -e .
 ```
 
@@ -252,7 +252,7 @@ cd deployment && docker-compose up -d
 ### Code Generation Tests Skipped
 ```bash
 # These tests are skipped until config file naming is fixed
-# Use workaround: mv config.yaml nanorec.yaml
+# Use workaround: mv config.yaml nanoml.yaml
 ```
 
 ### Permission Errors
@@ -304,7 +304,7 @@ When adding Plan 6, 7, etc.:
 4. Update system health report
 
 ### Improving Coverage
-1. Identify gaps with: `pytest --cov=nanorec tests/integration/`
+1. Identify gaps with: `pytest --cov=nanoml tests/integration/`
 2. Add tests for uncovered code
 3. Focus on critical paths first
 
@@ -316,4 +316,4 @@ When adding Plan 6, 7, etc.:
 
 ## License
 
-Same as main NanoRec project.
+Same as main NanoML project.

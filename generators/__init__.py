@@ -1,1 +1,1 @@
-"""Code generators for NanoRec components."""
+"""Code generators for NanoML components."""

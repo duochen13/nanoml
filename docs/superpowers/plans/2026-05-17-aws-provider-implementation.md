@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Enable NanoRec deployment to AWS cloud infrastructure using managed services.
+**Goal:** Enable NanoML deployment to AWS cloud infrastructure using managed services.
 
 **Architecture:** AWS CDK for Infrastructure as Code, AWS SDK for service clients, one-to-one mapping of local services to AWS equivalents.
 
@@ -54,7 +54,7 @@
 - `docs/deployment/aws.md` - AWS deployment guide
 
 **Code to modify:**
-- `nanorec.yaml` - Add AWS provider configuration schema
+- `nanoml.yaml` - Add AWS provider configuration schema
 - `cli/main.py` - Add deploy command
 
 ---
@@ -88,24 +88,24 @@ infrastructure:
 
     services:
       storage:
-        bucket_name: nanorec-data
+        bucket_name: nanoml-data
       messaging:
-        cluster_name: nanorec-kafka
+        cluster_name: nanoml-kafka
         instance_type: kafka.m5.large
       feature_store:
-        feature_group_prefix: nanorec
+        feature_group_prefix: nanoml
       training:
         instance_type: ml.m5.xlarge
       serving:
         instance_type: ml.t2.medium
       orchestration:
-        environment_name: nanorec-airflow
+        environment_name: nanoml-airflow
 """
 
 
 def test_load_aws_config(tmp_path):
-    """AWSConfig loads from nanorec.yaml."""
-    config_file = tmp_path / "nanorec.yaml"
+    """AWSConfig loads from nanoml.yaml."""
+    config_file = tmp_path / "nanoml.yaml"
     config_file.write_text(SAMPLE_AWS_CONFIG)
 
     config = AWSConfig.from_file(config_file)
@@ -132,12 +132,12 @@ def test_aws_config_validates_region():
 
 def test_aws_config_service_settings():
     """AWSConfig provides service-specific settings."""
-    config_file = Path("nanorec.yaml")
+    config_file = Path("nanoml.yaml")
     # Use sample config
     config = AWSConfig.from_yaml(SAMPLE_AWS_CONFIG)
 
-    assert config.get_service_config("storage")["bucket_name"] == "nanorec-data"
-    assert config.get_service_config("messaging")["cluster_name"] == "nanorec-kafka"
+    assert config.get_service_config("storage")["bucket_name"] == "nanoml-data"
+    assert config.get_service_config("messaging")["cluster_name"] == "nanoml-kafka"
     assert config.get_service_config("training")["instance_type"] == "ml.m5.xlarge"
 ```
 
@@ -150,7 +150,7 @@ Expected: FAIL with "ModuleNotFoundError: No module named 'providers.aws.config'
 
 ```python
 # providers/aws/__init__.py
-"""AWS provider for NanoRec infrastructure."""
+"""AWS provider for NanoML infrastructure."""
 
 # providers/aws/config.py
 import yaml
@@ -179,7 +179,7 @@ class AWSConfig:
     # Service-specific configs
     storage_bucket: Optional[str] = None
     messaging_cluster: Optional[str] = None
-    feature_store_prefix: str = "nanorec"
+    feature_store_prefix: str = "nanoml"
     training_instance_type: str = "ml.m5.xlarge"
     serving_instance_type: str = "ml.t2.medium"
     orchestration_environment: Optional[str] = None
@@ -209,10 +209,10 @@ class AWSConfig:
 
     @classmethod
     def from_file(cls, config_path: Path) -> "AWSConfig":
-        """Load AWS config from nanorec.yaml file.
+        """Load AWS config from nanoml.yaml file.
 
         Args:
-            config_path: Path to nanorec.yaml
+            config_path: Path to nanoml.yaml
 
         Returns:
             AWSConfig instance
@@ -282,7 +282,7 @@ feat(aws): add AWS provider configuration
 AWSConfig class for managing AWS-specific settings:
 - Region, account ID, VPC CIDR
 - Service-specific configurations
-- Loads from nanorec.yaml
+- Loads from nanoml.yaml
 - Validates region format
 
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
@@ -1151,7 +1151,7 @@ class BaseStack(Stack):
         super().__init__(scope, id, **kwargs)
 
         # Common tags
-        self.tags.set_tag("Project", "NanoRec")
+        self.tags.set_tag("Project", "NanoML")
         self.tags.set_tag("ManagedBy", "CDK")
 ```
 
@@ -1181,7 +1181,7 @@ class NetworkingStack(BaseStack):
         # VPC with public and private subnets
         self.vpc = ec2.Vpc(
             self,
-            "NanoRecVPC",
+            "NanoMLVPC",
             ip_addresses=ec2.IpAddresses.cidr(cidr),
             max_azs=2,
             nat_gateways=1,
@@ -1255,7 +1255,7 @@ class MLStack(BaseStack):
         self.data_bucket = s3.Bucket(
             self,
             "DataBucket",
-            bucket_name="nanorec-data",
+            bucket_name="nanoml-data",
             removal_policy=RemovalPolicy.DESTROY,
             auto_delete_objects=True
         )
@@ -1264,7 +1264,7 @@ class MLStack(BaseStack):
         self.model_bucket = s3.Bucket(
             self,
             "ModelBucket",
-            bucket_name="nanorec-models",
+            bucket_name="nanoml-models",
             removal_policy=RemovalPolicy.DESTROY,
             auto_delete_objects=True
         )
@@ -1287,7 +1287,7 @@ class MLStack(BaseStack):
         self.sagemaker_domain = sagemaker.CfnDomain(
             self,
             "SageMakerDomain",
-            domain_name="nanorec-domain",
+            domain_name="nanoml-domain",
             auth_mode="IAM",
             default_user_settings=sagemaker.CfnDomain.UserSettingsProperty(
                 execution_role=self.sagemaker_role.role_arn
@@ -1318,8 +1318,8 @@ def main():
     )
 
     # Create stacks
-    networking = NetworkingStack(app, "NanoRec-Networking", env=env)
-    ml = MLStack(app, "NanoRec-ML", vpc=networking.vpc, env=env)
+    networking = NetworkingStack(app, "NanoML-Networking", env=env)
+    ml = MLStack(app, "NanoML-ML", vpc=networking.vpc, env=env)
 
     app.synth()
 
@@ -1375,9 +1375,9 @@ from cli.main import cli
 
 
 def test_deploy_command_validates_provider(tmp_path):
-    """nanorec deploy validates provider config."""
+    """nanoml deploy validates provider config."""
     # Create invalid config
-    config = tmp_path / "nanorec.yaml"
+    config = tmp_path / "nanoml.yaml"
     config.write_text("name: test\nversion: 0.1.0\ninfrastructure:\n  provider: invalid")
 
     runner = CliRunner()
@@ -1390,8 +1390,8 @@ def test_deploy_command_validates_provider(tmp_path):
 
 
 def test_deploy_command_aws_synthesizes_cdk(tmp_path):
-    """nanorec deploy --provider aws synthesizes CDK."""
-    config = tmp_path / "nanorec.yaml"
+    """nanoml deploy --provider aws synthesizes CDK."""
+    config = tmp_path / "nanoml.yaml"
     config.write_text("""
 name: test
 version: 0.1.0
@@ -1412,8 +1412,8 @@ infrastructure:
 
 
 def test_deploy_command_local_starts_docker_compose(tmp_path):
-    """nanorec deploy --provider local starts Docker Compose."""
-    config = tmp_path / "nanorec.yaml"
+    """nanoml deploy --provider local starts Docker Compose."""
+    config = tmp_path / "nanoml.yaml"
     config.write_text("""
 name: test
 version: 0.1.0
@@ -1458,15 +1458,15 @@ from providers.aws.config import AWSConfig
     help="Synthesize but don't deploy"
 )
 def deploy(provider: str, dry_run: bool):
-    """Deploy NanoRec infrastructure.
+    """Deploy NanoML infrastructure.
 
     Deploys to local (Docker Compose) or AWS (CDK).
     """
     # Load config
-    config_path = Path.cwd() / "nanorec.yaml"
+    config_path = Path.cwd() / "nanoml.yaml"
 
     if not config_path.exists():
-        click.echo("❌ No nanorec.yaml found", err=True)
+        click.echo("❌ No nanoml.yaml found", err=True)
         raise click.Abort()
 
     config = load_config(config_path)
@@ -1577,7 +1577,7 @@ Expected: PASS
 ```bash
 git add cli/deploy.py cli/main.py tests/cli/test_deploy.py
 git commit -m "$(cat <<'EOF'
-feat(cli): add nanorec deploy command
+feat(cli): add nanoml deploy command
 
 Supports two providers:
 - local: starts Docker Compose
@@ -1606,7 +1606,7 @@ EOF
 # docs/deployment/aws.md
 # AWS Deployment Guide
 
-Deploy NanoRec to AWS using managed services.
+Deploy NanoML to AWS using managed services.
 
 ## Prerequisites
 
@@ -1619,7 +1619,7 @@ Deploy NanoRec to AWS using managed services.
 
 ### 1. Configure AWS Provider
 
-Edit `nanorec.yaml`:
+Edit `nanoml.yaml`:
 
 ```yaml
 name: my_project
@@ -1650,7 +1650,7 @@ infrastructure:
 ### 2. Deploy Infrastructure
 
 ```bash
-nanorec deploy --provider aws
+nanoml deploy --provider aws
 ```
 
 This will:
@@ -1796,7 +1796,7 @@ Typical monthly costs for a small production deployment:
 
 ```bash
 # Export S3 data
-aws s3 sync s3://local-nanorec-data/ s3://my-project-data/
+aws s3 sync s3://local-nanoml-data/ s3://my-project-data/
 
 # Export Kafka topics (requires kafka-console-consumer)
 kafka-console-consumer --bootstrap-server localhost:9092 --topic my-topic --from-beginning > my-topic.json
@@ -1804,12 +1804,12 @@ kafka-console-consumer --bootstrap-server localhost:9092 --topic my-topic --from
 
 ### 2. Update Configuration
 
-Change `nanorec.yaml` from `provider: local` to `provider: aws`.
+Change `nanoml.yaml` from `provider: local` to `provider: aws`.
 
 ### 3. Regenerate Code
 
 ```bash
-nanorec generate --clean
+nanoml generate --clean
 ```
 
 This regenerates infrastructure code for AWS services.
@@ -1817,7 +1817,7 @@ This regenerates infrastructure code for AWS services.
 ### 4. Deploy
 
 ```bash
-nanorec deploy --provider aws
+nanoml deploy --provider aws
 ```
 
 ### 5. Import Data
@@ -2004,7 +2004,7 @@ Check that these exist and have tests:
 
 - [ ] **Step 4: Test deploy command help**
 
-Run: `nanorec deploy --help`
+Run: `nanoml deploy --help`
 Expected: Shows provider and dry-run options
 
 - [ ] **Step 5: Final commit**
@@ -2021,7 +2021,7 @@ Full AWS deployment support:
 - Migration from local to AWS
 - Comprehensive documentation
 
-One command deployment: nanorec deploy --provider aws
+One command deployment: nanoml deploy --provider aws
 
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 EOF
@@ -2032,7 +2032,7 @@ EOF
 
 ## Summary
 
-This plan implements AWS cloud deployment for NanoRec.
+This plan implements AWS cloud deployment for NanoML.
 
 **Key deliverables:**
 1. AWS configuration management

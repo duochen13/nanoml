@@ -1,4 +1,4 @@
-# NanoRec Integration Test Report
+# NanoML Integration Test Report
 
 **Date:** 2026-05-17
 **Version:** 0.1.0
@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-Comprehensive integration testing validates that all 5 NanoRec implementation plans work together correctly. Out of **33 integration tests**, **24 passed**, **7 were skipped** (features not yet implemented), and **2 failed** (minor issues).
+Comprehensive integration testing validates that all 5 NanoML implementation plans work together correctly. Out of **33 integration tests**, **24 passed**, **7 were skipped** (features not yet implemented), and **2 failed** (minor issues).
 
 **Overall System Health: 85% Ready for Production** ✓
 
@@ -38,28 +38,28 @@ Comprehensive integration testing validates that all 5 NanoRec implementation pl
 - ✓ Version information accessible
 - ✓ CLI help displays correctly
 - ✓ CLI version command works
-- ✓ `nanorec init` command exists
-- ✓ `nanorec generate` command exists
-- ✓ `nanorec init` creates valid project structure
-- ✓ `nanorec validate` validates project configs
+- ✓ `nanoml init` command exists
+- ✓ `nanoml generate` command exists
+- ✓ `nanoml init` creates valid project structure
+- ✓ `nanoml validate` validates project configs
 - ✓ All template files have valid syntax
 
 #### Minor Issues
 - ⚠️ Help text wording differs slightly from expected (cosmetic)
 
 #### Capabilities
-1. **Project Initialization**: `nanorec init <name>` creates complete project structure
-2. **Validation**: `nanorec validate` checks config.yaml against schema
+1. **Project Initialization**: `nanoml init <name>` creates complete project structure
+2. **Validation**: `nanoml validate` checks config.yaml against schema
 3. **Templates**: Jinja2 templates for all project components
 4. **Directory Structure**: Proper separation of data/features/training/serving/evaluation
 
 #### Example Usage
 ```bash
 # Create new project
-nanorec init my-recommender
+nanoml init my-recommender
 
 # Validate configuration
-nanorec validate --config my-recommender/config.yaml
+nanoml validate --config my-recommender/config.yaml
 
 # Project structure created:
 my-recommender/
@@ -71,7 +71,7 @@ my-recommender/
 ├── training/
 ├── serving/
 ├── evaluation/
-└── .nanorec/
+└── .nanoml/
     ├── generated/
     └── cache/
 ```
@@ -120,13 +120,13 @@ my-recommender/
 **Status: IMPLEMENTED BUT NOT TESTED IN INTEGRATION** (0/4 tests ran, 4 skipped)
 
 #### Skipped Tests
-- ⏸️ Generate creates artifacts (requires nanorec.yaml in test project)
+- ⏸️ Generate creates artifacts (requires nanoml.yaml in test project)
 - ⏸️ Generated Flink job has valid syntax
 - ⏸️ Generated Feast config has valid YAML
 - ⏸️ Generated Airflow DAG has valid syntax
 
 #### Why Skipped
-Tests are skipped because `nanorec generate` requires a `nanorec.yaml` config file (not `config.yaml`) in the project root. The CLI's `init` command creates `config.yaml`, but `generate` expects `nanorec.yaml`.
+Tests are skipped because `nanoml generate` requires a `nanoml.yaml` config file (not `config.yaml`) in the project root. The CLI's `init` command creates `config.yaml`, but `generate` expects `nanoml.yaml`.
 
 #### Known Capabilities (from unit tests)
 1. **Flink Job Generation**: Creates streaming feature processing jobs
@@ -173,7 +173,7 @@ Tests are skipped because `nanorec generate` requires a `nanorec.yaml` config fi
 
 #### Usage as Reference
 The movie recommendations example serves as a complete reference implementation showing:
-- How to structure a NanoRec project
+- How to structure a NanoML project
 - How to define components
 - How to write tests
 - How to implement the full ML pipeline
@@ -218,12 +218,12 @@ AWS clients support both:
 ### Integration Points Working Correctly ✓
 
 1. **CLI + Templates** (Plan 1)
-   - `nanorec init` creates projects with valid structure
+   - `nanoml init` creates projects with valid structure
    - All template files render correctly
    - Config validation works
 
 2. **CLI + Code Generation** (Plan 1 + 3)
-   - `nanorec generate` command exists and accepts options
+   - `nanoml generate` command exists and accepts options
    - Generated directory structure is correct
 
 3. **Infrastructure + Clients** (Plan 2)
@@ -245,8 +245,8 @@ AWS clients support both:
 ### Integration Points Needing Attention ⚠️
 
 1. **Config File Naming Inconsistency**
-   - `nanorec init` creates `config.yaml`
-   - `nanorec generate` expects `nanorec.yaml`
+   - `nanoml init` creates `config.yaml`
+   - `nanoml generate` expects `nanoml.yaml`
    - **Recommendation:** Standardize on one name or support both
 
 2. **Docker Compose Location**
@@ -256,7 +256,7 @@ AWS clients support both:
 
 3. **Import Paths**
    - Some modules use absolute imports from project root
-   - Some use relative imports from nanorec package
+   - Some use relative imports from nanoml package
    - **Recommendation:** Standardize import patterns
 
 ---
@@ -287,10 +287,10 @@ AWS clients support both:
 **Status:** Skipped (config file naming issue)
 
 **Workflow Steps:**
-1. ✓ Create project with `nanorec init`
-2. ✓ Validate config with `nanorec validate`
+1. ✓ Create project with `nanoml init`
+2. ✓ Validate config with `nanoml validate`
 3. ✓ Add feature definitions
-4. ⏸️ Generate code with `nanorec generate` (skipped - needs nanorec.yaml)
+4. ⏸️ Generate code with `nanoml generate` (skipped - needs nanoml.yaml)
 5. ⏸️ Verify generated artifacts
 
 ### Test: Cross-Plan Compatibility
@@ -361,7 +361,7 @@ test_generate_system_health_report                          PASSED [100%]
 
 ```
 ======================================================================
-NANOREC SYSTEM HEALTH REPORT
+NANOML SYSTEM HEALTH REPORT
 ======================================================================
 
 Version: 0.1.0
@@ -401,18 +401,18 @@ None. All critical functionality works.
 **Affected:** Plan 1 + Plan 3 integration
 
 **Problem:**
-- `nanorec init` creates `config.yaml`
-- `nanorec generate` expects `nanorec.yaml`
+- `nanoml init` creates `config.yaml`
+- `nanoml generate` expects `nanoml.yaml`
 
 **Recommendation:**
 ```python
 # Option 1: Support both filenames
-config_path = project_root / "nanorec.yaml"
+config_path = project_root / "nanoml.yaml"
 if not config_path.exists():
     config_path = project_root / "config.yaml"
 
 # Option 2: Rename in template
-# Change template to create "nanorec.yaml" instead of "config.yaml"
+# Change template to create "nanoml.yaml" instead of "config.yaml"
 ```
 
 **Priority:** High (blocks code generation workflow)
@@ -463,13 +463,13 @@ from providers.aws.clients.sagemaker import SageMakerFeatureStoreClient
 
 1. **Create a New Project**
    ```bash
-   nanorec init my-recommender
+   nanoml init my-recommender
    cd my-recommender
    ```
 
 2. **Validate Configuration**
    ```bash
-   nanorec validate --config config.yaml
+   nanoml validate --config config.yaml
    ```
 
 3. **View Example Project**
@@ -484,10 +484,10 @@ from providers.aws.clients.sagemaker import SageMakerFeatureStoreClient
    docker-compose up -d
    ```
 
-5. **Generate Code (After fixing config.yaml → nanorec.yaml)**
+5. **Generate Code (After fixing config.yaml → nanoml.yaml)**
    ```bash
-   mv config.yaml nanorec.yaml  # temporary workaround
-   nanorec generate
+   mv config.yaml nanoml.yaml  # temporary workaround
+   nanoml generate
    ```
 
 ### What Requires Infrastructure
@@ -506,9 +506,9 @@ Start with: `cd deployment && docker-compose up`
 
 These features work immediately:
 
-- ✓ Project creation (`nanorec init`)
-- ✓ Config validation (`nanorec validate`)
-- ✓ Code generation (`nanorec generate`)
+- ✓ Project creation (`nanoml init`)
+- ✓ Config validation (`nanoml validate`)
+- ✓ Code generation (`nanoml generate`)
 - ✓ Example project exploration
 - ✓ AWS client initialization
 - ✓ Template customization
@@ -568,11 +568,11 @@ These features work immediately:
 ## Appendix A: Test Coverage Details
 
 ### Files Tested
-- `/nanorec/cli/main.py` - CLI entry point
-- `/nanorec/cli/init.py` - Project initialization
-- `/nanorec/cli/validate.py` - Config validation
-- `/nanorec/cli/generate.py` - Code generation
-- `/nanorec/core/config_loader.py` - Configuration loading
+- `/nanoml/cli/main.py` - CLI entry point
+- `/nanoml/cli/init.py` - Project initialization
+- `/nanoml/cli/validate.py` - Config validation
+- `/nanoml/cli/generate.py` - Code generation
+- `/nanoml/core/config_loader.py` - Configuration loading
 - `/examples/movie_recommendations/` - Complete example
 - `/providers/aws/` - AWS integration
 - `/infrastructure/` - Service clients
@@ -595,19 +595,19 @@ These features work immediately:
 ### Core Commands
 ```bash
 # Create new project
-nanorec init <project-name>
+nanoml init <project-name>
 
 # Validate configuration
-nanorec validate --config <path>
+nanoml validate --config <path>
 
 # Generate code
-nanorec generate [--clean]
+nanoml generate [--clean]
 
 # View version
-nanorec --version
+nanoml --version
 
 # Get help
-nanorec --help
+nanoml --help
 ```
 
 ### Infrastructure Commands
@@ -634,17 +634,17 @@ pytest tests/integration/
 pytest tests/integration/test_full_system.py -v
 
 # Run with coverage
-pytest tests/integration/ --cov=nanorec
+pytest tests/integration/ --cov=nanoml
 
 # Generate HTML coverage report
-pytest tests/integration/ --cov=nanorec --cov-report=html
+pytest tests/integration/ --cov=nanoml --cov-report=html
 ```
 
 ---
 
 ## Conclusion
 
-NanoRec's integration across all 5 implementation plans is **highly successful**. The system demonstrates:
+NanoML's integration across all 5 implementation plans is **highly successful**. The system demonstrates:
 
 1. **Strong Core Framework** - CLI, templates, and configuration management all working
 2. **Complete Infrastructure Support** - All service clients implemented and tested
@@ -652,7 +652,7 @@ NanoRec's integration across all 5 implementation plans is **highly successful**
 4. **Excellent Documentation** - Complete example project with tests
 5. **Production AWS Support** - Full AWS provider implementation
 
-With **92% of implemented tests passing** and only **2 minor cosmetic issues**, NanoRec is ready for production use. The 7 skipped tests are either for features intentionally not yet implemented or blocked by the simple config file naming issue.
+With **92% of implemented tests passing** and only **2 minor cosmetic issues**, NanoML is ready for production use. The 7 skipped tests are either for features intentionally not yet implemented or blocked by the simple config file naming issue.
 
 **Recommended Action:** Fix the config file naming issue and proceed with production release.
 
@@ -660,4 +660,4 @@ With **92% of implemented tests passing** and only **2 minor cosmetic issues**, 
 
 **Report Generated:** 2026-05-17
 **Test Suite Version:** 1.0
-**NanoRec Version:** 0.1.0
+**NanoML Version:** 0.1.0

@@ -1,1 +1,1 @@
-"""AWS provider for NanoRec infrastructure."""
+"""AWS provider for NanoML infrastructure."""

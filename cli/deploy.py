@@ -17,15 +17,15 @@ from providers.aws.config import AWSConfig
     help="Synthesize but don't deploy"
 )
 def deploy(provider: str, dry_run: bool):
-    """Deploy NanoRec infrastructure.
+    """Deploy NanoML infrastructure.
 
     Deploys to local (Docker Compose) or AWS (CDK).
     """
     # Load config
-    config_path = Path.cwd() / "nanorec.yaml"
+    config_path = Path.cwd() / "nanoml.yaml"
 
     if not config_path.exists():
-        click.echo("❌ No nanorec.yaml found", err=True)
+        click.echo("❌ No nanoml.yaml found", err=True)
         raise click.Abort()
 
     config = load_config(config_path)

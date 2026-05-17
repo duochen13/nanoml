@@ -4,7 +4,7 @@
 
 **Goal:** Build the code generation engine that transforms user definitions into executable Flink jobs, Feast configs, and Airflow DAGs.
 
-**Architecture:** Template-based code generation with AST parsing for feature definitions. Generators read user code/config, apply Jinja2 templates, write to `.nanorec/generated/`.
+**Architecture:** Template-based code generation with AST parsing for feature definitions. Generators read user code/config, apply Jinja2 templates, write to `.nanoml/generated/`.
 
 **Tech Stack:** Python 3.9+, Jinja2 (templates), ast (Python AST parsing), PyYAML (config), pytest
 
@@ -21,8 +21,8 @@
 - `generators/templates/feast_store.yaml.j2` - Feast store template
 - `generators/templates/feast_features.py.j2` - Feast feature definitions template
 - `generators/templates/airflow_dag.py.j2` - Airflow DAG template
-- `cli/generate.py` - `nanorec generate` command
-- `core/generated_manager.py` - Manages `.nanorec/generated/` folder
+- `cli/generate.py` - `nanoml generate` command
+- `core/generated_manager.py` - Manages `.nanoml/generated/` folder
 - `tests/generators/test_base.py` - Base generator tests
 - `tests/generators/test_flink_job.py` - Flink generator tests
 - `tests/generators/test_feast_config.py` - Feast generator tests
@@ -61,7 +61,7 @@ class MockGenerator(BaseGenerator):
         return f"# Generated: {parsed_data}"
 
     def get_output_path(self, project_root: Path) -> Path:
-        return project_root / ".nanorec" / "generated" / "mock.py"
+        return project_root / ".nanoml" / "generated" / "mock.py"
 
 
 def test_base_generator_interface():
@@ -84,7 +84,7 @@ def test_base_generator_run(tmp_path):
 
     assert output_path.exists()
     assert "# Generated:" in output_path.read_text()
-    assert output_path == tmp_path / ".nanorec" / "generated" / "mock.py"
+    assert output_path == tmp_path / ".nanoml" / "generated" / "mock.py"
 
 
 def test_base_generator_ensures_output_dir(tmp_path):
@@ -107,7 +107,7 @@ Expected: FAIL with "ModuleNotFoundError: No module named 'generators.base'"
 
 ```python
 # generators/__init__.py
-"""Code generators for NanoRec components."""
+"""Code generators for NanoML components."""
 
 # generators/base.py
 from abc import ABC, abstractmethod
@@ -154,7 +154,7 @@ class BaseGenerator(ABC):
         """Determine output file path.
 
         Args:
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
 
         Returns:
             Path where generated code should be written
@@ -172,7 +172,7 @@ class BaseGenerator(ABC):
 
         Args:
             source_path: Path to source file
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
 
         Returns:
             Path to generated file
@@ -236,11 +236,11 @@ from core.generated_manager import GeneratedManager
 
 
 def test_init_generated_directory(tmp_path):
-    """init() creates .nanorec/generated/ structure."""
+    """init() creates .nanoml/generated/ structure."""
     manager = GeneratedManager(tmp_path)
     manager.init()
 
-    generated_dir = tmp_path / ".nanorec" / "generated"
+    generated_dir = tmp_path / ".nanoml" / "generated"
     assert generated_dir.exists()
     assert (generated_dir / "__init__.py").exists()
     assert (generated_dir / "flink").exists()
@@ -259,7 +259,7 @@ def test_get_flink_dir(tmp_path):
     manager.init()
 
     flink_dir = manager.get_flink_dir()
-    assert flink_dir == tmp_path / ".nanorec" / "generated" / "flink"
+    assert flink_dir == tmp_path / ".nanoml" / "generated" / "flink"
     assert flink_dir.exists()
 
 
@@ -269,7 +269,7 @@ def test_get_feast_dir(tmp_path):
     manager.init()
 
     feast_dir = manager.get_feast_dir()
-    assert feast_dir == tmp_path / ".nanorec" / "generated" / "feast"
+    assert feast_dir == tmp_path / ".nanoml" / "generated" / "feast"
     assert feast_dir.exists()
 
 
@@ -279,7 +279,7 @@ def test_get_airflow_dir(tmp_path):
     manager.init()
 
     airflow_dir = manager.get_airflow_dir()
-    assert airflow_dir == tmp_path / ".nanorec" / "generated" / "airflow"
+    assert airflow_dir == tmp_path / ".nanoml" / "generated" / "airflow"
     assert airflow_dir.exists()
 
 
@@ -314,27 +314,27 @@ import shutil
 
 
 class GeneratedManager:
-    """Manages the .nanorec/generated/ directory structure."""
+    """Manages the .nanoml/generated/ directory structure."""
 
     def __init__(self, project_root: Path):
         """Initialize manager.
 
         Args:
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
         """
         self.project_root = Path(project_root)
-        self.generated_root = self.project_root / ".nanorec" / "generated"
+        self.generated_root = self.project_root / ".nanoml" / "generated"
 
     def init(self):
         """Initialize generated directory structure.
 
         Creates:
-        - .nanorec/generated/
-        - .nanorec/generated/__init__.py
-        - .nanorec/generated/flink/
-        - .nanorec/generated/feast/
-        - .nanorec/generated/airflow/
-        - .nanorec/generated/.gitignore
+        - .nanoml/generated/
+        - .nanoml/generated/__init__.py
+        - .nanoml/generated/flink/
+        - .nanoml/generated/feast/
+        - .nanoml/generated/airflow/
+        - .nanoml/generated/.gitignore
         """
         # Create directories
         self.generated_root.mkdir(parents=True, exist_ok=True)
@@ -362,7 +362,7 @@ class GeneratedManager:
         """Get Flink jobs directory.
 
         Returns:
-            Path to .nanorec/generated/flink/
+            Path to .nanoml/generated/flink/
         """
         return self.generated_root / "flink"
 
@@ -370,7 +370,7 @@ class GeneratedManager:
         """Get Feast config directory.
 
         Returns:
-            Path to .nanorec/generated/feast/
+            Path to .nanoml/generated/feast/
         """
         return self.generated_root / "feast"
 
@@ -378,7 +378,7 @@ class GeneratedManager:
         """Get Airflow DAGs directory.
 
         Returns:
-            Path to .nanorec/generated/airflow/
+            Path to .nanoml/generated/airflow/
         """
         return self.generated_root / "airflow"
 
@@ -404,7 +404,7 @@ git add core/generated_manager.py tests/core/test_generated_manager.py
 git commit -m "$(cat <<'EOF'
 feat(core): add generated code directory manager
 
-Manages .nanorec/generated/ structure:
+Manages .nanoml/generated/ structure:
 - init() - create directory structure
 - get_flink_dir/get_feast_dir/get_airflow_dir - access subdirectories
 - clean() - remove and recreate
@@ -433,7 +433,7 @@ from generators.flink_job import FlinkJobGenerator
 
 
 SAMPLE_FEATURES = '''
-from nanorec.features import Feature, FeatureGroup
+from nanoml.features import Feature, FeatureGroup
 
 user_features = FeatureGroup(
     name="user_features",
@@ -506,11 +506,11 @@ def test_generate_flink_job_code(tmp_path):
 
 
 def test_get_output_path(tmp_path):
-    """get_output_path() returns .nanorec/generated/flink/streaming_features.py."""
+    """get_output_path() returns .nanoml/generated/flink/streaming_features.py."""
     gen = FlinkJobGenerator()
     output = gen.get_output_path(tmp_path)
 
-    assert output == tmp_path / ".nanorec" / "generated" / "flink" / "streaming_features.py"
+    assert output == tmp_path / ".nanoml" / "generated" / "flink" / "streaming_features.py"
 
 
 def test_full_flink_generation(tmp_path):
@@ -543,7 +543,7 @@ Expected: FAIL with "ModuleNotFoundError: No module named 'generators.flink_job'
 Auto-generated Flink streaming feature computation job.
 
 DO NOT EDIT - Generated from features/definitions.py
-Run `nanorec generate` to regenerate.
+Run `nanoml generate` to regenerate.
 """
 from pyflink.datastream import StreamExecutionEnvironment
 from pyflink.datastream.connectors import FlinkKafkaConsumer, FlinkKafkaProducer
@@ -565,7 +565,7 @@ def main():
         deserialization_schema=SimpleStringSchema(),
         properties={
             "bootstrap.servers": "kafka:9092",
-            "group.id": "nanorec_{{ fg.name }}"
+            "group.id": "nanoml_{{ fg.name }}"
         }
     )
 
@@ -601,7 +601,7 @@ def main():
     {% endfor %}
 
     # Execute
-    env.execute("NanoRec Streaming Features")
+    env.execute("NanoML Streaming Features")
 
 
 if __name__ == "__main__":
@@ -707,12 +707,12 @@ class FlinkJobGenerator(BaseGenerator):
         """Get output path for Flink job.
 
         Args:
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
 
         Returns:
-            .nanorec/generated/flink/streaming_features.py
+            .nanoml/generated/flink/streaming_features.py
         """
-        return project_root / ".nanorec" / "generated" / "flink" / "streaming_features.py"
+        return project_root / ".nanoml" / "generated" / "flink" / "streaming_features.py"
 ```
 
 - [ ] **Step 5: Run tests to verify they pass**
@@ -759,7 +759,7 @@ from generators.feast_config import FeastConfigGenerator
 
 
 SAMPLE_FEATURES = '''
-from nanorec.features import Feature, FeatureGroup
+from nanoml.features import Feature, FeatureGroup
 
 user_features = FeatureGroup(
     name="user_features",
@@ -808,7 +808,7 @@ def test_generate_feast_store_yaml(tmp_path):
     # Should be valid YAML
     config = yaml.safe_load(code)
 
-    assert config["project"] == "nanorec"
+    assert config["project"] == "nanoml"
     assert config["provider"] == "local"
     assert "online_store" in config
     assert "offline_store" in config
@@ -839,11 +839,11 @@ def test_get_output_paths(tmp_path):
     """get_output_path() returns correct paths for store vs features."""
     gen_store = FeastConfigGenerator(output_type="store")
     assert gen_store.get_output_path(tmp_path) == \
-        tmp_path / ".nanorec" / "generated" / "feast" / "feature_store.yaml"
+        tmp_path / ".nanoml" / "generated" / "feast" / "feature_store.yaml"
 
     gen_features = FeastConfigGenerator(output_type="features")
     assert gen_features.get_output_path(tmp_path) == \
-        tmp_path / ".nanorec" / "generated" / "feast" / "features.py"
+        tmp_path / ".nanoml" / "generated" / "feast" / "features.py"
 ```
 
 - [ ] **Step 2: Run tests to verify they fail**
@@ -857,9 +857,9 @@ Expected: FAIL with "ModuleNotFoundError: No module named 'generators.feast_conf
 # generators/templates/feast_store.yaml.j2
 # Auto-generated Feast feature store configuration
 # DO NOT EDIT - Generated from features/definitions.py
-# Run `nanorec generate` to regenerate
+# Run `nanoml generate` to regenerate
 
-project: nanorec
+project: nanoml
 provider: local
 
 registry:
@@ -883,7 +883,7 @@ entity_key_serialization_version: 2
 Auto-generated Feast feature definitions.
 
 DO NOT EDIT - Generated from features/definitions.py
-Run `nanorec generate` to regenerate.
+Run `nanoml generate` to regenerate.
 """
 from feast import Entity, FeatureView, Field
 from feast.types import Int64, String, Float32
@@ -1033,12 +1033,12 @@ class FeastConfigGenerator(BaseGenerator):
         """Get output path for Feast config.
 
         Args:
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
 
         Returns:
             Path to feature_store.yaml or features.py
         """
-        feast_dir = project_root / ".nanorec" / "generated" / "feast"
+        feast_dir = project_root / ".nanoml" / "generated" / "feast"
 
         if self.output_type == "store":
             return feast_dir / "feature_store.yaml"
@@ -1087,7 +1087,7 @@ from generators.airflow_dag import AirflowDAGGenerator
 
 
 SAMPLE_COMPONENTS = '''
-from nanorec.components import DataComponent, FeaturesComponent
+from nanoml.components import DataComponent, FeaturesComponent
 
 data = DataComponent(
     name="data_ingestion",
@@ -1150,11 +1150,11 @@ def test_generate_airflow_dag_code(tmp_path):
 
 
 def test_get_output_path(tmp_path):
-    """get_output_path() returns .nanorec/generated/airflow/pipeline_dag.py."""
+    """get_output_path() returns .nanoml/generated/airflow/pipeline_dag.py."""
     gen = AirflowDAGGenerator()
     output = gen.get_output_path(tmp_path)
 
-    assert output == tmp_path / ".nanorec" / "generated" / "airflow" / "pipeline_dag.py"
+    assert output == tmp_path / ".nanoml" / "generated" / "airflow" / "pipeline_dag.py"
 ```
 
 - [ ] **Step 2: Run tests to verify they fail**
@@ -1167,10 +1167,10 @@ Expected: FAIL with "ModuleNotFoundError: No module named 'generators.airflow_da
 ```python
 # generators/templates/airflow_dag.py.j2
 """
-Auto-generated Airflow DAG for NanoRec pipeline.
+Auto-generated Airflow DAG for NanoML pipeline.
 
 DO NOT EDIT - Generated from components
-Run `nanorec generate` to regenerate.
+Run `nanoml generate` to regenerate.
 """
 from airflow import DAG
 from airflow.operators.python import PythonOperator
@@ -1178,7 +1178,7 @@ from datetime import datetime, timedelta
 
 
 default_args = {
-    "owner": "nanorec",
+    "owner": "nanoml",
     "depends_on_past": False,
     "start_date": datetime(2024, 1, 1),
     "email_on_failure": False,
@@ -1188,9 +1188,9 @@ default_args = {
 }
 
 dag = DAG(
-    "nanorec_pipeline",
+    "nanoml_pipeline",
     default_args=default_args,
-    description="Auto-generated NanoRec ML pipeline",
+    description="Auto-generated NanoML ML pipeline",
     schedule_interval="{{ components[0].schedule if components else '@daily' }}",
     catchup=False
 )
@@ -1237,7 +1237,7 @@ from .base import BaseGenerator
 
 
 class AirflowDAGGenerator(BaseGenerator):
-    """Generates Airflow DAG from NanoRec components."""
+    """Generates Airflow DAG from NanoML components."""
 
     def __init__(self):
         """Initialize generator with Jinja2 environment."""
@@ -1318,12 +1318,12 @@ class AirflowDAGGenerator(BaseGenerator):
         """Get output path for Airflow DAG.
 
         Args:
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
 
         Returns:
-            .nanorec/generated/airflow/pipeline_dag.py
+            .nanoml/generated/airflow/pipeline_dag.py
         """
-        return project_root / ".nanorec" / "generated" / "airflow" / "pipeline_dag.py"
+        return project_root / ".nanoml" / "generated" / "airflow" / "pipeline_dag.py"
 ```
 
 - [ ] **Step 5: Run tests to verify they pass**
@@ -1369,15 +1369,15 @@ from cli.main import cli
 
 @pytest.fixture
 def sample_project(tmp_path):
-    """Create a sample NanoRec project."""
+    """Create a sample NanoML project."""
     # Create project structure
-    (tmp_path / "nanorec.yaml").write_text("name: test_project\nversion: 0.1.0")
+    (tmp_path / "nanoml.yaml").write_text("name: test_project\nversion: 0.1.0")
     (tmp_path / "features").mkdir()
     (tmp_path / "components").mkdir()
 
     # Create sample features
     (tmp_path / "features" / "definitions.py").write_text('''
-from nanorec.features import Feature, FeatureGroup
+from nanoml.features import Feature, FeatureGroup
 
 user_features = FeatureGroup(
     name="user_features",
@@ -1391,7 +1391,7 @@ user_features = FeatureGroup(
 
 
 def test_generate_creates_all_artifacts(sample_project):
-    """nanorec generate creates Flink, Feast, and Airflow code."""
+    """nanoml generate creates Flink, Feast, and Airflow code."""
     runner = CliRunner()
 
     with runner.isolated_filesystem(temp_dir=sample_project):
@@ -1402,16 +1402,16 @@ def test_generate_creates_all_artifacts(sample_project):
         assert "Generated Feast config" in result.output
 
         # Check files created
-        generated_dir = sample_project / ".nanorec" / "generated"
+        generated_dir = sample_project / ".nanoml" / "generated"
         assert (generated_dir / "flink" / "streaming_features.py").exists()
         assert (generated_dir / "feast" / "feature_store.yaml").exists()
         assert (generated_dir / "feast" / "features.py").exists()
 
 
 def test_generate_clean_flag(sample_project):
-    """nanorec generate --clean removes existing generated code first."""
+    """nanoml generate --clean removes existing generated code first."""
     # Create some existing generated files
-    gen_dir = sample_project / ".nanorec" / "generated"
+    gen_dir = sample_project / ".nanoml" / "generated"
     gen_dir.mkdir(parents=True, exist_ok=True)
     (gen_dir / "old_file.py").write_text("# old")
 
@@ -1424,15 +1424,15 @@ def test_generate_clean_flag(sample_project):
         assert not (gen_dir / "old_file.py").exists()
 
 
-def test_generate_fails_without_nanorec_yaml(tmp_path):
-    """nanorec generate fails if not in NanoRec project."""
+def test_generate_fails_without_nanoml_yaml(tmp_path):
+    """nanoml generate fails if not in NanoML project."""
     runner = CliRunner()
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
         result = runner.invoke(cli, ["generate"])
 
         assert result.exit_code != 0
-        assert "No nanorec.yaml found" in result.output
+        assert "No nanoml.yaml found" in result.output
 ```
 
 - [ ] **Step 2: Run tests to verify they fail**
@@ -1467,17 +1467,17 @@ def generate(clean: bool):
     - components/*.py -> Airflow DAGs
 
     Writes to:
-    - .nanorec/generated/flink/
-    - .nanorec/generated/feast/
-    - .nanorec/generated/airflow/
+    - .nanoml/generated/flink/
+    - .nanoml/generated/feast/
+    - .nanoml/generated/airflow/
     """
     # Find project root
     project_root = Path.cwd()
-    config_path = project_root / "nanorec.yaml"
+    config_path = project_root / "nanoml.yaml"
 
     if not config_path.exists():
-        click.echo("❌ No nanorec.yaml found in current directory", err=True)
-        click.echo("Run this command from a NanoRec project root", err=True)
+        click.echo("❌ No nanoml.yaml found in current directory", err=True)
+        click.echo("Run this command from a NanoML project root", err=True)
         raise click.Abort()
 
     # Load config
@@ -1540,7 +1540,7 @@ from cli.generate import generate
 
 @click.group()
 def cli():
-    """NanoRec - Declarative ML recommendation framework."""
+    """NanoML - Declarative ML recommendation framework."""
     pass
 
 cli.add_command(init)
@@ -1558,7 +1558,7 @@ Expected: PASS (3 tests)
 ```bash
 git add cli/generate.py cli/main.py tests/cli/test_generate.py
 git commit -m "$(cat <<'EOF'
-feat(cli): add nanorec generate command
+feat(cli): add nanoml generate command
 
 Generates all code from user definitions:
 - Flink streaming jobs from features/definitions.py
@@ -1592,9 +1592,9 @@ from cli.main import cli
 
 @pytest.fixture
 def full_project(tmp_path):
-    """Create a complete NanoRec project for testing."""
-    # nanorec.yaml
-    (tmp_path / "nanorec.yaml").write_text("""
+    """Create a complete NanoML project for testing."""
+    # nanoml.yaml
+    (tmp_path / "nanoml.yaml").write_text("""
 name: movie_recommendations
 version: 0.1.0
 description: Movie recommendation system
@@ -1604,7 +1604,7 @@ description: Movie recommendation system
     features_dir = tmp_path / "features"
     features_dir.mkdir()
     (features_dir / "definitions.py").write_text('''
-from nanorec.features import Feature, FeatureGroup
+from nanoml.features import Feature, FeatureGroup
 
 user_features = FeatureGroup(
     name="user_features",
@@ -1633,7 +1633,7 @@ movie_features = FeatureGroup(
     components_dir = tmp_path / "components"
     components_dir.mkdir()
     (components_dir / "pipeline.py").write_text('''
-from nanorec.components import DataComponent, FeaturesComponent, TrainingComponent
+from nanoml.components import DataComponent, FeaturesComponent, TrainingComponent
 
 data = DataComponent(
     name="data_ingestion",
@@ -1666,7 +1666,7 @@ def test_full_code_generation_workflow(full_project):
         assert result.exit_code == 0
 
         # Verify Flink job
-        flink_job = full_project / ".nanorec" / "generated" / "flink" / "streaming_features.py"
+        flink_job = full_project / ".nanoml" / "generated" / "flink" / "streaming_features.py"
         assert flink_job.exists()
 
         code = flink_job.read_text()
@@ -1677,10 +1677,10 @@ def test_full_code_generation_workflow(full_project):
         assert "def main():" in code
 
         # Verify Feast config
-        feast_store = full_project / ".nanorec" / "generated" / "feast" / "feature_store.yaml"
+        feast_store = full_project / ".nanoml" / "generated" / "feast" / "feature_store.yaml"
         assert feast_store.exists()
 
-        feast_features = full_project / ".nanorec" / "generated" / "feast" / "features.py"
+        feast_features = full_project / ".nanoml" / "generated" / "feast" / "features.py"
         assert feast_features.exists()
 
         features_code = feast_features.read_text()
@@ -1690,7 +1690,7 @@ def test_full_code_generation_workflow(full_project):
         assert "movie_features = FeatureView" in features_code
 
         # Verify Airflow DAG
-        airflow_dag = full_project / ".nanorec" / "generated" / "airflow" / "pipeline_dag.py"
+        airflow_dag = full_project / ".nanoml" / "generated" / "airflow" / "pipeline_dag.py"
         assert airflow_dag.exists()
 
         dag_code = airflow_dag.read_text()
@@ -1710,7 +1710,7 @@ def test_regeneration_idempotent(full_project):
         result1 = runner.invoke(cli, ["generate"])
         assert result1.exit_code == 0
 
-        flink_job = full_project / ".nanorec" / "generated" / "flink" / "streaming_features.py"
+        flink_job = full_project / ".nanoml" / "generated" / "flink" / "streaming_features.py"
         content1 = flink_job.read_text()
 
         # Second generation
@@ -1732,24 +1732,24 @@ Expected: PASS (2 tests)
 
 ```markdown
 # docs/code-generation.md
-# Code Generation in NanoRec
+# Code Generation in NanoML
 
-NanoRec automatically generates infrastructure code from your high-level definitions. This document explains what gets generated and how.
+NanoML automatically generates infrastructure code from your high-level definitions. This document explains what gets generated and how.
 
 ## Overview
 
-When you run `nanorec generate`, NanoRec reads your user code and generates:
+When you run `nanoml generate`, NanoML reads your user code and generates:
 
 1. **Flink Streaming Jobs** - From `features/definitions.py`
 2. **Feast Configuration** - From `features/definitions.py`
 3. **Airflow DAGs** - From `components/*.py`
 
-All generated code is written to `.nanorec/generated/` and should not be edited manually.
+All generated code is written to `.nanoml/generated/` and should not be edited manually.
 
 ## Directory Structure
 
 ```
-.nanorec/generated/
+.nanoml/generated/
 ├── flink/
 │   └── streaming_features.py    # Flink job for feature computation
 ├── feast/
@@ -1763,7 +1763,7 @@ All generated code is written to `.nanorec/generated/` and should not be edited 
 
 **Input:** `features/definitions.py`
 
-**Output:** `.nanorec/generated/flink/streaming_features.py`
+**Output:** `.nanoml/generated/flink/streaming_features.py`
 
 The generator:
 1. Parses `FeatureGroup` definitions using AST
@@ -1793,8 +1793,8 @@ Generates a Flink job that:
 **Input:** `features/definitions.py`
 
 **Outputs:**
-- `.nanorec/generated/feast/feature_store.yaml`
-- `.nanorec/generated/feast/features.py`
+- `.nanoml/generated/feast/feature_store.yaml`
+- `.nanoml/generated/feast/features.py`
 
 The generator:
 1. Extracts unique entities from all `FeatureGroup` definitions
@@ -1824,7 +1824,7 @@ user_features = FeatureView(
 
 **Input:** `components/*.py`
 
-**Output:** `.nanorec/generated/airflow/pipeline_dag.py`
+**Output:** `.nanoml/generated/airflow/pipeline_dag.py`
 
 The generator:
 1. Parses component definitions (DataComponent, FeaturesComponent, etc.)
@@ -1849,20 +1849,20 @@ ingest >> compute
 ### Generate All Code
 
 ```bash
-nanorec generate
+nanoml generate
 ```
 
 ### Clean and Regenerate
 
 ```bash
-nanorec generate --clean
+nanoml generate --clean
 ```
 
 This removes all existing generated code before regenerating.
 
 ## When to Regenerate
 
-Run `nanorec generate` whenever you:
+Run `nanoml generate` whenever you:
 - Add/modify feature definitions
 - Add/modify components
 - Change dependencies between components
@@ -1879,8 +1879,8 @@ Run `nanorec generate` whenever you:
 If generated code doesn't work:
 
 1. Check the source definitions for errors
-2. Run `nanorec validate` to catch config issues
-3. Examine generated files in `.nanorec/generated/`
+2. Run `nanoml validate` to catch config issues
+3. Examine generated files in `.nanoml/generated/`
 4. File an issue if generation is incorrect
 
 Generated code includes comments showing:
@@ -1932,7 +1932,7 @@ Expected: All tests pass
 
 - [ ] **Step 2: Test CLI help**
 
-Run: `nanorec generate --help`
+Run: `nanoml generate --help`
 Expected: Shows command help with --clean option
 
 - [ ] **Step 3: Verify all files created**
@@ -1965,9 +1965,9 @@ All generators implemented:
 - FeastConfigGenerator (features -> Feast entities + views)
 - AirflowDAGGenerator (components -> Airflow DAG)
 
-CLI command: nanorec generate [--clean]
+CLI command: nanoml generate [--clean]
 
-Generated code location: .nanorec/generated/
+Generated code location: .nanoml/generated/
 
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 EOF
@@ -1990,5 +1990,5 @@ This plan implements the code generation framework that transforms user definiti
 
 **After this plan:**
 - Users can write high-level definitions
-- `nanorec generate` produces all infrastructure code
+- `nanoml generate` produces all infrastructure code
 - Ready for Plan 4: End-to-End Local Example

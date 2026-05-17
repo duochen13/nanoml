@@ -1,4 +1,4 @@
-"""JSON Schema for NanoRec config.yaml validation."""
+"""JSON Schema for NanoML config.yaml validation."""
 
 CONFIG_SCHEMA = {
     "$schema": "http://json-schema.org/draft-07/schema#",

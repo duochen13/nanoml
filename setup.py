@@ -1,30 +1,30 @@
-"""Setup configuration for NanoRec package."""
+"""Setup configuration for NanoML package."""
 
 from setuptools import setup, find_packages
 from pathlib import Path
 
 # Read version
 version = {}
-with open("nanorec/__version__.py") as f:
+with open("nanoml/__version__.py") as f:
     exec(f.read(), version)
 
 # Read long description (will create README.md later)
 readme_path = Path(__file__).parent / "README.md"
-long_description = readme_path.read_text() if readme_path.exists() else "NanoRec - Production ML Systems Made Easy"
+long_description = readme_path.read_text() if readme_path.exists() else "NanoML - Production ML Systems Made Easy"
 
 setup(
-    name="nanorec",
+    name="nanoml",
     version=version["__version__"],
     description="Production ML Recommendation Systems Made Easy",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author="NanoRec Team",
-    author_email="team@nanorec.dev",
-    url="https://github.com/nanorec/nanorec",
+    author="NanoML Team",
+    author_email="team@nanoml.dev",
+    url="https://github.com/nanoml/nanoml",
     packages=find_packages(exclude=["tests", "tests.*"]),
     include_package_data=True,
     package_data={
-        "nanorec": [
+        "nanoml": [
             "templates/**/*",
             "templates/**/**/*",
         ],
@@ -45,7 +45,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "nanorec=nanorec.cli.main:cli",
+            "nanoml=nanoml.cli.main:cli",
         ],
     },
     python_requires=">=3.9",

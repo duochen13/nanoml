@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from nanorec.core.config_loader import ConfigLoader, ConfigValidationError
+from nanoml.core.config_loader import ConfigLoader, ConfigValidationError
 
 
 def test_load_valid_config():

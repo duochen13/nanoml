@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a complete working movie recommendation system that demonstrates NanoRec end-to-end on local infrastructure.
+**Goal:** Build a complete working movie recommendation system that demonstrates NanoML end-to-end on local infrastructure.
 
 **Architecture:** Full ML pipeline (data ingestion → feature computation → training → serving) using all 11 infrastructure services. Uses MovieLens dataset for realistic demo.
 
@@ -13,7 +13,7 @@
 ## File Structure
 
 **Code to create:**
-- `examples/movie_recommendations/nanorec.yaml` - Project config
+- `examples/movie_recommendations/nanoml.yaml` - Project config
 - `examples/movie_recommendations/features/definitions.py` - Feature definitions
 - `examples/movie_recommendations/components/data.py` - DataComponent implementation
 - `examples/movie_recommendations/components/features.py` - FeaturesComponent implementation
@@ -35,7 +35,7 @@
 ## Task 1: Project Setup & Dataset
 
 **Files:**
-- Create: `examples/movie_recommendations/nanorec.yaml`
+- Create: `examples/movie_recommendations/nanoml.yaml`
 - Create: `examples/movie_recommendations/data/download.py`
 - Test: `examples/movie_recommendations/tests/test_dataset.py`
 
@@ -158,10 +158,10 @@ if __name__ == "__main__":
 - [ ] **Step 4: Create project config**
 
 ```yaml
-# examples/movie_recommendations/nanorec.yaml
+# examples/movie_recommendations/nanoml.yaml
 name: movie_recommendations
 version: 0.1.0
-description: Movie recommendation system using NanoRec
+description: Movie recommendation system using NanoML
 
 infrastructure:
   provider: local
@@ -260,7 +260,7 @@ Expected: FAIL with "ModuleNotFoundError: No module named 'features.definitions'
 """Feature definitions for movie recommendations."""
 
 # examples/movie_recommendations/features/definitions.py
-from nanorec.features import Feature, FeatureGroup
+from nanoml.features import Feature, FeatureGroup
 
 
 # User features
@@ -309,8 +309,8 @@ Expected: PASS (3 tests)
 
 - [ ] **Step 5: Generate Flink and Feast code from features**
 
-Run: `cd examples/movie_recommendations && nanorec generate`
-Expected: Creates .nanorec/generated/ with Flink job and Feast configs
+Run: `cd examples/movie_recommendations && nanoml generate`
+Expected: Creates .nanoml/generated/ with Flink job and Feast configs
 
 - [ ] **Step 6: Commit**
 
@@ -377,8 +377,8 @@ def test_data_component_upload_to_s3(data_dir):
 
     # Verify files uploaded
     storage = StorageClient()
-    assert storage.exists("nanorec-data", "movies.csv")
-    assert storage.exists("nanorec-data", "ratings.csv")
+    assert storage.exists("nanoml-data", "movies.csv")
+    assert storage.exists("nanoml-data", "ratings.csv")
 
 
 def test_data_component_publish_events(data_dir):
@@ -419,7 +419,7 @@ Expected: FAIL with "ModuleNotFoundError: No module named 'components.data'"
 
 ```python
 # examples/movie_recommendations/components/__init__.py
-"""NanoRec components for movie recommendations."""
+"""NanoML components for movie recommendations."""
 
 # examples/movie_recommendations/components/data.py
 import csv
@@ -431,7 +431,7 @@ from infrastructure.messaging.client import MessagingClient
 
 
 class DataComponent:
-    """Ingests MovieLens data into NanoRec infrastructure.
+    """Ingests MovieLens data into NanoML infrastructure.
 
     Responsibilities:
     1. Upload raw CSV files to S3 (LocalStack)
@@ -478,7 +478,7 @@ class DataComponent:
 
     def _upload_to_s3(self, movies_file: Path, ratings_file: Path):
         """Upload CSV files to S3."""
-        bucket = "nanorec-data"
+        bucket = "nanoml-data"
         self.storage.create_bucket(bucket)
 
         self.storage.upload_file(movies_file, bucket, "movies.csv")
@@ -732,11 +732,11 @@ class FeaturesComponent:
     def run(self):
         """Run feature computation."""
         # Submit Flink job
-        flink_job = Path(".nanorec/generated/flink/streaming_features.py")
+        flink_job = Path(".nanoml/generated/flink/streaming_features.py")
 
         if not flink_job.exists():
             raise FileNotFoundError(
-                "Flink job not found. Run 'nanorec generate' first."
+                "Flink job not found. Run 'nanoml generate' first."
             )
 
         print(f"Submitting Flink job: {flink_job}")
@@ -744,7 +744,7 @@ class FeaturesComponent:
         print(f"✓ Flink job submitted: {job_id}")
 
         # Apply Feast definitions
-        feast_dir = Path(".nanorec/generated/feast")
+        feast_dir = Path(".nanoml/generated/feast")
         print(f"Applying Feast definitions from {feast_dir}")
 
         # Run: feast apply
@@ -1211,7 +1211,7 @@ def test_full_pipeline_runs():
 
     # Generate code
     subprocess.run(
-        ["nanorec", "generate"],
+        ["nanoml", "generate"],
         cwd="examples/movie_recommendations",
         check=True
     )
@@ -1273,7 +1273,7 @@ def main():
     project_root = Path(__file__).parent
 
     print("=" * 60)
-    print("NanoRec Movie Recommendations Pipeline")
+    print("NanoML Movie Recommendations Pipeline")
     print("=" * 60)
 
     # Step 1: Data ingestion
@@ -1342,7 +1342,7 @@ if __name__ == "__main__":
 #!/bin/bash
 set -e
 
-echo "Setting up NanoRec Movie Recommendations example..."
+echo "Setting up NanoML Movie Recommendations example..."
 
 # Start infrastructure
 echo "Starting infrastructure services..."
@@ -1358,7 +1358,7 @@ python data/download.py
 
 # Generate code
 echo "Generating Flink jobs, Feast configs, and Airflow DAGs..."
-nanorec generate --clean
+nanoml generate --clean
 
 # Run pipeline
 echo "Running pipeline..."
@@ -1421,9 +1421,9 @@ EOF
 
 ```markdown
 # examples/movie_recommendations/README.md
-# Movie Recommendations with NanoRec
+# Movie Recommendations with NanoML
 
-A complete end-to-end example demonstrating NanoRec's capabilities using the MovieLens dataset.
+A complete end-to-end example demonstrating NanoML's capabilities using the MovieLens dataset.
 
 ## Overview
 
@@ -1448,7 +1448,7 @@ This example builds a movie recommendation system that:
 
 - Docker and Docker Compose
 - Python 3.9+
-- NanoRec installed (`pip install nanorec`)
+- NanoML installed (`pip install nanoml`)
 
 ### Run the Example
 
@@ -1503,14 +1503,14 @@ python data/download.py
 ### 3. Generate Code
 
 ```bash
-nanorec generate --clean
+nanoml generate --clean
 ```
 
 This generates:
-- `.nanorec/generated/flink/streaming_features.py`
-- `.nanorec/generated/feast/feature_store.yaml`
-- `.nanorec/generated/feast/features.py`
-- `.nanorec/generated/airflow/pipeline_dag.py`
+- `.nanoml/generated/flink/streaming_features.py`
+- `.nanoml/generated/feast/feature_store.yaml`
+- `.nanoml/generated/feast/features.py`
+- `.nanoml/generated/airflow/pipeline_dag.py`
 
 ### 4. Run Pipeline
 
@@ -1522,7 +1522,7 @@ python pipeline.py
 
 ```
 movie_recommendations/
-├── nanorec.yaml               # Project config
+├── nanoml.yaml               # Project config
 ├── data/
 │   ├── download.py            # Dataset downloader
 │   ├── movies.csv             # Movie metadata
@@ -1540,7 +1540,7 @@ movie_recommendations/
 │   └── run_example.sh         # One-command setup
 ├── tests/
 │   └── test_end_to_end.py     # Integration tests
-└── .nanorec/generated/        # Auto-generated code
+└── .nanoml/generated/        # Auto-generated code
     ├── flink/
     ├── feast/
     └── airflow/
@@ -1619,7 +1619,7 @@ View experiments and models at http://localhost:5000
 
 View pipeline DAG at http://localhost:8080
 
-- DAG ID: `nanorec_pipeline`
+- DAG ID: `nanoml_pipeline`
 - Tasks: data_ingestion → feature_computation → model_training → model_evaluation → model_serving
 
 ## Customization
@@ -1629,7 +1629,7 @@ View pipeline DAG at http://localhost:8080
 Edit `features/definitions.py` and regenerate:
 
 ```bash
-nanorec generate
+nanoml generate
 python pipeline.py
 ```
 
@@ -1677,7 +1677,7 @@ docker logs flink-taskmanager
 
 Re-apply Feast definitions:
 ```bash
-cd .nanorec/generated/feast
+cd .nanoml/generated/feast
 feast apply
 ```
 
@@ -1697,19 +1697,19 @@ cd ../.. && make infra-down
 
 Remove generated code:
 ```bash
-rm -rf .nanorec/generated
+rm -rf .nanoml/generated
 ```
 
 ## Next Steps
 
 - Try different recommendation algorithms (Matrix Factorization, Neural Collaborative Filtering)
 - Add more feature groups (temporal features, content-based features)
-- Deploy to AWS using `nanorec deploy --provider aws`
+- Deploy to AWS using `nanoml deploy --provider aws`
 - Scale up with larger datasets (MovieLens 25M)
 
 ## Learn More
 
-- [NanoRec Documentation](../../docs/)
+- [NanoML Documentation](../../docs/)
 - [Feature Engineering Guide](../../docs/features.md)
 - [Deployment Guide](../../docs/deployment.md)
 ```
@@ -1765,7 +1765,7 @@ Expected: All tests pass
 ```bash
 # Clean everything
 make infra-down
-rm -rf examples/movie_recommendations/.nanorec/generated
+rm -rf examples/movie_recommendations/.nanoml/generated
 rm -rf examples/movie_recommendations/data/*.csv
 
 # Run from scratch
@@ -1783,7 +1783,7 @@ Check:
 
 - [ ] **Step 4: Verify generated code**
 
-Check that `.nanorec/generated/` contains:
+Check that `.nanoml/generated/` contains:
 - [ ] `flink/streaming_features.py`
 - [ ] `feast/feature_store.yaml`
 - [ ] `feast/features.py`
@@ -1796,7 +1796,7 @@ git add -A
 git commit -m "$(cat <<'EOF'
 feat: complete end-to-end movie recommendations example
 
-Full working example demonstrating NanoRec capabilities:
+Full working example demonstrating NanoML capabilities:
 - MovieLens 100K dataset
 - 3 feature groups (user, movie, interaction)
 - 5 components (data, features, training, evaluation, serving)
@@ -1814,7 +1814,7 @@ EOF
 
 ## Summary
 
-This plan implements a complete working example that demonstrates NanoRec end-to-end.
+This plan implements a complete working example that demonstrates NanoML end-to-end.
 
 **Key deliverables:**
 1. MovieLens dataset integration

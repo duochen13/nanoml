@@ -26,7 +26,7 @@ def main():
     project_root = Path(__file__).parent
 
     print("=" * 60)
-    print("NanoRec Movie Recommendations Pipeline")
+    print("NanoML Movie Recommendations Pipeline")
     print("=" * 60)
 
     # Step 1: Data ingestion

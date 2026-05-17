@@ -31,5 +31,5 @@ class FeaturesComponent:
         print(f"✓ Feature computation would run here")
         print(f"  (Simplified implementation for demo)")
         # In full implementation:
-        # - Submit Flink job from .nanorec/generated/flink/
-        # - Apply Feast definitions from .nanorec/generated/feast/
+        # - Submit Flink job from .nanoml/generated/flink/
+        # - Apply Feast definitions from .nanoml/generated/feast/

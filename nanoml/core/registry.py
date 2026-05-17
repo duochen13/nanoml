@@ -5,7 +5,7 @@ components and providers at runtime.
 """
 
 from typing import Dict, Type
-from nanorec.core.base import Component, Provider
+from nanoml.core.base import Component, Provider
 
 
 class Registry:

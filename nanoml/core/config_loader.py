@@ -4,7 +4,7 @@ import yaml
 from pathlib import Path
 from typing import Dict, Any
 from jsonschema import validate, ValidationError
-from nanorec.core.schema import CONFIG_SCHEMA
+from nanoml.core.schema import CONFIG_SCHEMA
 
 
 class ConfigValidationError(Exception):
@@ -13,7 +13,7 @@ class ConfigValidationError(Exception):
 
 
 class ConfigLoader:
-    """Loads and validates NanoRec configuration files."""
+    """Loads and validates NanoML configuration files."""
 
     def load(self, config_path: Path) -> Dict[str, Any]:
         """

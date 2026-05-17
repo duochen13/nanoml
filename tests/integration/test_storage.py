@@ -38,10 +38,10 @@ def test_storage_upload_download(storage_client, tmp_path):
 
     # Create test file
     test_file = tmp_path / "test.txt"
-    test_file.write_text("Hello NanoRec")
+    test_file.write_text("Hello NanoML")
 
     # Upload
-    bucket = "nanorec-test"
+    bucket = "nanoml-test"
     key = "test/test.txt"
     storage_client.create_bucket(bucket)
     storage_client.upload_file(str(test_file), bucket, key)
@@ -50,4 +50,4 @@ def test_storage_upload_download(storage_client, tmp_path):
     download_path = tmp_path / "downloaded.txt"
     storage_client.download_file(bucket, key, str(download_path))
 
-    assert download_path.read_text() == "Hello NanoRec"
+    assert download_path.read_text() == "Hello NanoML"

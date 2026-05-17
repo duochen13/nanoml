@@ -1,4 +1,4 @@
-"""Base classes for NanoRec components and providers."""
+"""Base classes for NanoML components and providers."""
 
 from abc import ABC, abstractmethod
 from typing import Dict, Any
@@ -6,7 +6,7 @@ from typing import Dict, Any
 
 class Component(ABC):
     """
-    Base class for all NanoRec components.
+    Base class for all NanoML components.
 
     Components are user-facing modules (data, features, training, etc.)
     that orchestrate business logic and use infrastructure services.

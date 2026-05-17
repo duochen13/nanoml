@@ -3,27 +3,27 @@ import shutil
 
 
 class GeneratedManager:
-    """Manages the .nanorec/generated/ directory structure."""
+    """Manages the .nanoml/generated/ directory structure."""
 
     def __init__(self, project_root: Path):
         """Initialize manager.
 
         Args:
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
         """
         self.project_root = Path(project_root)
-        self.generated_root = self.project_root / ".nanorec" / "generated"
+        self.generated_root = self.project_root / ".nanoml" / "generated"
 
     def init(self):
         """Initialize generated directory structure.
 
         Creates:
-        - .nanorec/generated/
-        - .nanorec/generated/__init__.py
-        - .nanorec/generated/flink/
-        - .nanorec/generated/feast/
-        - .nanorec/generated/airflow/
-        - .nanorec/generated/.gitignore
+        - .nanoml/generated/
+        - .nanoml/generated/__init__.py
+        - .nanoml/generated/flink/
+        - .nanoml/generated/feast/
+        - .nanoml/generated/airflow/
+        - .nanoml/generated/.gitignore
         """
         # Create directories
         self.generated_root.mkdir(parents=True, exist_ok=True)
@@ -51,7 +51,7 @@ class GeneratedManager:
         """Get Flink jobs directory.
 
         Returns:
-            Path to .nanorec/generated/flink/
+            Path to .nanoml/generated/flink/
         """
         return self.generated_root / "flink"
 
@@ -59,7 +59,7 @@ class GeneratedManager:
         """Get Feast config directory.
 
         Returns:
-            Path to .nanorec/generated/feast/
+            Path to .nanoml/generated/feast/
         """
         return self.generated_root / "feast"
 
@@ -67,7 +67,7 @@ class GeneratedManager:
         """Get Airflow DAGs directory.
 
         Returns:
-            Path to .nanorec/generated/airflow/
+            Path to .nanoml/generated/airflow/
         """
         return self.generated_root / "airflow"
 

@@ -4,7 +4,7 @@ Define features using @feature decorator.
 Framework auto-generates Flink jobs and Feast configs.
 """
 
-from nanorec.features import feature
+from nanoml.features import feature
 import pandas as pd
 
 
@@ -68,6 +68,6 @@ def compute_item_avg_rating(item_ratings: pd.DataFrame) -> pd.Series:
 
 # TODO: Add your custom features here
 # Framework will auto-generate:
-# - .nanorec/generated/flink/batch_features.py
-# - .nanorec/generated/flink/stream_features.py
-# - .nanorec/generated/feast/feature_repo/features.py
+# - .nanoml/generated/flink/batch_features.py
+# - .nanoml/generated/flink/stream_features.py
+# - .nanoml/generated/feast/feature_repo/features.py

@@ -1,4 +1,4 @@
-"""Health check utilities for NanoRec infrastructure services."""
+"""Health check utilities for NanoML infrastructure services."""
 
 import requests
 import socket
@@ -27,7 +27,7 @@ class ServiceHealth:
 
 
 class HealthChecker:
-    """Check health of NanoRec infrastructure services."""
+    """Check health of NanoML infrastructure services."""
 
     def __init__(self, timeout: int = 5):
         """
@@ -83,7 +83,7 @@ class HealthChecker:
 
     def check_all_services(self) -> Dict[str, ServiceHealth]:
         """
-        Check health of all NanoRec services.
+        Check health of all NanoML services.
 
         Returns:
             Dictionary mapping service name to health status

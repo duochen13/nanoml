@@ -1,4 +1,4 @@
-"""Integration tests for NanoRec infrastructure services."""
+"""Integration tests for NanoML infrastructure services."""
 
 import pytest
 from core.health import HealthChecker, ServiceStatus
@@ -74,10 +74,10 @@ def test_mlflow_healthy(health_checker):
 
 def test_all_services_healthy(health_checker):
     """All infrastructure services should be healthy."""
-    # Only run if at least one expected NanoRec service is running
+    # Only run if at least one expected NanoML service is running
     # Check for LocalStack specifically as it's the most specific indicator
     if not _is_service_available("localhost", 4566):
-        pytest.skip("NanoRec infrastructure not running (LocalStack not found on 4566)")
+        pytest.skip("NanoML infrastructure not running (LocalStack not found on 4566)")
 
     results = health_checker.check_all_services()
 

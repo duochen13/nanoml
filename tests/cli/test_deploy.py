@@ -5,9 +5,9 @@ from pathlib import Path
 
 
 def test_deploy_command_validates_provider(tmp_path, monkeypatch):
-    """nanorec deploy validates provider config."""
+    """nanoml deploy validates provider config."""
     # Create invalid config
-    config = tmp_path / "nanorec.yaml"
+    config = tmp_path / "nanoml.yaml"
     config.write_text("name: test\nversion: 0.1.0\ninfrastructure:\n  provider: invalid")
 
     runner = CliRunner()
@@ -20,8 +20,8 @@ def test_deploy_command_validates_provider(tmp_path, monkeypatch):
 
 
 def test_deploy_command_aws_synthesizes_cdk(tmp_path, monkeypatch):
-    """nanorec deploy --provider aws synthesizes CDK."""
-    config = tmp_path / "nanorec.yaml"
+    """nanoml deploy --provider aws synthesizes CDK."""
+    config = tmp_path / "nanoml.yaml"
     config.write_text("""
 name: test
 version: 0.1.0
@@ -58,8 +58,8 @@ infrastructure:
 
 
 def test_deploy_command_local_starts_docker_compose(tmp_path, monkeypatch):
-    """nanorec deploy --provider local starts Docker Compose."""
-    config = tmp_path / "nanorec.yaml"
+    """nanoml deploy --provider local starts Docker Compose."""
+    config = tmp_path / "nanoml.yaml"
     config.write_text("""
 name: test
 version: 0.1.0

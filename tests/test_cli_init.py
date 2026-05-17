@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
 from click.testing import CliRunner
-from nanorec.cli.main import cli
+from nanoml.cli.main import cli
 
 
 def test_init_creates_project(tmp_path):
@@ -12,7 +12,7 @@ def test_init_creates_project(tmp_path):
         result = runner.invoke(cli, ["init", "test-project"])
 
         assert result.exit_code == 0
-        assert "Creating NanoRec project: test-project" in result.output
+        assert "Creating NanoML project: test-project" in result.output
         assert "✅ Project created!" in result.output
 
         # Verify project directory exists

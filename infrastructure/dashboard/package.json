@@ -1,5 +1,5 @@
 {
-  "name": "nanorec-dashboard",
+  "name": "nanoml-dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

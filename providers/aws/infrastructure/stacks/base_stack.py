@@ -16,5 +16,5 @@ class BaseStack(Stack):
         super().__init__(scope, id, **kwargs)
 
         # Common tags
-        Tags.of(self).add("Project", "NanoRec")
+        Tags.of(self).add("Project", "NanoML")
         Tags.of(self).add("ManagedBy", "CDK")

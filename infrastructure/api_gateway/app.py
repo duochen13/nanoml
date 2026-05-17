@@ -1,9 +1,9 @@
-"""NanoRec API Gateway."""
+"""NanoML API Gateway."""
 
 from fastapi import FastAPI
 from infrastructure.api_gateway.routes import router
 
-app = FastAPI(title="NanoRec API Gateway")
+app = FastAPI(title="NanoML API Gateway")
 
 app.include_router(router)
 
@@ -18,7 +18,7 @@ async def health():
 async def root():
     """Root endpoint."""
     return {
-        "name": "NanoRec API Gateway",
+        "name": "NanoML API Gateway",
         "version": "0.1.0",
         "docs": "/docs"
     }

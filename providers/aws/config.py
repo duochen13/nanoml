@@ -24,7 +24,7 @@ class AWSConfig:
     # Service-specific configs
     storage_bucket: Optional[str] = None
     messaging_cluster: Optional[str] = None
-    feature_store_prefix: str = "nanorec"
+    feature_store_prefix: str = "nanoml"
     training_instance_type: str = "ml.m5.xlarge"
     serving_instance_type: str = "ml.t2.medium"
     orchestration_environment: Optional[str] = None
@@ -45,7 +45,7 @@ class AWSConfig:
             self.storage_bucket = self._services["storage"].get("bucket_name")
         elif self.storage_bucket is None:
             # Provide default bucket name
-            self.storage_bucket = "nanorec-data"
+            self.storage_bucket = "nanoml-data"
 
         if "messaging" in self._services:
             self.messaging_cluster = self._services["messaging"].get("cluster_name")
@@ -57,10 +57,10 @@ class AWSConfig:
 
     @classmethod
     def from_file(cls, config_path: Path) -> "AWSConfig":
-        """Load AWS config from nanorec.yaml file.
+        """Load AWS config from nanoml.yaml file.
 
         Args:
-            config_path: Path to nanorec.yaml
+            config_path: Path to nanoml.yaml
 
         Returns:
             AWSConfig instance

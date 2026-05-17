@@ -93,9 +93,9 @@ class FlinkJobGenerator(BaseGenerator):
         """Get output path for Flink job.
 
         Args:
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
 
         Returns:
-            .nanorec/generated/flink/streaming_features.py
+            .nanoml/generated/flink/streaming_features.py
         """
-        return project_root / ".nanorec" / "generated" / "flink" / "streaming_features.py"
+        return project_root / ".nanoml" / "generated" / "flink" / "streaming_features.py"

@@ -5,8 +5,8 @@ based on the selected environment in config.yaml.
 """
 
 from typing import Dict, Any
-from nanorec.core.base import Provider
-from nanorec.core.registry import get_registry
+from nanoml.core.base import Provider
+from nanoml.core.registry import get_registry
 
 
 class ProviderFactory:

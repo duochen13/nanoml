@@ -1,4 +1,4 @@
-# NanoRec Integration Test Summary
+# NanoML Integration Test Summary
 
 **Status: 85% PRODUCTION READY** ✓
 
@@ -13,8 +13,8 @@
 ## What Works Right Now
 
 ✓ **Core Framework (Plan 1)**
-- Create projects: `nanorec init my-recommender`
-- Validate configs: `nanorec validate --config config.yaml`
+- Create projects: `nanoml init my-recommender`
+- Validate configs: `nanoml validate --config config.yaml`
 - Complete project templates with proper structure
 
 ✓ **Infrastructure Clients (Plan 2)**
@@ -45,21 +45,21 @@
 ## Issues Found (Only 2!)
 
 ### Issue #1: Config File Naming (BLOCKING)
-**Impact:** Prevents `nanorec generate` from working immediately after `nanorec init`
+**Impact:** Prevents `nanoml generate` from working immediately after `nanoml init`
 
 **Problem:**
-- `nanorec init` creates `config.yaml`
-- `nanorec generate` expects `nanorec.yaml`
+- `nanoml init` creates `config.yaml`
+- `nanoml generate` expects `nanoml.yaml`
 
 **Fix:** 5-minute code change
 ```python
-# In nanorec/cli/generate.py, line 39
-config_path = project_root / "nanorec.yaml"
+# In nanoml/cli/generate.py, line 39
+config_path = project_root / "nanoml.yaml"
 if not config_path.exists():
     config_path = project_root / "config.yaml"  # Add fallback
 ```
 
-**OR** change template to create `nanorec.yaml` instead of `config.yaml`
+**OR** change template to create `nanoml.yaml` instead of `config.yaml`
 
 ### Issue #2: Docker Compose Path (NON-BLOCKING)
 **Impact:** One test expects different path
@@ -74,8 +74,8 @@ if not config_path.exists():
 
 ### Critical (Fix Before Release)
 1. **Fix config file naming** - 5 minutes
-   - Update generate.py to accept both config.yaml and nanorec.yaml
-   - OR update template to create nanorec.yaml
+   - Update generate.py to accept both config.yaml and nanoml.yaml
+   - OR update template to create nanoml.yaml
 
 ### Nice to Have
 1. **Update test path** - 2 minutes
@@ -83,20 +83,20 @@ if not config_path.exists():
 2. **Document infrastructure startup** - 10 minutes
    - Add README with docker-compose instructions
 
-## How to Use NanoRec Today
+## How to Use NanoML Today
 
 ### Quick Start (No Infrastructure Needed)
 ```bash
 # 1. Create project
-nanorec init my-recommender
+nanoml init my-recommender
 cd my-recommender
 
 # 2. Validate configuration
-nanorec validate --config config.yaml
+nanoml validate --config config.yaml
 
 # 3. Generate code (after config file fix)
-mv config.yaml nanorec.yaml  # temporary workaround
-nanorec generate
+mv config.yaml nanoml.yaml  # temporary workaround
+nanoml generate
 
 # 4. Explore example
 cd ../examples/movie_recommendations
@@ -199,7 +199,7 @@ pytest tests/integration/ -v
 
 ## Conclusion
 
-NanoRec successfully integrates all 5 implementation plans. With just **one 5-minute fix**, the system is ready for production use. The remaining "issues" are cosmetic test improvements, not functional problems.
+NanoML successfully integrates all 5 implementation plans. With just **one 5-minute fix**, the system is ready for production use. The remaining "issues" are cosmetic test improvements, not functional problems.
 
 **Recommendation: Ship it!** (after config fix)
 

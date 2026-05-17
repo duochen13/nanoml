@@ -13,7 +13,7 @@ class MockGenerator(BaseGenerator):
         return f"# Generated: {parsed_data}"
 
     def get_output_path(self, project_root: Path) -> Path:
-        return project_root / ".nanorec" / "generated" / "mock.py"
+        return project_root / ".nanoml" / "generated" / "mock.py"
 
 
 def test_base_generator_interface():
@@ -36,7 +36,7 @@ def test_base_generator_run(tmp_path):
 
     assert output_path.exists()
     assert "# Generated:" in output_path.read_text()
-    assert output_path == tmp_path / ".nanorec" / "generated" / "mock.py"
+    assert output_path == tmp_path / ".nanoml" / "generated" / "mock.py"
 
 
 def test_base_generator_ensures_output_dir(tmp_path):

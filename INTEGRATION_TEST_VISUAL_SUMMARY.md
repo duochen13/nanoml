@@ -1,10 +1,10 @@
-# NanoRec Integration Test Results - Visual Summary
+# NanoML Integration Test Results - Visual Summary
 
 ## Overall System Health
 
 ```
 ╔══════════════════════════════════════════════════════════════╗
-║                  NANOREC SYSTEM STATUS                       ║
+║                  NANOML SYSTEM STATUS                       ║
 ║                  Version: 0.1.0                              ║
 ╠══════════════════════════════════════════════════════════════╣
 ║                                                              ║
@@ -67,7 +67,7 @@
 ║  ✓ Flink Generator     ✓ Feast Generator   ✓ Airflow Generator   ║
 ║  ⏸ Integration Tests   ⚠ Config File Name                        ║
 ║                                                                   ║
-║  Issue: init creates config.yaml, generate expects nanorec.yaml   ║
+║  Issue: init creates config.yaml, generate expects nanoml.yaml   ║
 ╚═══════════════════════════════════════════════════════════════════╝
 
 ╔═══════════════════════════════════════════════════════════════════╗
@@ -102,8 +102,8 @@
 │  Impact:     Prevents generate after init                   │
 │                                                             │
 │  Problem:                                                   │
-│    - nanorec init creates config.yaml                       │
-│    - nanorec generate expects nanorec.yaml                  │
+│    - nanoml init creates config.yaml                       │
+│    - nanoml generate expects nanoml.yaml                  │
 │                                                             │
 │  Solution:                                                  │
 │    Support both filenames in generate.py                    │
@@ -174,7 +174,7 @@ Legend:
 ```
         ┌─────────────────────────────────────────┐
         │                                         │
-        │         NANOREC ARCHITECTURE            │
+        │         NANOML ARCHITECTURE            │
         │                                         │
         └─────────────────────────────────────────┘
 
@@ -237,11 +237,11 @@ Total Time: 3.88 seconds
 
 ```bash
 # 1. Create a new project
-nanorec init my-recommender
+nanoml init my-recommender
 cd my-recommender
 
 # 2. Validate configuration
-nanorec validate --config config.yaml
+nanoml validate --config config.yaml
 
 # 3. Start infrastructure (optional)
 cd ../deployment
@@ -249,8 +249,8 @@ docker-compose up -d
 
 # 4. Generate code (after config fix)
 cd ../my-recommender
-mv config.yaml nanorec.yaml  # temporary workaround
-nanorec generate
+mv config.yaml nanoml.yaml  # temporary workaround
+nanoml generate
 
 # 5. Explore example
 cd ../examples/movie_recommendations
@@ -357,7 +357,7 @@ pytest tests/
 ║                                                               ║
 ║                    🎉 SUCCESS! 🎉                             ║
 ║                                                               ║
-║  NanoRec successfully integrates all 5 implementation plans   ║
+║  NanoML successfully integrates all 5 implementation plans   ║
 ║                                                               ║
 ║  ✓ Core Framework:      Working                              ║
 ║  ✓ Infrastructure:      Ready                                ║

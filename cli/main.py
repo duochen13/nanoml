@@ -3,7 +3,7 @@ import click
 
 @click.group()
 def cli():
-    """NanoRec - Declarative ML recommendation framework."""
+    """NanoML - Declarative ML recommendation framework."""
     pass
 
 

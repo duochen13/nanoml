@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-echo "Setting up NanoRec Movie Recommendations example..."
+echo "Setting up NanoML Movie Recommendations example..."
 
 # Check if we're in the right directory
-if [ ! -f "nanorec.yaml" ]; then
+if [ ! -f "nanoml.yaml" ]; then
     echo "Error: Must run from examples/movie_recommendations directory"
     exit 1
 fi

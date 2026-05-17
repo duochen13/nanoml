@@ -1,12 +1,12 @@
-# NanoRec
+# NanoML
 
 **Production ML Recommendation Systems Made Easy**
 
-NanoRec is a pip-installable framework that scaffolds complete end-to-end ML recommendation systems, enabling users to focus on ML business logic (features, models, labels) while the framework handles all infrastructure complexity.
+NanoML is a pip-installable framework that scaffolds complete end-to-end ML recommendation systems, enabling users to focus on ML business logic (features, models, labels) while the framework handles all infrastructure complexity.
 
 ## Features
 
-- 🚀 **One-command deployment** - `nanorec deploy` handles everything
+- 🚀 **One-command deployment** - `nanoml deploy` handles everything
 - ☁️ **Cloud-agnostic** - Same code runs on local/AWS/GCP/Azure
 - 🔧 **Fully declarative** - Write WHAT, framework generates HOW
 - 📦 **Complete stack** - 11 infrastructure services integrated
@@ -17,13 +17,13 @@ NanoRec is a pip-installable framework that scaffolds complete end-to-end ML rec
 ### Installation
 
 ```bash
-pip install nanorec
+pip install nanoml
 ```
 
 ### Create a New Project
 
 ```bash
-nanorec init my-recommender
+nanoml init my-recommender
 cd my-recommender
 ```
 
@@ -38,7 +38,7 @@ make run    # Start Docker Compose (11 services)
 
 ```bash
 # Edit config.yaml: environment: aws
-nanorec deploy
+nanoml deploy
 ```
 
 ## Architecture
@@ -73,7 +73,7 @@ nanorec deploy
 
 ## Documentation
 
-- [Design Document](docs/superpowers/specs/2026-05-17-nanorec-design.md)
+- [Design Document](docs/superpowers/specs/2026-05-17-nanoml-design.md)
 - [Implementation Plans](docs/superpowers/plans/)
 
 ## Development
@@ -88,14 +88,14 @@ pip install -e ".[dev]"
 
 ```bash
 pytest tests/ -v
-pytest tests/ --cov=nanorec
+pytest tests/ --cov=nanoml
 ```
 
 ### Code Quality
 
 ```bash
-black nanorec/ tests/
-ruff check nanorec/ tests/
+black nanoml/ tests/
+ruff check nanoml/ tests/
 ```
 
 ## Architecture Principles
@@ -111,6 +111,6 @@ MIT
 
 ## Links
 
-- GitHub: https://github.com/nanorec/nanorec
-- Documentation: https://nanorec.dev
-- Issues: https://github.com/nanorec/nanorec/issues
+- GitHub: https://github.com/nanoml/nanoml
+- Documentation: https://nanoml.dev
+- Issues: https://github.com/nanoml/nanoml/issues

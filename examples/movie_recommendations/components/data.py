@@ -12,7 +12,7 @@ from infrastructure.kafka.client import KafkaClient
 
 
 class DataComponent:
-    """Ingests MovieLens data into NanoRec infrastructure.
+    """Ingests MovieLens data into NanoML infrastructure.
 
     Responsibilities:
     1. Upload raw CSV files to S3 (LocalStack)
@@ -73,7 +73,7 @@ class DataComponent:
 
     def _upload_to_s3(self, movies_file: Path, ratings_file: Path):
         """Upload CSV files to S3."""
-        bucket = "nanorec-data"
+        bucket = "nanoml-data"
         self.storage.create_bucket(bucket)
 
         self.storage.upload_file(str(movies_file), bucket, "movies.csv")

@@ -4,7 +4,7 @@ from generators.airflow_dag import AirflowDAGGenerator
 
 
 SAMPLE_COMPONENTS = '''
-from nanorec.components import DataComponent, FeaturesComponent
+from nanoml.components import DataComponent, FeaturesComponent
 
 data = DataComponent(
     name="data_ingestion",
@@ -67,8 +67,8 @@ def test_generate_airflow_dag_code(tmp_path):
 
 
 def test_get_output_path(tmp_path):
-    """get_output_path() returns .nanorec/generated/airflow/pipeline_dag.py."""
+    """get_output_path() returns .nanoml/generated/airflow/pipeline_dag.py."""
     gen = AirflowDAGGenerator()
     output = gen.get_output_path(tmp_path)
 
-    assert output == tmp_path / ".nanorec" / "generated" / "airflow" / "pipeline_dag.py"
+    assert output == tmp_path / ".nanoml" / "generated" / "airflow" / "pipeline_dag.py"

@@ -1,1 +1,1 @@
-"""NanoRec infrastructure services."""
+"""NanoML infrastructure services."""

@@ -1,6 +1,6 @@
 from pathlib import Path
 from click.testing import CliRunner
-from nanorec.cli.main import cli
+from nanoml.cli.main import cli
 
 
 def test_validate_valid_config(tmp_path):

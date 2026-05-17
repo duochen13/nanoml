@@ -21,17 +21,17 @@ def generate(clean: bool):
     - components/*.py -> Airflow DAGs
 
     Writes to:
-    - .nanorec/generated/flink/
-    - .nanorec/generated/feast/
-    - .nanorec/generated/airflow/
+    - .nanoml/generated/flink/
+    - .nanoml/generated/feast/
+    - .nanoml/generated/airflow/
     """
     # Find project root
     project_root = Path.cwd()
-    config_path = project_root / "nanorec.yaml"
+    config_path = project_root / "nanoml.yaml"
 
     if not config_path.exists():
-        click.echo("No nanorec.yaml found in current directory", err=True)
-        click.echo("Run this command from a NanoRec project root", err=True)
+        click.echo("No nanoml.yaml found in current directory", err=True)
+        click.echo("Run this command from a NanoML project root", err=True)
         raise click.Abort()
 
     # Load config

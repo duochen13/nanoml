@@ -1,6 +1,6 @@
 # AWS Deployment Guide
 
-Deploy NanoRec to AWS using managed services.
+Deploy NanoML to AWS using managed services.
 
 ## Prerequisites
 
@@ -13,7 +13,7 @@ Deploy NanoRec to AWS using managed services.
 
 ### 1. Configure AWS Provider
 
-Edit `nanorec.yaml`:
+Edit `nanoml.yaml`:
 
 ```yaml
 name: my_project
@@ -44,7 +44,7 @@ infrastructure:
 ### 2. Deploy Infrastructure
 
 ```bash
-nanorec deploy --provider aws
+nanoml deploy --provider aws
 ```
 
 This will:
@@ -190,7 +190,7 @@ Typical monthly costs for a small production deployment:
 
 ```bash
 # Export S3 data
-aws s3 sync s3://local-nanorec-data/ s3://my-project-data/
+aws s3 sync s3://local-nanoml-data/ s3://my-project-data/
 
 # Export Kafka topics (requires kafka-console-consumer)
 kafka-console-consumer --bootstrap-server localhost:9092 --topic my-topic --from-beginning > my-topic.json
@@ -198,12 +198,12 @@ kafka-console-consumer --bootstrap-server localhost:9092 --topic my-topic --from
 
 ### 2. Update Configuration
 
-Change `nanorec.yaml` from `provider: local` to `provider: aws`.
+Change `nanoml.yaml` from `provider: local` to `provider: aws`.
 
 ### 3. Regenerate Code
 
 ```bash
-nanorec generate --clean
+nanoml generate --clean
 ```
 
 This regenerates infrastructure code for AWS services.
@@ -211,7 +211,7 @@ This regenerates infrastructure code for AWS services.
 ### 4. Deploy
 
 ```bash
-nanorec deploy --provider aws
+nanoml deploy --provider aws
 ```
 
 ### 5. Import Data

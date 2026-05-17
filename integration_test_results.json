@@ -44,7 +44,7 @@
       "id": 1,
       "severity": "medium",
       "title": "Config file naming inconsistency",
-      "description": "init creates config.yaml but generate expects nanorec.yaml",
+      "description": "init creates config.yaml but generate expects nanoml.yaml",
       "fix_time": "5 minutes",
       "blocking": true
     },

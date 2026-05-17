@@ -6,7 +6,7 @@ from .base import BaseGenerator
 
 
 class AirflowDAGGenerator(BaseGenerator):
-    """Generates Airflow DAG from NanoRec components."""
+    """Generates Airflow DAG from NanoML components."""
 
     def __init__(self):
         """Initialize generator with Jinja2 environment."""
@@ -87,9 +87,9 @@ class AirflowDAGGenerator(BaseGenerator):
         """Get output path for Airflow DAG.
 
         Args:
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
 
         Returns:
-            .nanorec/generated/airflow/pipeline_dag.py
+            .nanoml/generated/airflow/pipeline_dag.py
         """
-        return project_root / ".nanorec" / "generated" / "airflow" / "pipeline_dag.py"
+        return project_root / ".nanoml" / "generated" / "airflow" / "pipeline_dag.py"

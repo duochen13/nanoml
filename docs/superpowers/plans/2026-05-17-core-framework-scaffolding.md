@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the core NanoRec CLI that scaffolds new projects and validates configurations.
+**Goal:** Build the core NanoML CLI that scaffolds new projects and validates configurations.
 
-**Architecture:** PyPI-installable package with CLI entry point. Two commands: `nanorec init` (scaffolds project from template) and `nanorec validate` (validates config.yaml schema). Includes base abstractions for future infrastructure integration.
+**Architecture:** PyPI-installable package with CLI entry point. Two commands: `nanoml init` (scaffolds project from template) and `nanoml validate` (validates config.yaml schema). Includes base abstractions for future infrastructure integration.
 
 **Tech Stack:** Python 3.9+, Click (CLI), PyYAML (config), Jinja2 (templating), pytest
 
@@ -13,7 +13,7 @@
 ## File Structure
 
 ```
-nanorec/                          # PyPI package source
+nanoml/                          # PyPI package source
 ├── __init__.py
 ├── __version__.py
 ├── cli/
@@ -82,8 +82,8 @@ tests/
 ## Task 1: Package Setup & Base Structure
 
 **Files:**
-- Create: `nanorec/__init__.py`
-- Create: `nanorec/__version__.py`
+- Create: `nanoml/__init__.py`
+- Create: `nanoml/__version__.py`
 - Create: `setup.py`
 - Create: `requirements.txt`
 - Create: `requirements-dev.txt`
@@ -93,14 +93,14 @@ tests/
 Create: `tests/test_package.py`
 
 ```python
-import nanorec
+import nanoml
 
 
 def test_version_exists():
     """Package should have a __version__ attribute."""
-    assert hasattr(nanorec, "__version__")
-    assert isinstance(nanorec.__version__, str)
-    assert len(nanorec.__version__) > 0
+    assert hasattr(nanoml, "__version__")
+    assert isinstance(nanoml.__version__, str)
+    assert len(nanoml.__version__) > 0
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
@@ -109,26 +109,26 @@ def test_version_exists():
 pytest tests/test_package.py::test_version_exists -v
 ```
 
-Expected: FAIL with "ModuleNotFoundError: No module named 'nanorec'"
+Expected: FAIL with "ModuleNotFoundError: No module named 'nanoml'"
 
 - [ ] **Step 3: Create package __version__.py**
 
-Create: `nanorec/__version__.py`
+Create: `nanoml/__version__.py`
 
 ```python
-"""NanoRec version information."""
+"""NanoML version information."""
 
 __version__ = "0.1.0"
 ```
 
 - [ ] **Step 4: Create package __init__.py**
 
-Create: `nanorec/__init__.py`
+Create: `nanoml/__init__.py`
 
 ```python
-"""NanoRec - Production ML Systems Made Easy."""
+"""NanoML - Production ML Systems Made Easy."""
 
-from nanorec.__version__ import __version__
+from nanoml.__version__ import __version__
 
 __all__ = ["__version__"]
 ```
@@ -138,32 +138,32 @@ __all__ = ["__version__"]
 Create: `setup.py`
 
 ```python
-"""Setup configuration for NanoRec package."""
+"""Setup configuration for NanoML package."""
 
 from setuptools import setup, find_packages
 from pathlib import Path
 
 # Read version
 version = {}
-with open("nanorec/__version__.py") as f:
+with open("nanoml/__version__.py") as f:
     exec(f.read(), version)
 
 # Read long description
 long_description = (Path(__file__).parent / "README.md").read_text()
 
 setup(
-    name="nanorec",
+    name="nanoml",
     version=version["__version__"],
     description="Production ML Recommendation Systems Made Easy",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author="NanoRec Team",
-    author_email="team@nanorec.dev",
-    url="https://github.com/nanorec/nanorec",
+    author="NanoML Team",
+    author_email="team@nanoml.dev",
+    url="https://github.com/nanoml/nanoml",
     packages=find_packages(exclude=["tests", "tests.*"]),
     include_package_data=True,
     package_data={
-        "nanorec": [
+        "nanoml": [
             "templates/**/*",
             "templates/**/**/*",
         ],
@@ -184,7 +184,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "nanorec=nanorec.cli.main:cli",
+            "nanoml=nanoml.cli.main:cli",
         ],
     },
     python_requires=">=3.9",
@@ -242,7 +242,7 @@ Expected: PASS
 - [ ] **Step 10: Commit**
 
 ```bash
-git add nanorec/ setup.py requirements.txt requirements-dev.txt tests/test_package.py
+git add nanoml/ setup.py requirements.txt requirements-dev.txt tests/test_package.py
 git commit -m "feat: initial package structure with version"
 ```
 
@@ -251,9 +251,9 @@ git commit -m "feat: initial package structure with version"
 ## Task 2: Config Schema & Validation
 
 **Files:**
-- Create: `nanorec/core/__init__.py`
-- Create: `nanorec/core/schema.py`
-- Create: `nanorec/core/config_loader.py`
+- Create: `nanoml/core/__init__.py`
+- Create: `nanoml/core/schema.py`
+- Create: `nanoml/core/config_loader.py`
 - Create: `tests/test_config_loader.py`
 - Create: `tests/fixtures/valid_config.yaml`
 - Create: `tests/fixtures/invalid_config.yaml`
@@ -265,7 +265,7 @@ Create: `tests/test_config_loader.py`
 ```python
 import pytest
 from pathlib import Path
-from nanorec.core.config_loader import ConfigLoader, ConfigValidationError
+from nanoml.core.config_loader import ConfigLoader, ConfigValidationError
 
 
 def test_load_valid_config():
@@ -345,24 +345,24 @@ project:
 pytest tests/test_config_loader.py -v
 ```
 
-Expected: FAIL with "ModuleNotFoundError: No module named 'nanorec.core'"
+Expected: FAIL with "ModuleNotFoundError: No module named 'nanoml.core'"
 
 - [ ] **Step 4: Create config schema**
 
-Create: `nanorec/core/__init__.py`
+Create: `nanoml/core/__init__.py`
 
 ```python
 """Core framework components."""
 
-from nanorec.core.config_loader import ConfigLoader, ConfigValidationError
+from nanoml.core.config_loader import ConfigLoader, ConfigValidationError
 
 __all__ = ["ConfigLoader", "ConfigValidationError"]
 ```
 
-Create: `nanorec/core/schema.py`
+Create: `nanoml/core/schema.py`
 
 ```python
-"""JSON Schema for NanoRec config.yaml validation."""
+"""JSON Schema for NanoML config.yaml validation."""
 
 CONFIG_SCHEMA = {
     "$schema": "http://json-schema.org/draft-07/schema#",
@@ -427,7 +427,7 @@ CONFIG_SCHEMA = {
 
 - [ ] **Step 5: Create config loader**
 
-Create: `nanorec/core/config_loader.py`
+Create: `nanoml/core/config_loader.py`
 
 ```python
 """Configuration loading and validation."""
@@ -436,7 +436,7 @@ import yaml
 from pathlib import Path
 from typing import Dict, Any
 from jsonschema import validate, ValidationError
-from nanorec.core.schema import CONFIG_SCHEMA
+from nanoml.core.schema import CONFIG_SCHEMA
 
 
 class ConfigValidationError(Exception):
@@ -445,7 +445,7 @@ class ConfigValidationError(Exception):
 
 
 class ConfigLoader:
-    """Loads and validates NanoRec configuration files."""
+    """Loads and validates NanoML configuration files."""
 
     def load(self, config_path: Path) -> Dict[str, Any]:
         """
@@ -491,7 +491,7 @@ Expected: All tests PASS
 - [ ] **Step 7: Commit**
 
 ```bash
-git add nanorec/core/ tests/test_config_loader.py tests/fixtures/
+git add nanoml/core/ tests/test_config_loader.py tests/fixtures/
 git commit -m "feat: add config schema and validation"
 ```
 
@@ -500,9 +500,9 @@ git commit -m "feat: add config schema and validation"
 ## Task 3: Base Abstractions (Stubs)
 
 **Files:**
-- Create: `nanorec/core/base.py`
-- Create: `nanorec/core/registry.py`
-- Create: `nanorec/core/factory.py`
+- Create: `nanoml/core/base.py`
+- Create: `nanoml/core/registry.py`
+- Create: `nanoml/core/factory.py`
 - Create: `tests/test_base.py`
 
 - [ ] **Step 1: Write test for base classes**
@@ -510,7 +510,7 @@ git commit -m "feat: add config schema and validation"
 Create: `tests/test_base.py`
 
 ```python
-from nanorec.core.base import Component, Provider
+from nanoml.core.base import Component, Provider
 
 
 def test_component_base_class():
@@ -547,10 +547,10 @@ Expected: FAIL with "cannot import name 'Component'"
 
 - [ ] **Step 3: Create base classes**
 
-Create: `nanorec/core/base.py`
+Create: `nanoml/core/base.py`
 
 ```python
-"""Base classes for NanoRec components and providers."""
+"""Base classes for NanoML components and providers."""
 
 from abc import ABC, abstractmethod
 from typing import Dict, Any
@@ -558,7 +558,7 @@ from typing import Dict, Any
 
 class Component(ABC):
     """
-    Base class for all NanoRec components.
+    Base class for all NanoML components.
 
     Components are user-facing modules (data, features, training, etc.)
     that orchestrate business logic and use infrastructure services.
@@ -613,7 +613,7 @@ class Provider(ABC):
 
 - [ ] **Step 4: Create registry stub**
 
-Create: `nanorec/core/registry.py`
+Create: `nanoml/core/registry.py`
 
 ```python
 """Component and provider registry.
@@ -623,7 +623,7 @@ components and providers at runtime.
 """
 
 from typing import Dict, Type
-from nanorec.core.base import Component, Provider
+from nanoml.core.base import Component, Provider
 
 
 class Registry:
@@ -677,7 +677,7 @@ def get_registry() -> Registry:
 
 - [ ] **Step 5: Create factory stub**
 
-Create: `nanorec/core/factory.py`
+Create: `nanoml/core/factory.py`
 
 ```python
 """Factory for creating providers based on configuration.
@@ -687,8 +687,8 @@ based on the selected environment in config.yaml.
 """
 
 from typing import Dict, Any
-from nanorec.core.base import Provider
-from nanorec.core.registry import get_registry
+from nanoml.core.base import Provider
+from nanoml.core.registry import get_registry
 
 
 class ProviderFactory:
@@ -725,15 +725,15 @@ class ProviderFactory:
 
 - [ ] **Step 6: Update core __init__.py**
 
-Modify: `nanorec/core/__init__.py`
+Modify: `nanoml/core/__init__.py`
 
 ```python
 """Core framework components."""
 
-from nanorec.core.config_loader import ConfigLoader, ConfigValidationError
-from nanorec.core.base import Component, Provider
-from nanorec.core.registry import Registry, get_registry
-from nanorec.core.factory import ProviderFactory
+from nanoml.core.config_loader import ConfigLoader, ConfigValidationError
+from nanoml.core.base import Component, Provider
+from nanoml.core.registry import Registry, get_registry
+from nanoml.core.factory import ProviderFactory
 
 __all__ = [
     "ConfigLoader",
@@ -757,7 +757,7 @@ Expected: All tests PASS
 - [ ] **Step 8: Commit**
 
 ```bash
-git add nanorec/core/base.py nanorec/core/registry.py nanorec/core/factory.py tests/test_base.py
+git add nanoml/core/base.py nanoml/core/registry.py nanoml/core/factory.py tests/test_base.py
 git commit -m "feat: add base abstractions for components and providers"
 ```
 
@@ -766,8 +766,8 @@ git commit -m "feat: add base abstractions for components and providers"
 ## Task 4: CLI Entry Point
 
 **Files:**
-- Create: `nanorec/cli/__init__.py`
-- Create: `nanorec/cli/main.py`
+- Create: `nanoml/cli/__init__.py`
+- Create: `nanoml/cli/main.py`
 - Create: `tests/test_cli_main.py`
 
 - [ ] **Step 1: Write test for CLI entry point**
@@ -776,7 +776,7 @@ Create: `tests/test_cli_main.py`
 
 ```python
 from click.testing import CliRunner
-from nanorec.cli.main import cli
+from nanoml.cli.main import cli
 
 
 def test_cli_help():
@@ -785,7 +785,7 @@ def test_cli_help():
     result = runner.invoke(cli, ["--help"])
 
     assert result.exit_code == 0
-    assert "NanoRec" in result.output
+    assert "NanoML" in result.output
     assert "init" in result.output
     assert "validate" in result.output
 
@@ -809,30 +809,30 @@ Expected: FAIL with "cannot import name 'cli'"
 
 - [ ] **Step 3: Create CLI entry point**
 
-Create: `nanorec/cli/__init__.py`
+Create: `nanoml/cli/__init__.py`
 
 ```python
-"""NanoRec CLI commands."""
+"""NanoML CLI commands."""
 
-from nanorec.cli.main import cli
+from nanoml.cli.main import cli
 
 __all__ = ["cli"]
 ```
 
-Create: `nanorec/cli/main.py`
+Create: `nanoml/cli/main.py`
 
 ```python
-"""NanoRec CLI main entry point."""
+"""NanoML CLI main entry point."""
 
 import click
-from nanorec.__version__ import __version__
+from nanoml.__version__ import __version__
 
 
 @click.group()
-@click.version_option(version=__version__, prog_name="nanorec")
+@click.version_option(version=__version__, prog_name="nanoml")
 def cli():
     """
-    NanoRec - Production ML Recommendation Systems Made Easy
+    NanoML - Production ML Recommendation Systems Made Easy
 
     Build, deploy, and scale ML recommendation systems with a single command.
     """
@@ -840,8 +840,8 @@ def cli():
 
 
 # Commands will be added in subsequent tasks
-from nanorec.cli import init as _init_module  # noqa: E402, F401
-from nanorec.cli import validate as _validate_module  # noqa: E402, F401
+from nanoml.cli import init as _init_module  # noqa: E402, F401
+from nanoml.cli import validate as _validate_module  # noqa: E402, F401
 ```
 
 - [ ] **Step 4: Run test to verify it passes**
@@ -856,8 +856,8 @@ Expected: Both tests PASS
 - [ ] **Step 5: Test CLI from command line**
 
 ```bash
-nanorec --help
-nanorec --version
+nanoml --help
+nanoml --version
 ```
 
 Expected: Help message and version displayed
@@ -865,7 +865,7 @@ Expected: Help message and version displayed
 - [ ] **Step 6: Commit**
 
 ```bash
-git add nanorec/cli/ tests/test_cli_main.py
+git add nanoml/cli/ tests/test_cli_main.py
 git commit -m "feat: add CLI entry point with help and version"
 ```
 
@@ -874,23 +874,23 @@ git commit -m "feat: add CLI entry point with help and version"
 ## Task 5: Project Template Structure
 
 **Files:**
-- Create: `nanorec/templates/default/template.yaml`
-- Create: `nanorec/templates/default/project/config.yaml.jinja2`
-- Create: `nanorec/templates/default/project/.gitignore.jinja2`
-- Create: `nanorec/templates/default/project/README.md.jinja2`
-- Create: `nanorec/templates/default/project/Makefile.jinja2`
-- Create: `nanorec/templates/default/project/requirements.txt.jinja2`
+- Create: `nanoml/templates/default/template.yaml`
+- Create: `nanoml/templates/default/project/config.yaml.jinja2`
+- Create: `nanoml/templates/default/project/.gitignore.jinja2`
+- Create: `nanoml/templates/default/project/README.md.jinja2`
+- Create: `nanoml/templates/default/project/Makefile.jinja2`
+- Create: `nanoml/templates/default/project/requirements.txt.jinja2`
 - Create: Multiple component template files
 
 - [ ] **Step 1: Create template metadata**
 
-Create: `nanorec/templates/default/template.yaml`
+Create: `nanoml/templates/default/template.yaml`
 
 ```yaml
 name: default
-description: Default NanoRec project template with all components
+description: Default NanoML project template with all components
 version: 1.0.0
-author: NanoRec Team
+author: NanoML Team
 
 # Variables that can be customized during project creation
 variables:
@@ -905,15 +905,15 @@ variables:
 
   - name: description
     description: Project description
-    default: "A NanoRec recommendation system"
+    default: "A NanoML recommendation system"
 ```
 
 - [ ] **Step 2: Create config.yaml template**
 
-Create: `nanorec/templates/default/project/config.yaml.jinja2`
+Create: `nanoml/templates/default/project/config.yaml.jinja2`
 
 ```yaml
-# NanoRec Configuration
+# NanoML Configuration
 # This file controls deployment environment and ML settings
 
 # ENVIRONMENT SELECTION
@@ -974,12 +974,12 @@ ml:
 
 - [ ] **Step 3: Create .gitignore template**
 
-Create: `nanorec/templates/default/project/.gitignore.jinja2`
+Create: `nanoml/templates/default/project/.gitignore.jinja2`
 
 ```
-# NanoRec generated files
-.nanorec/generated/
-.nanorec/cache/
+# NanoML generated files
+.nanoml/generated/
+.nanoml/cache/
 
 # Python
 __pycache__/
@@ -1024,14 +1024,14 @@ Thumbs.db
 
 - [ ] **Step 4: Create README template**
 
-Create: `nanorec/templates/default/project/README.md.jinja2`
+Create: `nanoml/templates/default/project/README.md.jinja2`
 
 ```markdown
 # {{ project_name }}
 
 {{ description }}
 
-Built with [NanoRec](https://github.com/nanorec/nanorec) - Production ML Recommendation Systems Made Easy.
+Built with [NanoML](https://github.com/nanoml/nanoml) - Production ML Recommendation Systems Made Easy.
 
 ## Quick Start
 
@@ -1059,7 +1059,7 @@ Built with [NanoRec](https://github.com/nanorec/nanorec) - Production ML Recomme
 
 2. **Deploy**
    ```bash
-   nanorec deploy
+   nanoml deploy
    ```
 
 ## Project Structure
@@ -1071,7 +1071,7 @@ Built with [NanoRec](https://github.com/nanorec/nanorec) - Production ML Recomme
 ├── training/          # Model training
 ├── evaluation/        # Model evaluation
 ├── serving/           # Recommendation serving
-├── infrastructure/    # Infrastructure services (managed by NanoRec)
+├── infrastructure/    # Infrastructure services (managed by NanoML)
 ├── config.yaml        # Main configuration
 └── Makefile           # Common commands
 ```
@@ -1087,7 +1087,7 @@ Built with [NanoRec](https://github.com/nanorec/nanorec) - Production ML Recomme
 
 **Framework-managed** (don't edit):
 - `infrastructure/` - Auto-generated infrastructure code
-- `.nanorec/generated/` - Auto-generated Flink jobs, Airflow DAGs, etc.
+- `.nanoml/generated/` - Auto-generated Flink jobs, Airflow DAGs, etc.
 
 ## Available Commands
 
@@ -1100,19 +1100,19 @@ make test     # Run smoke tests
 
 ## Learn More
 
-- [NanoRec Documentation](https://nanorec.dev/docs)
-- [Design Document](docs/superpowers/specs/2026-05-17-nanorec-design.md)
+- [NanoML Documentation](https://nanoml.dev/docs)
+- [Design Document](docs/superpowers/specs/2026-05-17-nanoml-design.md)
 ```
 
 - [ ] **Step 5: Create Makefile template**
 
-Create: `nanorec/templates/default/project/Makefile.jinja2`
+Create: `nanoml/templates/default/project/Makefile.jinja2`
 
 ```makefile
 .PHONY: setup run clean test help
 
 help:
-	@echo "{{ project_name }} - NanoRec Project"
+	@echo "{{ project_name }} - NanoML Project"
 	@echo ""
 	@echo "Available commands:"
 	@echo "  make setup   - Install dependencies"
@@ -1125,7 +1125,7 @@ setup:
 	@echo "✅ Dependencies installed"
 
 run:
-	@echo "Starting NanoRec infrastructure..."
+	@echo "Starting NanoML infrastructure..."
 	docker-compose up -d
 	@echo "✅ Infrastructure running!"
 	@echo "API: http://localhost:8000"
@@ -1145,11 +1145,11 @@ test:
 
 - [ ] **Step 6: Create requirements.txt template**
 
-Create: `nanorec/templates/default/project/requirements.txt.jinja2`
+Create: `nanoml/templates/default/project/requirements.txt.jinja2`
 
 ```
-# NanoRec framework
-nanorec>=0.1.0
+# NanoML framework
+nanoml>=0.1.0
 
 # Data processing
 pandas>=2.0.0
@@ -1179,20 +1179,20 @@ apache-flink>=1.18.0
 - [ ] **Step 7: Create component template directories**
 
 ```bash
-mkdir -p nanorec/templates/default/project/data
-mkdir -p nanorec/templates/default/project/features
-mkdir -p nanorec/templates/default/project/training
-mkdir -p nanorec/templates/default/project/evaluation
-mkdir -p nanorec/templates/default/project/serving
-mkdir -p nanorec/templates/default/project/infrastructure
-mkdir -p nanorec/templates/default/project/core
-mkdir -p nanorec/templates/default/project/integration
-mkdir -p nanorec/templates/default/project/deployment
+mkdir -p nanoml/templates/default/project/data
+mkdir -p nanoml/templates/default/project/features
+mkdir -p nanoml/templates/default/project/training
+mkdir -p nanoml/templates/default/project/evaluation
+mkdir -p nanoml/templates/default/project/serving
+mkdir -p nanoml/templates/default/project/infrastructure
+mkdir -p nanoml/templates/default/project/core
+mkdir -p nanoml/templates/default/project/integration
+mkdir -p nanoml/templates/default/project/deployment
 ```
 
 - [ ] **Step 8: Create data component templates**
 
-Create: `nanorec/templates/default/project/data/loader.py.jinja2`
+Create: `nanoml/templates/default/project/data/loader.py.jinja2`
 
 ```python
 """Data loader for {{ project_name }}.
@@ -1238,7 +1238,7 @@ if __name__ == "__main__":
     print(df.head())
 ```
 
-Create: `nanorec/templates/default/project/data/preprocessor.py.jinja2`
+Create: `nanoml/templates/default/project/data/preprocessor.py.jinja2`
 
 ```python
 """Data preprocessing for {{ project_name }}.
@@ -1285,7 +1285,7 @@ if __name__ == "__main__":
     print(f"Preprocessed: {len(df)} → {len(df_clean)} rows")
 ```
 
-Create: `nanorec/templates/default/project/data/labeling.py.jinja2`
+Create: `nanoml/templates/default/project/data/labeling.py.jinja2`
 
 ```python
 """Label generation for {{ project_name }}.
@@ -1330,7 +1330,7 @@ if __name__ == "__main__":
     print(f"Generated labels for {len(df_labeled)} rows")
 ```
 
-Create: `nanorec/templates/default/project/data/splitting.py.jinja2`
+Create: `nanoml/templates/default/project/data/splitting.py.jinja2`
 
 ```python
 """Train/validation/test split for {{ project_name }}.
@@ -1402,7 +1402,7 @@ if __name__ == "__main__":
 
 - [ ] **Step 9: Create features component template**
 
-Create: `nanorec/templates/default/project/features/definitions.py.jinja2`
+Create: `nanoml/templates/default/project/features/definitions.py.jinja2`
 
 ```python
 """Feature definitions for {{ project_name }}.
@@ -1411,7 +1411,7 @@ Define features using @feature decorator.
 Framework auto-generates Flink jobs and Feast configs.
 """
 
-from nanorec.features import feature
+from nanoml.features import feature
 import pandas as pd
 
 
@@ -1475,24 +1475,24 @@ def compute_item_avg_rating(item_ratings: pd.DataFrame) -> pd.Series:
 
 # TODO: Add your custom features here
 # Framework will auto-generate:
-# - .nanorec/generated/flink/batch_features.py
-# - .nanorec/generated/flink/stream_features.py
-# - .nanorec/generated/feast/feature_repo/features.py
+# - .nanoml/generated/flink/batch_features.py
+# - .nanoml/generated/flink/stream_features.py
+# - .nanoml/generated/feast/feature_repo/features.py
 ```
 
 - [ ] **Step 10: Commit template files**
 
 ```bash
-git add nanorec/templates/
+git add nanoml/templates/
 git commit -m "feat: add project template structure and component templates"
 ```
 
 ---
 
-## Task 6: `nanorec init` Command
+## Task 6: `nanoml init` Command
 
 **Files:**
-- Create: `nanorec/cli/init.py`
+- Create: `nanoml/cli/init.py`
 - Create: `tests/test_cli_init.py`
 
 - [ ] **Step 1: Write test for init command**
@@ -1503,7 +1503,7 @@ Create: `tests/test_cli_init.py`
 import pytest
 from pathlib import Path
 from click.testing import CliRunner
-from nanorec.cli.main import cli
+from nanoml.cli.main import cli
 
 
 def test_init_creates_project(tmp_path):
@@ -1514,7 +1514,7 @@ def test_init_creates_project(tmp_path):
         result = runner.invoke(cli, ["init", "test-project"])
 
         assert result.exit_code == 0
-        assert "Creating NanoRec project: test-project" in result.output
+        assert "Creating NanoML project: test-project" in result.output
         assert "✅ Project created!" in result.output
 
         # Verify project directory exists
@@ -1589,7 +1589,7 @@ Expected: FAIL with "ImportError" or command not found
 
 - [ ] **Step 3: Create init command implementation**
 
-Create: `nanorec/cli/init.py`
+Create: `nanoml/cli/init.py`
 
 ```python
 """Project initialization command."""
@@ -1602,7 +1602,7 @@ from typing import Optional
 import click
 from jinja2 import Environment, FileSystemLoader
 
-from nanorec.cli.main import cli
+from nanoml.cli.main import cli
 
 
 @cli.command()
@@ -1615,13 +1615,13 @@ from nanorec.cli.main import cli
 )
 @click.option(
     "--description",
-    default="A NanoRec recommendation system",
+    default="A NanoML recommendation system",
     help="Project description",
     show_default=True
 )
 def init(project_name: str, template: str, description: str):
     """
-    Create a new NanoRec project.
+    Create a new NanoML project.
 
     PROJECT_NAME must be lowercase with hyphens (e.g., my-recommender)
     """
@@ -1659,7 +1659,7 @@ def init(project_name: str, template: str, description: str):
         raise click.Abort()
 
     # Create project
-    click.echo(f"Creating NanoRec project: {project_name}")
+    click.echo(f"Creating NanoML project: {project_name}")
 
     try:
         _scaffold_project(
@@ -1739,9 +1739,9 @@ def _scaffold_project(
                 shutil.copy2(template_path, target_path)
 
     # Create empty directories that need to exist
-    (project_dir / ".nanorec").mkdir(exist_ok=True)
-    (project_dir / ".nanorec" / "generated").mkdir(exist_ok=True)
-    (project_dir / ".nanorec" / "cache").mkdir(exist_ok=True)
+    (project_dir / ".nanoml").mkdir(exist_ok=True)
+    (project_dir / ".nanoml" / "generated").mkdir(exist_ok=True)
+    (project_dir / ".nanoml" / "cache").mkdir(exist_ok=True)
 ```
 
 - [ ] **Step 4: Run tests to verify they pass**
@@ -1756,7 +1756,7 @@ Expected: All tests PASS
 
 ```bash
 cd /tmp
-nanorec init test-recommender
+nanoml init test-recommender
 cd test-recommender
 ls -la
 cat config.yaml
@@ -1775,16 +1775,16 @@ rm -rf test-recommender
 - [ ] **Step 7: Commit**
 
 ```bash
-git add nanorec/cli/init.py tests/test_cli_init.py
-git commit -m "feat: implement nanorec init command"
+git add nanoml/cli/init.py tests/test_cli_init.py
+git commit -m "feat: implement nanoml init command"
 ```
 
 ---
 
-## Task 7: `nanorec validate` Command
+## Task 7: `nanoml validate` Command
 
 **Files:**
-- Create: `nanorec/cli/validate.py`
+- Create: `nanoml/cli/validate.py`
 - Create: `tests/test_cli_validate.py`
 
 - [ ] **Step 1: Write test for validate command**
@@ -1794,7 +1794,7 @@ Create: `tests/test_cli_validate.py`
 ```python
 from pathlib import Path
 from click.testing import CliRunner
-from nanorec.cli.main import cli
+from nanoml.cli.main import cli
 
 
 def test_validate_valid_config(tmp_path):
@@ -1885,7 +1885,7 @@ Expected: FAIL with "ImportError" or command not found
 
 - [ ] **Step 3: Create validate command implementation**
 
-Create: `nanorec/cli/validate.py`
+Create: `nanoml/cli/validate.py`
 
 ```python
 """Configuration validation command."""
@@ -1894,8 +1894,8 @@ from pathlib import Path
 
 import click
 
-from nanorec.cli.main import cli
-from nanorec.core import ConfigLoader, ConfigValidationError
+from nanoml.cli.main import cli
+from nanoml.core import ConfigLoader, ConfigValidationError
 
 
 @cli.command()
@@ -1909,7 +1909,7 @@ from nanorec.core import ConfigLoader, ConfigValidationError
 )
 def validate(config: Path):
     """
-    Validate NanoRec configuration file.
+    Validate NanoML configuration file.
 
     Checks config.yaml against the schema and reports any errors.
     """
@@ -1960,9 +1960,9 @@ Expected: All tests PASS
 
 ```bash
 cd /tmp
-nanorec init test-project
+nanoml init test-project
 cd test-project
-nanorec validate
+nanoml validate
 ```
 
 Expected: "✅ Configuration is valid"
@@ -1972,7 +1972,7 @@ Expected: "✅ Configuration is valid"
 ```bash
 # Break the config
 echo "invalid: yaml: content" > config.yaml
-nanorec validate
+nanoml validate
 ```
 
 Expected: Validation error shown
@@ -1987,8 +1987,8 @@ rm -rf test-project
 - [ ] **Step 8: Commit**
 
 ```bash
-git add nanorec/cli/validate.py tests/test_cli_validate.py
-git commit -m "feat: implement nanorec validate command"
+git add nanoml/cli/validate.py tests/test_cli_validate.py
+git commit -m "feat: implement nanoml validate command"
 ```
 
 ---
@@ -2005,11 +2005,11 @@ git commit -m "feat: implement nanorec validate command"
 Create: `tests/test_integration.py`
 
 ```python
-"""End-to-end integration tests for NanoRec CLI."""
+"""End-to-end integration tests for NanoML CLI."""
 
 from pathlib import Path
 from click.testing import CliRunner
-from nanorec.cli.main import cli
+from nanoml.cli.main import cli
 
 
 def test_end_to_end_workflow(tmp_path):
@@ -2084,15 +2084,15 @@ Expected: All tests PASS
 Create: `README.md`
 
 ```markdown
-# NanoRec
+# NanoML
 
 **Production ML Recommendation Systems Made Easy**
 
-NanoRec is a pip-installable framework that scaffolds complete end-to-end ML recommendation systems, enabling users to focus on ML business logic (features, models, labels) while the framework handles all infrastructure complexity.
+NanoML is a pip-installable framework that scaffolds complete end-to-end ML recommendation systems, enabling users to focus on ML business logic (features, models, labels) while the framework handles all infrastructure complexity.
 
 ## Features
 
-- 🚀 **One-command deployment** - `nanorec deploy` handles everything
+- 🚀 **One-command deployment** - `nanoml deploy` handles everything
 - ☁️ **Cloud-agnostic** - Same code runs on local/AWS/GCP/Azure
 - 🔧 **Fully declarative** - Write WHAT, framework generates HOW
 - 📦 **Complete stack** - 11 infrastructure services integrated
@@ -2103,13 +2103,13 @@ NanoRec is a pip-installable framework that scaffolds complete end-to-end ML rec
 ### Installation
 
 ```bash
-pip install nanorec
+pip install nanoml
 ```
 
 ### Create a New Project
 
 ```bash
-nanorec init my-recommender
+nanoml init my-recommender
 cd my-recommender
 ```
 
@@ -2124,7 +2124,7 @@ make run    # Start Docker Compose (11 services)
 
 ```bash
 # Edit config.yaml: environment: aws
-nanorec deploy
+nanoml deploy
 ```
 
 ## Architecture
@@ -2159,7 +2159,7 @@ nanorec deploy
 
 ## Documentation
 
-- [Design Document](docs/superpowers/specs/2026-05-17-nanorec-design.md)
+- [Design Document](docs/superpowers/specs/2026-05-17-nanoml-design.md)
 - [Implementation Plans](docs/superpowers/plans/)
 
 ## Development
@@ -2174,14 +2174,14 @@ pip install -e ".[dev]"
 
 ```bash
 pytest tests/ -v
-pytest tests/ --cov=nanorec
+pytest tests/ --cov=nanoml
 ```
 
 ### Code Quality
 
 ```bash
-black nanorec/ tests/
-ruff check nanorec/ tests/
+black nanoml/ tests/
+ruff check nanoml/ tests/
 ```
 
 ## Architecture Principles
@@ -2197,9 +2197,9 @@ MIT
 
 ## Links
 
-- GitHub: https://github.com/nanorec/nanorec
-- Documentation: https://nanorec.dev
-- Issues: https://github.com/nanorec/nanorec/issues
+- GitHub: https://github.com/nanoml/nanoml
+- Documentation: https://nanoml.dev
+- Issues: https://github.com/nanoml/nanoml/issues
 ```
 
 - [ ] **Step 4: Verify package data is included**
@@ -2210,7 +2210,7 @@ Ensure `package_data` includes templates:
 
 ```python
 package_data={
-    "nanorec": [
+    "nanoml": [
         "templates/**/*",
         "templates/**/**/*",
     ],
@@ -2226,11 +2226,11 @@ python setup.py sdist bdist_wheel
 # Install in clean virtualenv
 python -m venv test_venv
 source test_venv/bin/activate
-pip install dist/nanorec-0.1.0-py3-none-any.whl
+pip install dist/nanoml-0.1.0-py3-none-any.whl
 
 # Test CLI
-nanorec --version
-nanorec --help
+nanoml --version
+nanoml --help
 
 # Cleanup
 deactivate
@@ -2242,7 +2242,7 @@ Expected: Package installs and CLI works
 - [ ] **Step 6: Run all tests**
 
 ```bash
-pytest tests/ -v --cov=nanorec
+pytest tests/ -v --cov=nanoml
 ```
 
 Expected: All tests PASS, good coverage
@@ -2299,7 +2299,7 @@ htmlcov/
 Thumbs.db
 
 # Project specific
-.nanorec/
+.nanoml/
 ```
 
 - [ ] **Step 2: Create MANIFEST.in**
@@ -2311,13 +2311,13 @@ include README.md
 include LICENSE
 include requirements.txt
 include requirements-dev.txt
-recursive-include nanorec/templates *
+recursive-include nanoml/templates *
 ```
 
 - [ ] **Step 3: Run full test suite**
 
 ```bash
-pytest tests/ -v --cov=nanorec --cov-report=html
+pytest tests/ -v --cov=nanoml --cov-report=html
 ```
 
 Expected: All tests PASS
@@ -2344,9 +2344,9 @@ Expected: Source and wheel distributions created
 
 ```bash
 cd /tmp
-nanorec init final-test
+nanoml init final-test
 cd final-test
-nanorec validate
+nanoml validate
 cat config.yaml
 cat data/loader.py
 cat features/definitions.py
@@ -2382,7 +2382,7 @@ git tag -a v0.1.0 -m "Release v0.1.0 - Core framework & project scaffolding"
 
 From the design spec, Plan 1 should cover:
 - ✅ PyPI package structure
-- ✅ CLI commands (`nanorec init`, `nanorec validate`)
+- ✅ CLI commands (`nanoml init`, `nanoml validate`)
 - ✅ Project scaffolding from templates
 - ✅ Config schema and validation
 - ✅ Base abstractions (Component, Provider, Registry, Factory)
@@ -2419,9 +2419,9 @@ Found TODOs in:
 
 ## Plan Complete
 
-**Deliverable:** Core NanoRec framework with:
-- PyPI-installable package (`pip install nanorec`)
-- CLI commands: `nanorec init` and `nanorec validate`
+**Deliverable:** Core NanoML framework with:
+- PyPI-installable package (`pip install nanoml`)
+- CLI commands: `nanoml init` and `nanoml validate`
 - Project scaffolding with complete template structure
 - Config validation against JSON schema
 - Base abstractions for future infrastructure integration

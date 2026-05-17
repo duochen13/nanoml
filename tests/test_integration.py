@@ -1,8 +1,8 @@
-"""End-to-end integration tests for NanoRec CLI."""
+"""End-to-end integration tests for NanoML CLI."""
 
 from pathlib import Path
 from click.testing import CliRunner
-from nanorec.cli.main import cli
+from nanoml.cli.main import cli
 
 
 def test_end_to_end_workflow(tmp_path):

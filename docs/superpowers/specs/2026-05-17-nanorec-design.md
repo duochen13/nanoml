@@ -1,4 +1,4 @@
-# NanoRec - Production ML Recommendation Systems Made Easy
+# NanoML - Production ML Recommendation Systems Made Easy
 
 **Design Document**
 **Date:** 2026-05-17
@@ -9,11 +9,11 @@
 
 ## Executive Summary
 
-**What:** NanoRec is a pip-installable framework that scaffolds complete end-to-end ML recommendation systems, enabling users to focus on ML business logic (features, models, labels) while the framework handles all infrastructure complexity.
+**What:** NanoML is a pip-installable framework that scaffolds complete end-to-end ML recommendation systems, enabling users to focus on ML business logic (features, models, labels) while the framework handles all infrastructure complexity.
 
-**Why:** Building production ML systems requires integrating fragmented components (Kafka, Flink, Feast, SageMaker, Airflow, etc.). NanoRec demonstrates how these components connect and provides a template that works locally and deploys to any cloud (AWS/GCP/Azure) via a single config change.
+**Why:** Building production ML systems requires integrating fragmented components (Kafka, Flink, Feast, SageMaker, Airflow, etc.). NanoML demonstrates how these components connect and provides a template that works locally and deploys to any cloud (AWS/GCP/Azure) via a single config change.
 
-**How:** Users `pip install nanorec`, run `nanorec init my-project`, customize 15 ML files, and deploy with one command. Same code runs everywhere.
+**How:** Users `pip install nanoml`, run `nanoml init my-project`, customize 15 ML files, and deploy with one command. Same code runs everywhere.
 
 **Architecture:** 11 total components:
 - **9 CORE** (full implementation): Storage, Message Queue, Stream Processing, Feature Store, Training, Experiment Tracking, Model Serving, API Gateway, Orchestration
@@ -44,7 +44,7 @@
 1. **Integration Demonstration** - Show how production ML components (Kafka, Flink, Feast, SageMaker, Airflow) connect
 2. **User Focus** - Users customize only ML logic (~15 files), framework handles infrastructure (~100+ files)
 3. **Cloud Agnostic** - Same code deploys to local/AWS/GCP/Azure via `config.yaml`
-4. **Easy Onboarding** - `pip install nanorec` → `nanorec init` → working system in 5 minutes
+4. **Easy Onboarding** - `pip install nanoml` → `nanoml init` → working system in 5 minutes
 5. **Educational** - Users learn production ML engineering by using the system
 
 ### Non-Goals
@@ -70,12 +70,12 @@
 ### Installation Flow
 
 ```bash
-# 1. Install NanoRec from PyPI
-$ pip3 install nanorec
+# 1. Install NanoML from PyPI
+$ pip3 install nanoml
 
 # 2. Create new project
-$ nanorec init book-recommender
-   Creating NanoRec project: book-recommender
+$ nanoml init book-recommender
+   Creating NanoML project: book-recommender
    ✅ Project created!
 
 # 3. Navigate to project
@@ -99,7 +99,7 @@ $ curl 'http://localhost:8000/recommend?user_id=123'
 
 # 7. Deploy to cloud
 $ vim config.yaml  # Change environment: local → environment: aws
-$ nanorec deploy
+$ nanoml deploy
    ⚠️  Deploying to AWS (~$950/month)
    Continue? [y/N]: y
    [15 minutes later...]
@@ -110,29 +110,29 @@ $ nanorec deploy
 ### CLI Commands
 
 ```bash
-nanorec init <project-name>          # Create new project
-nanorec init <name> --template <tmpl> # Use specific template
-nanorec templates                     # List available templates
-nanorec deploy                        # Deploy project
-nanorec deploy --env aws              # Override environment
-nanorec deploy --teardown             # Tear down infrastructure
-nanorec validate                      # Validate config.yaml
-nanorec test                          # Run smoke tests
-nanorec --version                     # Show version
+nanoml init <project-name>          # Create new project
+nanoml init <name> --template <tmpl> # Use specific template
+nanoml templates                     # List available templates
+nanoml deploy                        # Deploy project
+nanoml deploy --env aws              # Override environment
+nanoml deploy --teardown             # Tear down infrastructure
+nanoml validate                      # Validate config.yaml
+nanoml test                          # Run smoke tests
+nanoml --version                     # Show version
 ```
 
 ### User Journey
 
 **Day 1: Local Development**
-1. Install: `pip install nanorec`
-2. Create: `nanorec init my-recommender`
+1. Install: `pip install nanoml`
+2. Create: `nanoml init my-recommender`
 3. Customize 15 ML files
 4. Run: `make run`
 5. Test: `curl localhost:8000/recommend?user_id=123`
 
 **Day 7: Cloud Deployment**
 1. Edit `config.yaml`: `environment: aws`
-2. Deploy: `nanorec deploy`
+2. Deploy: `nanoml deploy`
 3. Confirm: `y`
 4. Wait 15 minutes
 5. Test: `curl https://api.aws.../recommend?user_id=123`
@@ -150,7 +150,7 @@ nanorec --version                     # Show version
 └────────────────────┬────────────────────────────────────────────┘
                      ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│              NANOREC FRAMEWORK (100+ files)                     │
+│              NANOML FRAMEWORK (100+ files)                     │
 │  • Cloud-agnostic abstraction layer                             │
 │  • Provider plugins (local/AWS/GCP/Azure)                       │
 │  • Integration pipelines                                        │
@@ -166,7 +166,7 @@ nanorec --version                     # Show version
 
 ### System Architecture: Services vs Components
 
-NanoRec has two distinct taxonomies:
+NanoML has two distinct taxonomies:
 
 **11 Infrastructure Services** (what gets deployed):
 1. Storage, 2. Message Queue, 3. Stream Processing (Flink), 4. Feature Store (Feast), 5. Training (SageMaker), 6. Experiment Tracking (MLflow), 7. Model Serving, 8. API Gateway, 9. Orchestration (Airflow), 10. Lineage Tracking, 11. Frontend Dashboard
@@ -230,7 +230,7 @@ These live in component folders (`data/`, `features/`, etc.) and contain user fi
 
 ### Architecture: Infrastructure-First Design
 
-NanoRec uses an **infrastructure-first** architecture to eliminate duplication and clarify ownership:
+NanoML uses an **infrastructure-first** architecture to eliminate duplication and clarify ownership:
 
 **The 11 Infrastructure Services (`infrastructure/`):**
 - Storage, Kafka, Flink, Feast, SageMaker, MLflow, Model Server, API Gateway, Airflow, Lineage, Dashboard
@@ -251,7 +251,7 @@ NanoRec uses an **infrastructure-first** architecture to eliminate duplication a
 
 ### Implementation Levels
 
-NanoRec infrastructure services are implemented at two levels:
+NanoML infrastructure services are implemented at two levels:
 
 **CORE (9 services - Full Implementation):**
 - Complete cloud provider abstraction (local/AWS/GCP/Azure)
@@ -305,9 +305,9 @@ NanoRec infrastructure services are implemented at two levels:
 **Framework Files:**
 - `features/codegen.py` - Code generator that:
   - Reads user's `definitions.py`
-  - Generates Flink jobs → `.nanorec/generated/flink/batch_features.py`
-  - Generates Flink jobs → `.nanorec/generated/flink/stream_features.py`
-  - Generates Feast configs → `.nanorec/generated/feast/feature_repo/features.py`
+  - Generates Flink jobs → `.nanoml/generated/flink/batch_features.py`
+  - Generates Flink jobs → `.nanoml/generated/flink/stream_features.py`
+  - Generates Feast configs → `.nanoml/generated/feast/feature_repo/features.py`
 
 **Uses Infrastructure Services:**
 - `infrastructure/flink/` - Submits generated jobs to Flink cluster
@@ -319,7 +319,7 @@ NanoRec infrastructure services are implemented at two levels:
 
 ```python
 # USER WRITES (features/definitions.py):
-from nanorec.features import feature
+from nanoml.features import feature
 
 @feature(
     name="user_avg_rating",
@@ -330,7 +330,7 @@ from nanorec.features import feature
 def compute_user_avg_rating(ratings_df):
     return ratings_df.groupby("user_id")["rating"].mean()
 
-# FRAMEWORK GENERATES (.nanorec/generated/flink/batch_features.py):
+# FRAMEWORK GENERATES (.nanoml/generated/flink/batch_features.py):
 def flink_batch_job():
     env = StreamExecutionEnvironment.get_execution_environment()
     ratings = env.read_csv("s3://data/ratings.csv")
@@ -341,7 +341,7 @@ def flink_batch_job():
 
     write_to_feast_offline(user_avg, feature_name="user_avg_rating")
 
-# FRAMEWORK GENERATES (.nanorec/generated/feast/feature_repo/features.py):
+# FRAMEWORK GENERATES (.nanoml/generated/feast/feature_repo/features.py):
 from feast import Feature, Entity, FeatureView
 
 user_avg_rating_feature = Feature(
@@ -466,13 +466,13 @@ NEW (Correct):
 **Framework Files:**
 - `orchestration/dag_factory.py` - Generates DAGs from user's ML components
   - Reads all component definitions (data, features, training, serving)
-  - Creates DAGs in `.nanorec/generated/airflow/dags/`
+  - Creates DAGs in `.nanoml/generated/airflow/dags/`
 
 **Generated DAGs (Automatic):**
-- `.nanorec/generated/airflow/dags/data_pipeline.py` - Data loading orchestration
-- `.nanorec/generated/airflow/dags/feature_pipeline.py` - Feature computation orchestration
-- `.nanorec/generated/airflow/dags/training_pipeline.py` - Training orchestration
-- `.nanorec/generated/airflow/dags/serving_pipeline.py` - Deployment orchestration
+- `.nanoml/generated/airflow/dags/data_pipeline.py` - Data loading orchestration
+- `.nanoml/generated/airflow/dags/feature_pipeline.py` - Feature computation orchestration
+- `.nanoml/generated/airflow/dags/training_pipeline.py` - Training orchestration
+- `.nanoml/generated/airflow/dags/serving_pipeline.py` - Deployment orchestration
 
 **Uses Infrastructure Services:**
 - `infrastructure/airflow/` - Airflow server that executes generated DAGs
@@ -759,7 +759,7 @@ environment: local  # Options: local, aws, gcp, azure
 
 # PROJECT INFO
 project:
-  name: nanorec-book-recommender
+  name: nanoml-book-recommender
   version: 1.0.0
 
 # LOCAL ENVIRONMENT
@@ -788,7 +788,7 @@ aws:
   account_id: "123456789012"
   storage:
     type: s3
-    bucket: nanorec-data-${account_id}
+    bucket: nanoml-data-${account_id}
   features:
     feast:
       offline_store:
@@ -811,7 +811,7 @@ gcp:
   region: us-central1
   storage:
     type: gcs
-    bucket: nanorec-data
+    bucket: nanoml-data
   features:
     feast:
       offline_store:
@@ -828,10 +828,10 @@ gcp:
 # AZURE ENVIRONMENT
 azure:
   subscription_id: xxxxx
-  resource_group: nanorec-rg
+  resource_group: nanoml-rg
   storage:
     type: blob
-    account_name: nanorecStorage
+    account_name: nanomlStorage
   features:
     feast:
       offline_store:
@@ -861,7 +861,7 @@ ml:
 
 ### 6.2 One-Command Deployment
 
-**Command: `nanorec deploy`**
+**Command: `nanoml deploy`**
 
 **Flow:**
 1. **Load configuration**
@@ -871,11 +871,11 @@ ml:
 
 2. **Generate infrastructure code** (automatic, < 1 second)
    - `features/codegen.py` reads `features/definitions.py`
-     → Generates `.nanorec/generated/flink/batch_features.py`
-     → Generates `.nanorec/generated/flink/stream_features.py`
-     → Generates `.nanorec/generated/feast/feature_repo/features.py`
+     → Generates `.nanoml/generated/flink/batch_features.py`
+     → Generates `.nanoml/generated/flink/stream_features.py`
+     → Generates `.nanoml/generated/feast/feature_repo/features.py`
    - `orchestration/dag_factory.py` reads all components
-     → Generates `.nanorec/generated/airflow/dags/*.py`
+     → Generates `.nanoml/generated/airflow/dags/*.py`
 
 3. **Deploy infrastructure** (one command)
    - **Local:** `docker-compose up -d` (all 11 services)
@@ -996,10 +996,10 @@ Later: Switch to GCP
 
 ## 7. File Structure
 
-### 7.1 NanoRec Package Structure (PyPI)
+### 7.1 NanoML Package Structure (PyPI)
 
 ```
-nanorec/                          # PyPI package
+nanoml/                          # PyPI package
 ├── __init__.py
 ├── __version__.py
 ├── cli/                          # CLI commands
@@ -1030,14 +1030,14 @@ nanorec/                          # PyPI package
 └── setup.py                      # PyPI setup
 ```
 
-### 7.2 Generated Project Structure (After `nanorec init`)
+### 7.2 Generated Project Structure (After `nanoml init`)
 
 ```
 my-recommender/                   # User's project
 
 # ============ GENERATED CODE (Auto-generated, gitignored) ============
-.nanorec/
-└── generated/                    # All generated artifacts (created by `nanorec deploy`)
+.nanoml/
+└── generated/                    # All generated artifacts (created by `nanoml deploy`)
     ├── flink/
     │   ├── batch_features.py     # Generated from features/definitions.py
     │   └── stream_features.py    # Generated from features/definitions.py
@@ -1173,7 +1173,7 @@ deployment/                       # Deployment configs
 
 # ============ SUMMARY ============
 Layer 1 (User):           ~15 files (what users customize)
-Layer 2 (Generated):      .nanorec/generated/ (auto-created, gitignored)
+Layer 2 (Generated):      .nanoml/generated/ (auto-created, gitignored)
 Layer 3 (Infrastructure): 11 services in infrastructure/
 Cloud Providers:          3 files (aws.py, gcp.py, azure.py - ZERO duplication)
 
@@ -1181,8 +1181,8 @@ Total Docker containers:  13 (11 logical services, some need multiple containers
 
 # ============ VERSION CONTROL ============
 .gitignore includes:
-  - .nanorec/generated/      # All generated code (recreated on deploy)
-  - .nanorec/cache/          # Downloaded datasets, model artifacts
+  - .nanoml/generated/      # All generated code (recreated on deploy)
+  - .nanoml/cache/          # Downloaded datasets, model artifacts
   - infrastructure/*/data/   # Service data (Postgres, Redis, etc.)
 ```
 
@@ -1196,9 +1196,9 @@ Total Docker containers:  13 (11 logical services, some need multiple containers
 - Total: ~15 files across 9 components
 
 **Layer 2: Generated Code (Auto-created by framework)**
-- `.nanorec/generated/` - All generated artifacts (gitignored)
+- `.nanoml/generated/` - All generated artifacts (gitignored)
 - Flink jobs, Feast feature definitions, Airflow DAGs
-- Created automatically from Layer 1 during `nanorec deploy`
+- Created automatically from Layer 1 during `nanoml deploy`
 - Users never edit these files
 
 **Layer 3: Infrastructure (Framework-provided)**
@@ -1211,14 +1211,14 @@ Total Docker containers:  13 (11 logical services, some need multiple containers
 ```
 User writes:       features/definitions.py (declarative)
                           ↓
-Framework generates: .nanorec/generated/flink/batch_features.py (imperative)
+Framework generates: .nanoml/generated/flink/batch_features.py (imperative)
                           ↓
 Framework deploys:   infrastructure/flink/ submits job to cluster
 ```
 
 **Key Rules:**
 1. **User business logic** → `<component>/*.py` (data, features, training, serving)
-2. **Generated code** → `.nanorec/generated/` (never commit, auto-created)
+2. **Generated code** → `.nanoml/generated/` (never commit, auto-created)
 3. **Infrastructure source** → `infrastructure/<service>/` (deployment configs + clients)
 4. **Cloud providers** → `infrastructure/providers/{aws,gcp,azure}.py` (ONE file per cloud)
 
@@ -1226,7 +1226,7 @@ Framework deploys:   infrastructure/flink/ submits job to cluster
 - **Fully declarative:** Users write high-level business logic only
 - **No duplication:** AWS logic in ONE place, generated code in ONE place
 - **Clear separation:** Source vs generated vs user code
-- **One command:** `nanorec deploy` generates + deploys everything
+- **One command:** `nanoml deploy` generates + deploys everything
 - **LLM-friendly:** File location indicates its purpose and mutability
 
 ---
@@ -1240,7 +1240,7 @@ Framework deploys:   infrastructure/flink/ submits job to cluster
 ⏳ Local provider implementation (9 core components)
 ⏳ AWS provider implementation (9 core components)
 ⏳ Shallow implementation (2 components: Lineage + Dashboard)
-⏳ CLI scaffolding (`nanorec init`, `nanorec deploy`)
+⏳ CLI scaffolding (`nanoml init`, `nanoml deploy`)
 ⏳ Docker Compose local environment (all 11 services)
 ⏳ Basic smoke tests
 ⏳ Example project (book recommendations)
@@ -1258,7 +1258,7 @@ Framework deploys:   infrastructure/flink/ submits job to cluster
 
 ### Phase 3: Developer Experience
 
-⏳ Enhanced CLI (`nanorec validate`, `nanorec test`)
+⏳ Enhanced CLI (`nanoml validate`, `nanoml test`)
 ⏳ Interactive setup wizard
 ⏳ Pre-built model templates
 ⏳ Documentation (user guide, API reference)

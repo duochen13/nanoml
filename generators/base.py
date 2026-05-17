@@ -42,7 +42,7 @@ class BaseGenerator(ABC):
         """Determine output file path.
 
         Args:
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
 
         Returns:
             Path where generated code should be written
@@ -60,7 +60,7 @@ class BaseGenerator(ABC):
 
         Args:
             source_path: Path to source file
-            project_root: Root directory of NanoRec project
+            project_root: Root directory of NanoML project
 
         Returns:
             Path to generated file

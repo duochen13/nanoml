@@ -4,8 +4,8 @@ from pathlib import Path
 
 import click
 
-from nanorec.cli.main import cli
-from nanorec.core import ConfigLoader, ConfigValidationError
+from nanoml.cli.main import cli
+from nanoml.core import ConfigLoader, ConfigValidationError
 
 
 @cli.command()
@@ -19,7 +19,7 @@ from nanorec.core import ConfigLoader, ConfigValidationError
 )
 def validate(config: Path):
     """
-    Validate NanoRec configuration file.
+    Validate NanoML configuration file.
 
     Checks config.yaml against the schema and reports any errors.
     """

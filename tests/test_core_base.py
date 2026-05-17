@@ -1,4 +1,4 @@
-from nanorec.core.base import Component, Provider
+from nanoml.core.base import Component, Provider
 
 
 def test_component_base_class():
