@@ -49,7 +49,7 @@ services:
   flink-jobmanager:
     image: flink:1.18
     ports:
-      - "8081:8081"
+      - "9091:8081"
     command: jobmanager
     environment:
       - "FLINK_PROPERTIES=jobmanager.rpc.address: flink-jobmanager"
@@ -111,7 +111,7 @@ services:
       context: ./infrastructure/model_server
       dockerfile: Dockerfile
     ports:
-      - "8001:8001"
+      - "8002:8001"
     environment:
       - MODEL_PATH=/models
     volumes:
@@ -131,7 +131,7 @@ services:
       - redis
       - mlflow
     environment:
-      - MODEL_SERVER_URL=http://model-server:8001
+      - MODEL_SERVER_URL=http://model-server:8002
       - FEAST_ONLINE_STORE=redis:6379
       - MLFLOW_TRACKING_URI=http://mlflow:5001
     networks:
@@ -142,7 +142,7 @@ services:
     image: apache/airflow:2.8.0-python3.10
     command: webserver
     ports:
-      - "8080:8080"
+      - "8090:8080"
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
@@ -193,7 +193,7 @@ services:
       context: ./infrastructure/dashboard
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       - lineage-api
       - mlflow
@@ -201,7 +201,7 @@ services:
     environment:
       - REACT_APP_LINEAGE_API=http://lineage-api:9000
       - REACT_APP_MLFLOW_URL=http://mlflow:5001
-      - REACT_APP_AIRFLOW_URL=http://airflow-webserver:8080
+      - REACT_APP_AIRFLOW_URL=http://airflow-webserver:8090
     networks:
       - nanoml
 

@@ -41,9 +41,9 @@ make infra-down
 
 - API Gateway: http://localhost:8000
 - MLflow UI: http://localhost:5001
-- Airflow UI: http://localhost:8080
-- Flink UI: http://localhost:8081
-- Dashboard: http://localhost:3000
+- Airflow UI: http://localhost:8090
+- Flink UI: http://localhost:9091
+- Dashboard: http://localhost:3001
 - Lineage API: http://localhost:9000
 
 ## Architecture

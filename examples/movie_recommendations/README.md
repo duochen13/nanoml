@@ -143,7 +143,7 @@ This starts all 11 services:
 - **MLflow UI**: http://localhost:5001
   - View experiments, models, metrics
 
-- **Airflow UI**: http://localhost:8080
+- **Airflow UI**: http://localhost:8090
   - View DAG structure and runs
 
 - **Feast UI**: http://localhost:8888

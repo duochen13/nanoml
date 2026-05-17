@@ -50,7 +50,7 @@ python examples/movie_recommendations/pipeline.py
 cd infrastructure/dashboard
 npm install
 npm start
-# Dashboard will be available at http://localhost:3000
+# Dashboard will be available at http://localhost:3001
 ```
 
 ### Deploy to Cloud
