@@ -1,0 +1,40 @@
+"""Label generation for {{ project_name }}.
+
+Define labels for training.
+"""
+
+import pandas as pd
+
+
+def generate_labels(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Generate training labels from preprocessed data.
+
+    Args:
+        df: Preprocessed DataFrame
+
+    Returns:
+        DataFrame with labels
+    """
+    # TODO: Implement your labeling logic
+    # Examples:
+    # - Binary labels (clicked/not clicked)
+    # - Rating labels (1-5 stars)
+    # - Implicit feedback (purchase, view)
+
+    df_labeled = df.copy()
+
+    # Example: Binary label from rating threshold
+    # df_labeled['label'] = (df_labeled['rating'] >= 4).astype(int)
+
+    return df_labeled
+
+
+if __name__ == "__main__":
+    from loader import load_data
+    from preprocessor import preprocess_data
+
+    df = load_data()
+    df_clean = preprocess_data(df)
+    df_labeled = generate_labels(df_clean)
+    print(f"Generated labels for {len(df_labeled)} rows")

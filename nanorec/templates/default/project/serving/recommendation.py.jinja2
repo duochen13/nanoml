@@ -1,0 +1,23 @@
+"""Main recommendation endpoint for {{ project_name }}."""
+
+from .candidate_generation import generate_candidates
+from .ranking import rank_candidates
+from .postprocessing import postprocess_recommendations
+
+
+def get_recommendations(user_id, top_n=10):
+    """
+    Get top-N recommendations for a user.
+    
+    Args:
+        user_id: User ID
+        top_n: Number of recommendations
+        
+    Returns:
+        List of recommended item IDs
+    """
+    # TODO: Implement full recommendation pipeline
+    candidates = generate_candidates(user_id)
+    ranked = rank_candidates(user_id, candidates)
+    recommendations = postprocess_recommendations(ranked)
+    return recommendations[:top_n]

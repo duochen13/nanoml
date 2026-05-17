@@ -1,0 +1,41 @@
+"""Data loader for {{ project_name }}.
+
+Load raw data from Kaggle/S3/GCS.
+"""
+
+from pathlib import Path
+import pandas as pd
+
+
+def load_data(source: str = "local") -> pd.DataFrame:
+    """
+    Load raw dataset.
+
+    Args:
+        source: Data source ("local", "s3", "kaggle")
+
+    Returns:
+        Raw data as DataFrame
+    """
+    if source == "local":
+        # TODO: Replace with your dataset path
+        data_path = Path("data/raw/dataset.csv")
+        return pd.read_csv(data_path)
+
+    elif source == "s3":
+        # TODO: Implement S3 loading
+        raise NotImplementedError("S3 loading not yet implemented")
+
+    elif source == "kaggle":
+        # TODO: Implement Kaggle API loading
+        raise NotImplementedError("Kaggle loading not yet implemented")
+
+    else:
+        raise ValueError(f"Unknown source: {source}")
+
+
+if __name__ == "__main__":
+    # Test loading
+    df = load_data()
+    print(f"Loaded {len(df)} rows")
+    print(df.head())

@@ -1,0 +1,57 @@
+# NanoRec Configuration
+# This file controls deployment environment and ML settings
+
+# ENVIRONMENT SELECTION
+environment: local  # Options: local, aws, gcp, azure
+
+# PROJECT INFO
+project:
+  name: {{ project_name }}
+  version: {{ project_version }}
+
+# LOCAL ENVIRONMENT
+local:
+  storage:
+    type: localstack
+    endpoint: http://localhost:4566
+  features:
+    feast:
+      offline_store:
+        type: file
+      online_store:
+        type: redis
+        host: localhost:6379
+  training:
+    sagemaker:
+      mode: local
+  serving:
+    api:
+      type: fastapi
+      port: 8000
+
+# AWS ENVIRONMENT (uncomment and configure when deploying to AWS)
+# aws:
+#   region: us-west-2
+#   account_id: "123456789012"
+#   storage:
+#     type: s3
+#     bucket: {{ project_name }}-data-${account_id}
+
+# ML CONFIGURATION (Environment-agnostic)
+ml:
+  features:
+    required_features:
+      - user:user_avg_rating_normalized
+      - user:user_total_books_log
+      - item:item_popularity_score
+  training:
+    hyperparameters:
+      embedding_dim: 64
+      learning_rate: 0.001
+      batch_size: 256
+      epochs: 10
+  serving:
+    candidate_generation:
+      max_candidates: 1000
+    ranking:
+      top_n: 10

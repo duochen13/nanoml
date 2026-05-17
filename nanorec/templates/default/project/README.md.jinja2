@@ -1,0 +1,75 @@
+# {{ project_name }}
+
+{{ description }}
+
+Built with [NanoRec](https://github.com/nanorec/nanorec) - Production ML Recommendation Systems Made Easy.
+
+## Quick Start
+
+### Local Development
+
+1. **Install dependencies**
+   ```bash
+   make setup
+   ```
+
+2. **Start infrastructure**
+   ```bash
+   make run
+   ```
+
+3. **Test the system**
+   ```bash
+   curl http://localhost:8000/recommend?user_id=123
+   ```
+
+### Deploy to Cloud
+
+1. **Configure AWS/GCP/Azure**
+   Edit `config.yaml` and change `environment: local` to `environment: aws`
+
+2. **Deploy**
+   ```bash
+   nanorec deploy
+   ```
+
+## Project Structure
+
+```
+{{ project_name }}/
+├── data/              # Data loading and preprocessing
+├── features/          # Feature definitions
+├── training/          # Model training
+├── evaluation/        # Model evaluation
+├── serving/           # Recommendation serving
+├── infrastructure/    # Infrastructure services (managed by NanoRec)
+├── config.yaml        # Main configuration
+└── Makefile           # Common commands
+```
+
+## Customization
+
+**User-facing files** (what you customize):
+- `data/*.py` - Data loading, preprocessing, labeling, splitting
+- `features/definitions.py` - Feature definitions
+- `training/*.py` - Model architecture, training config
+- `evaluation/metrics.py` - Evaluation metrics
+- `serving/*.py` - Recommendation logic
+
+**Framework-managed** (don't edit):
+- `infrastructure/` - Auto-generated infrastructure code
+- `.nanorec/generated/` - Auto-generated Flink jobs, Airflow DAGs, etc.
+
+## Available Commands
+
+```bash
+make setup    # Install dependencies
+make run      # Start local infrastructure
+make clean    # Stop and remove all data
+make test     # Run smoke tests
+```
+
+## Learn More
+
+- [NanoRec Documentation](https://nanorec.dev/docs)
+- [Design Document](docs/superpowers/specs/2026-05-17-nanorec-design.md)

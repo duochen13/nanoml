@@ -1,0 +1,73 @@
+"""Feature definitions for {{ project_name }}.
+
+Define features using @feature decorator.
+Framework auto-generates Flink jobs and Feast configs.
+"""
+
+from nanorec.features import feature
+import pandas as pd
+
+
+@feature(
+    name="user_avg_rating",
+    entity="user",
+    description="User's average rating across all items"
+)
+def compute_user_avg_rating(user_ratings: pd.DataFrame) -> pd.Series:
+    """
+    Compute average rating per user.
+
+    Args:
+        user_ratings: DataFrame with columns [user_id, rating]
+
+    Returns:
+        Series with user_id index and avg_rating values
+    """
+    return user_ratings.groupby("user_id")["rating"].mean()
+
+
+@feature(
+    name="user_rating_std",
+    entity="user",
+    description="Standard deviation of user ratings"
+)
+def compute_user_rating_std(user_ratings: pd.DataFrame) -> pd.Series:
+    """Compute rating standard deviation per user."""
+    return user_ratings.groupby("user_id")["rating"].std().fillna(0)
+
+
+@feature(
+    name="user_total_ratings",
+    entity="user",
+    description="Total number of ratings by user"
+)
+def compute_user_total_ratings(user_ratings: pd.DataFrame) -> pd.Series:
+    """Count total ratings per user."""
+    return user_ratings.groupby("user_id").size()
+
+
+@feature(
+    name="item_popularity",
+    entity="item",
+    description="Number of ratings for item (popularity proxy)"
+)
+def compute_item_popularity(item_ratings: pd.DataFrame) -> pd.Series:
+    """Count total ratings per item."""
+    return item_ratings.groupby("item_id").size()
+
+
+@feature(
+    name="item_avg_rating",
+    entity="item",
+    description="Average rating for item"
+)
+def compute_item_avg_rating(item_ratings: pd.DataFrame) -> pd.Series:
+    """Compute average rating per item."""
+    return item_ratings.groupby("item_id")["rating"].mean()
+
+
+# TODO: Add your custom features here
+# Framework will auto-generate:
+# - .nanorec/generated/flink/batch_features.py
+# - .nanorec/generated/flink/stream_features.py
+# - .nanorec/generated/feast/feature_repo/features.py

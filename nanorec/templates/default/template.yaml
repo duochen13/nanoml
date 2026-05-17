@@ -1,0 +1,19 @@
+name: default
+description: Default NanoRec project template with all components
+version: 1.0.0
+author: NanoRec Team
+
+# Variables that can be customized during project creation
+variables:
+  - name: project_name
+    description: Project name
+    required: true
+    pattern: "^[a-z][a-z0-9-]*$"
+
+  - name: project_version
+    description: Project version
+    default: "0.1.0"
+
+  - name: description
+    description: Project description
+    default: "A NanoRec recommendation system"

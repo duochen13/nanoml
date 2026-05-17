@@ -1,0 +1,32 @@
+.PHONY: setup run clean test help
+
+help:
+	@echo "{{ project_name }} - NanoRec Project"
+	@echo ""
+	@echo "Available commands:"
+	@echo "  make setup   - Install dependencies"
+	@echo "  make run     - Start local infrastructure"
+	@echo "  make clean   - Stop and remove all data"
+	@echo "  make test    - Run smoke tests"
+
+setup:
+	pip install -r requirements.txt
+	@echo "✅ Dependencies installed"
+
+run:
+	@echo "Starting NanoRec infrastructure..."
+	docker-compose up -d
+	@echo "✅ Infrastructure running!"
+	@echo "API: http://localhost:8000"
+	@echo "Airflow UI: http://localhost:8080"
+	@echo "MLflow UI: http://localhost:5000"
+
+clean:
+	@echo "Stopping all services..."
+	docker-compose down -v
+	@echo "✅ All services stopped and data cleaned"
+
+test:
+	@echo "Running smoke tests..."
+	pytest integration/smoke_tests.py -v
+	@echo "✅ Tests passed"

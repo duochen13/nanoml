@@ -1,0 +1,42 @@
+"""Data preprocessing for {{ project_name }}.
+
+Clean and transform raw data.
+"""
+
+import pandas as pd
+
+
+def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Clean and preprocess raw data.
+
+    Args:
+        df: Raw DataFrame
+
+    Returns:
+        Cleaned DataFrame
+    """
+    # TODO: Implement your preprocessing logic
+    # Examples:
+    # - Remove duplicates
+    # - Handle missing values
+    # - Convert data types
+    # - Filter invalid records
+
+    df_clean = df.copy()
+
+    # Remove duplicates
+    df_clean = df_clean.drop_duplicates()
+
+    # Handle missing values
+    df_clean = df_clean.dropna()
+
+    return df_clean
+
+
+if __name__ == "__main__":
+    from loader import load_data
+
+    df = load_data()
+    df_clean = preprocess_data(df)
+    print(f"Preprocessed: {len(df)} → {len(df_clean)} rows")
