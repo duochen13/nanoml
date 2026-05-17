@@ -1,0 +1,13 @@
+name: movie_recommendations
+version: 0.1.0
+description: Movie recommendation system using NanoRec
+
+infrastructure:
+  provider: local
+
+components:
+  - data
+  - features
+  - training
+  - evaluation
+  - serving
