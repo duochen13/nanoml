@@ -17,7 +17,7 @@ NanoML is a pip-installable framework that scaffolds complete end-to-end ML reco
 ### Installation
 
 ```bash
-pip install nanoml
+pip3 install nanoml
 ```
 
 ### Create a New Project
@@ -32,8 +32,8 @@ cd my-recommender
 **Prerequisites:** Install [Docker](https://docs.docker.com/get-docker/) and Docker Compose before proceeding.
 
 ```bash
-make setup  # Install dependencies
-make run    # Start Docker Compose (11 services)
+make setup      # Install NanoML framework and dependencies
+make infra-up   # Start Docker Compose (11 services)
 ```
 
 ### Run Model Training
@@ -135,7 +135,7 @@ NanoML automatically generates from your definitions:
 ### Install Development Dependencies
 
 ```bash
-pip install -e ".[dev]"
+pip3 install -e ".[dev]"
 ```
 
 ### Run Tests

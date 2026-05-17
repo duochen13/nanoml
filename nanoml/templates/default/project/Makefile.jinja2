@@ -10,7 +10,7 @@ help:
 	@echo "  make test    - Run smoke tests"
 
 setup:
-	pip install -r requirements.txt
+	pip3 install -r requirements.txt
 	@echo "✅ Dependencies installed"
 
 run:
@@ -18,8 +18,10 @@ run:
 	docker-compose up -d
 	@echo "✅ Infrastructure running!"
 	@echo "API: http://localhost:8000"
-	@echo "Airflow UI: http://localhost:8080"
+	@echo "Airflow UI: http://localhost:8090"
+	@echo "Flink UI: http://localhost:9091"
 	@echo "MLflow UI: http://localhost:5001"
+	@echo "Dashboard: http://localhost:3001"
 
 clean:
 	@echo "Stopping all services..."
@@ -30,3 +32,9 @@ test:
 	@echo "Running smoke tests..."
 	pytest integration/smoke_tests.py -v
 	@echo "✅ Tests passed"
+
+infra-status:
+	@echo "Checking infrastructure health..."
+	@python3 -c "import requests; print('✅ API' if requests.get('http://localhost:8000/health', timeout=1).ok else '❌ API')" 2>/dev/null || echo "❌ API"
+	@python3 -c "import requests; print('✅ MLflow' if requests.get('http://localhost:5001/health', timeout=1).ok else '❌ MLflow')" 2>/dev/null || echo "❌ MLflow"
+	@python3 -c "import requests; print('✅ Airflow' if requests.get('http://localhost:8090/health', timeout=1).ok else '❌ Airflow')" 2>/dev/null || echo "❌ Airflow"
