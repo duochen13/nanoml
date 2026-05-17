@@ -52,7 +52,7 @@ services:
       - "8081:8081"
     command: jobmanager
     environment:
-      - FLINK_PROPERTIES=jobmanager.rpc.address: flink-jobmanager
+      - "FLINK_PROPERTIES=jobmanager.rpc.address: flink-jobmanager"
     volumes:
       - ./volumes/flink/jobs:/opt/flink/jobs
     networks:
@@ -64,7 +64,7 @@ services:
       - flink-jobmanager
     command: taskmanager
     environment:
-      - FLINK_PROPERTIES=jobmanager.rpc.address: flink-jobmanager
+      - "FLINK_PROPERTIES=jobmanager.rpc.address: flink-jobmanager"
     networks:
       - nanoml
 
