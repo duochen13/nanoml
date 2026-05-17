@@ -140,7 +140,7 @@ This starts all 11 services:
 
 ### 2. Access Points
 
-- **MLflow UI**: http://localhost:5000
+- **MLflow UI**: http://localhost:5001
   - View experiments, models, metrics
 
 - **Airflow UI**: http://localhost:8080

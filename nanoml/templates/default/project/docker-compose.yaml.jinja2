@@ -108,7 +108,7 @@ services:
   # Service 7: Model Serving
   model-server:
     build:
-      context: ../infrastructure/model_server
+      context: ./infrastructure/model_server
       dockerfile: Dockerfile
     ports:
       - "8001:8001"
@@ -122,7 +122,7 @@ services:
   # Service 8: API Gateway
   api:
     build:
-      context: ../infrastructure/api_gateway
+      context: ./infrastructure/api_gateway
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
@@ -178,7 +178,7 @@ services:
   # Service 10: Lineage Tracking (SHALLOW)
   lineage-api:
     build:
-      context: ../infrastructure/lineage
+      context: ./infrastructure/lineage
       dockerfile: Dockerfile
     ports:
       - "9000:9000"
@@ -190,7 +190,7 @@ services:
   # Service 11: Frontend Dashboard (SHALLOW)
   dashboard:
     build:
-      context: ../infrastructure/dashboard
+      context: ./infrastructure/dashboard
       dockerfile: Dockerfile
     ports:
       - "3000:3000"

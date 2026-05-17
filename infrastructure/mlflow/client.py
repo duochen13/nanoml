@@ -8,7 +8,7 @@ from typing import List, Dict, Any, Optional
 class MLflowClient:
     """Client for interacting with MLflow tracking server."""
 
-    def __init__(self, tracking_uri: str = "http://localhost:5000"):
+    def __init__(self, tracking_uri: str = "http://localhost:5001"):
         """Initialize MLflow client."""
         mlflow.set_tracking_uri(tracking_uri)
         self.client = BaseMlflowClient(tracking_uri=tracking_uri)

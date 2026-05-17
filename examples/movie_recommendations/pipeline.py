@@ -85,7 +85,7 @@ def main():
     print("\nNext steps:")
     print("  - Start infrastructure: make infra-up")
     print("  - Model serving at: http://localhost:8000/recommendations")
-    print("  - MLflow UI: http://localhost:5000")
+    print("  - MLflow UI: http://localhost:5001")
     print("  - Airflow UI: http://localhost:8080")
     print("\nTry: curl 'http://localhost:8000/recommendations?user_id=1&top_k=5'")
 

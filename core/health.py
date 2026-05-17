@@ -93,7 +93,7 @@ class HealthChecker:
             "kafka": self.check_tcp("Kafka", "localhost", 9092),
             "flink": self.check_http("Flink", "http://localhost:8081/overview"),
             "redis": self.check_tcp("Redis", "localhost", 6379),
-            "mlflow": self.check_http("MLflow", "http://localhost:5000/health"),
+            "mlflow": self.check_http("MLflow", "http://localhost:5001/health"),
             "api": self.check_http("API Gateway", "http://localhost:8000/health"),
             "airflow": self.check_http("Airflow", "http://localhost:8080/health"),
             "lineage": self.check_http("Lineage API", "http://localhost:9000/health"),

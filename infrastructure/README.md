@@ -40,7 +40,7 @@ make infra-down
 ## Service URLs (Local)
 
 - API Gateway: http://localhost:8000
-- MLflow UI: http://localhost:5000
+- MLflow UI: http://localhost:5001
 - Airflow UI: http://localhost:8080
 - Flink UI: http://localhost:8081
 - Dashboard: http://localhost:3000

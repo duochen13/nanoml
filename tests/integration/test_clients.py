@@ -37,13 +37,13 @@ def test_mlflow_client():
     # Check if it's actually MLflow
     import requests
     try:
-        response = requests.get("http://localhost:5000/health", timeout=1)
+        response = requests.get("http://localhost:5001/health", timeout=1)
         if response.status_code == 403:
             pytest.skip("Port 5000 occupied by non-MLflow service")
     except Exception:
         pytest.skip("MLflow not available")
 
-    client = MLflowClient(tracking_uri="http://localhost:5000")
+    client = MLflowClient(tracking_uri="http://localhost:5001")
     experiments = client.list_experiments()
     assert isinstance(experiments, list)
 

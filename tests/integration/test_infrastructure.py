@@ -66,7 +66,7 @@ def test_mlflow_healthy(health_checker):
     if not _is_service_available("localhost", 5000):
         pytest.skip("MLflow not running")
 
-    health = health_checker.check_http("MLflow", "http://localhost:5000/health")
+    health = health_checker.check_http("MLflow", "http://localhost:5001/health")
     if not health.healthy and ("403" in health.message or "404" in health.message):
         pytest.skip("Port 5000 occupied by non-MLflow service")
     assert health.healthy, f"MLflow unhealthy: {health.message}"
