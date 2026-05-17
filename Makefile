@@ -64,13 +64,13 @@ lineage-api:
 	@echo "API will be available at http://localhost:9000"
 	@echo "API docs: http://localhost:9000/docs"
 	@echo ""
-	cd infrastructure/lineage && uvicorn api:app --host 0.0.0.0 --port 9000 --reload
+	python3 -m uvicorn infrastructure.lineage.api:app --host 0.0.0.0 --port 9000 --reload
 
 dev:
 	@echo "Starting development environment..."
 	@echo ""
 	@echo "Starting lineage API in background..."
-	@cd infrastructure/lineage && uvicorn api:app --host 0.0.0.0 --port 9000 --reload &
+	@python3 -m uvicorn infrastructure.lineage.api:app --host 0.0.0.0 --port 9000 --reload &
 	@sleep 2
 	@echo "✅ Lineage API running at http://localhost:9000"
 	@echo ""
