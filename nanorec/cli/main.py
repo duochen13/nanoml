@@ -18,3 +18,4 @@ def cli():
 # Commands will be added in subsequent tasks
 from nanorec.cli import init as _init_module  # noqa: E402, F401
 from nanorec.cli import validate as _validate_module  # noqa: E402, F401
+from nanorec.cli import generate as _generate_module  # noqa: E402, F401
