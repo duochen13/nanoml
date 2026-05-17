@@ -35,3 +35,8 @@ Thumbs.db
 deployment/volumes/*
 !deployment/volumes/.gitkeep
 !deployment/volumes/README.md
+
+# Demo-generated artifacts (created by make demo)
+examples/*/data/*.csv
+examples/*/data/*.pkl
+examples/*/.backup/

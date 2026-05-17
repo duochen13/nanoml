@@ -11,6 +11,7 @@ def main():
     example_dir = project_root / "examples" / "movie_recommendations"
     components_dir = example_dir / "components"
     backup_dir = example_dir / ".backup"
+    data_dir = example_dir / "data"
 
     if not backup_dir.exists():
         print("❌ No backups found. Skeleton code may already be restored.")
@@ -22,7 +23,7 @@ def main():
     print()
 
     # Restore original files
-    print("🔄 Restoring from backups...")
+    print("🔄 Restoring Python files from backups...")
     for file in ["features.py", "training.py", "evaluation.py", "serving.py"]:
         src = backup_dir / file
         dst = components_dir / file
@@ -31,11 +32,38 @@ def main():
             print(f"  ✓ Restored {file}")
 
     print()
+
+    # Clean up generated data artifacts
+    print("🧹 Cleaning up generated artifacts...")
+    artifacts = [
+        data_dir / "ratings.csv",          # Downloaded dataset
+        data_dir / "movies.csv",           # Downloaded dataset
+        data_dir / "user_features.csv",    # Computed features
+        data_dir / "model.pkl",            # Trained model
+        data_dir / "test_data.csv",        # Test split
+    ]
+
+    for artifact in artifacts:
+        if artifact.exists():
+            artifact.unlink()
+            print(f"  ✓ Removed {artifact.name}")
+
+    # Remove backup directory
+    print()
+    print("🗑️  Removing backup directory...")
+    shutil.rmtree(backup_dir)
+    print("  ✓ Removed .backup/")
+
+    print()
     print("=" * 60)
-    print("✅ Skeleton code restored!")
+    print("✅ Skeleton code and artifacts restored!")
     print("=" * 60)
     print()
-    print("The example code is back to its placeholder state.")
+    print("The example is back to its pristine state:")
+    print("  • Python code restored to skeleton")
+    print("  • All generated data files removed")
+    print("  • Backup directory cleaned up")
+    print()
     print("To activate demo again:  make demo")
     print()
 

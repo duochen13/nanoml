@@ -55,6 +55,7 @@ python3 skills/demo-fill/restore.py
 
 ## What Gets Modified
 
+### Python Code (backed up and restorable)
 The skill modifies these files:
 - `examples/movie_recommendations/components/features.py`
 - `examples/movie_recommendations/components/training.py`
@@ -62,6 +63,20 @@ The skill modifies these files:
 - `examples/movie_recommendations/components/serving.py`
 
 Original files are backed up to `.backup/` so you can restore them.
+
+### Generated Artifacts (cleaned on restore)
+Running the demo creates these data files:
+- `data/ratings.csv` - Downloaded MovieLens ratings
+- `data/movies.csv` - Downloaded MovieLens movies
+- `data/user_features.csv` - Computed user features
+- `data/model.pkl` - Trained model
+- `data/test_data.csv` - Test dataset split
+
+**When you run `make demo-restore`:**
+- ✅ Python files are restored from backups
+- ✅ All generated data files are removed
+- ✅ Backup directory is cleaned up
+- ✅ Repository returns to pristine state
 
 ## Example Output
 
