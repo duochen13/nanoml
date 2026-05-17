@@ -1,10 +1,15 @@
-.PHONY: setup infra-up infra-down infra-status infra-test help
+.PHONY: setup run test infra-up infra-down infra-status infra-test help
 
 help:
 	@echo "NanoML Framework Commands"
 	@echo ""
+	@echo "Quick Start (No Docker Required):"
 	@echo "  make setup         - Install NanoML and dependencies"
-	@echo "  make infra-up      - Start all infrastructure services"
+	@echo "  make run           - Run example locally (no Docker needed)"
+	@echo "  make test          - Run tests"
+	@echo ""
+	@echo "Full Infrastructure (Requires Docker):"
+	@echo "  make infra-up      - Start all infrastructure services (Docker)"
 	@echo "  make infra-down    - Stop all infrastructure services"
 	@echo "  make infra-status  - Check service health"
 	@echo "  make infra-test    - Run infrastructure integration tests"
@@ -15,9 +20,24 @@ setup:
 	@echo "✅ NanoML framework installed"
 	@echo ""
 	@echo "Next steps:"
-	@echo "  1. Start infrastructure: make infra-up"
-	@echo "  2. Check health: make infra-status"
-	@echo "  3. Run tests: make infra-test"
+	@echo "  • Quick start (no Docker): make run"
+	@echo "  • Full infrastructure: make infra-up"
+
+run:
+	@echo "Running movie recommendations example (local mode, no Docker)..."
+	@echo ""
+	cd examples/movie_recommendations && python3 pipeline.py
+	@echo ""
+	@echo "✅ Example completed!"
+	@echo ""
+	@echo "To run with full infrastructure (Kafka, MLflow, etc.):"
+	@echo "  1. make infra-up"
+	@echo "  2. cd examples/movie_recommendations && python3 pipeline.py"
+
+test:
+	@echo "Running tests..."
+	python3 -m pytest tests/ -v --cov=nanoml
+	@echo "✅ Tests passed"
 
 infra-up:
 	@echo "Starting NanoRec infrastructure..."

@@ -27,14 +27,41 @@ nanoml init my-recommender
 cd my-recommender
 ```
 
-### Local Development
-
-**Prerequisites:** Install [Docker](https://docs.docker.com/get-docker/) and Docker Compose before proceeding.
+### Quick Start (No Docker Required)
 
 ```bash
-make setup      # Install NanoML framework and dependencies
-make infra-up   # Start Docker Compose (11 services)
+# 1. Install framework
+make setup
+
+# 2. Run example locally
+make run
 ```
+
+That's it! The example runs locally without any infrastructure.
+
+### Cloud Deployment (Requires Docker)
+
+When you're ready to deploy to production:
+
+```bash
+# Edit config.yaml: environment: aws|gcp|azure
+nanoml deploy
+```
+
+Docker is used internally for cloud deployment but you never interact with it directly.
+
+### [Optional] Test Production Stack Locally
+
+Want to test with full infrastructure (Kafka, MLflow, Airflow) before deploying?
+
+**Prerequisites:** Install [Docker](https://docs.docker.com/get-docker/) and Docker Compose.
+
+```bash
+make infra-up     # Start all 11 services locally
+make infra-status # Check health
+```
+
+**Note:** This is completely optional. Most development happens without this.
 
 ### Run Model Training
 
@@ -60,9 +87,26 @@ npm start
 nanoml deploy
 ```
 
+## When Do You Need Docker?
+
+### ✅ Local Development (No Docker)
+- **Learning the framework** - `make setup && make run`
+- **Writing ML code** - Pure Python development
+- **Running examples** - Works out of the box
+- **Model training** - PyTorch/scikit-learn runs locally
+- **99% of development** - No infrastructure needed
+
+### 🐳 Docker ONLY For:
+- **Cloud deployment** - `nanoml deploy` (AWS/GCP/Azure)
+- **[Optional] Testing production stack locally** - `make infra-up`
+
+**TL;DR:** Docker is only required when deploying to cloud. Everything else runs locally without Docker.
+
+---
+
 ## Architecture
 
-**11 Infrastructure Services:**
+**11 Infrastructure Services (Optional - Docker):**
 1. Storage (S3/GCS/Blob)
 2. Message Queue (Kafka)
 3. Stream Processing (Flink)
@@ -127,6 +171,7 @@ NanoML automatically generates from your definitions:
 
 ## Documentation
 
+- [Local Development Mode](LOCAL_MODE.md) - Run without Docker
 - [Design Document](docs/superpowers/specs/2026-05-17-nanoml-design.md)
 - [Implementation Plans](docs/superpowers/plans/)
 
