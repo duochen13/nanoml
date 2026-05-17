@@ -34,3 +34,4 @@ Thumbs.db
 # Docker volumes (runtime data - do NOT commit)
 deployment/volumes/*
 !deployment/volumes/.gitkeep
+!deployment/volumes/README.md
