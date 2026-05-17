@@ -1,0 +1,67 @@
+"""
+Auto-generated Flink streaming feature computation job.
+
+DO NOT EDIT - Generated from features/definitions.py
+Run `nanorec generate` to regenerate.
+"""
+from pyflink.datastream import StreamExecutionEnvironment
+from pyflink.datastream.connectors import FlinkKafkaConsumer, FlinkKafkaProducer
+from pyflink.common.serialization import SimpleStringSchema
+import json
+
+
+def main():
+    """Run Flink streaming job for feature computation."""
+    env = StreamExecutionEnvironment.get_execution_environment()
+
+    {% for fg in feature_groups %}
+    # Feature Group: {{ fg.name }}
+    # Entity: {{ fg.entity }}
+    # Source: {{ fg.source }}
+
+    {{ fg.name }}_consumer = FlinkKafkaConsumer(
+        topics="{{ fg.source.replace('kafka://', '') }}",
+        deserialization_schema=SimpleStringSchema(),
+        properties={
+            "bootstrap.servers": "kafka:9092",
+            "group.id": "nanorec_{{ fg.name }}"
+        }
+    )
+
+    {{ fg.name }}_stream = env.add_source({{ fg.name }}_consumer)
+
+    def process_{{ fg.name }}(event: str) -> str:
+        """Extract features from {{ fg.name }} events."""
+        data = json.loads(event)
+
+        features = {
+            "entity_id": data.get("{{ fg.entity }}"),
+            {% for feature in fg.features %}
+            "{{ feature.name }}": data.get("{{ feature.name }}"),
+            {% endfor %}
+            "event_timestamp": data.get("timestamp")
+        }
+
+        return json.dumps(features)
+
+    {{ fg.name }}_features = {{ fg.name }}_stream.map(process_{{ fg.name }})
+
+    # Write to Feast via Kafka
+    {{ fg.name }}_producer = FlinkKafkaProducer(
+        topic="feast_{{ fg.name }}",
+        serialization_schema=SimpleStringSchema(),
+        producer_config={
+            "bootstrap.servers": "kafka:9092"
+        }
+    )
+
+    {{ fg.name }}_features.add_sink({{ fg.name }}_producer)
+
+    {% endfor %}
+
+    # Execute
+    env.execute("NanoRec Streaming Features")
+
+
+if __name__ == "__main__":
+    main()

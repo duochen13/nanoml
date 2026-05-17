@@ -1,0 +1,57 @@
+"""
+Auto-generated Airflow DAG for NanoRec pipeline.
+
+DO NOT EDIT - Generated from components
+Run `nanorec generate` to regenerate.
+"""
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+
+
+default_args = {
+    "owner": "nanorec",
+    "depends_on_past": False,
+    "start_date": datetime(2024, 1, 1),
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "retries": 1,
+    "retry_delay": timedelta(minutes=5)
+}
+
+dag = DAG(
+    "nanorec_pipeline",
+    default_args=default_args,
+    description="Auto-generated NanoRec ML pipeline",
+    schedule_interval="{{ components[0].schedule if components else '@daily' }}",
+    catchup=False
+)
+
+
+{% for component in components %}
+def {{ component.name }}_task():
+    """Execute {{ component.type }} component."""
+    # Import component
+    from components.{{ component.type.replace('Component', '').lower() }} import {{ component.type }}
+
+    # Run component
+    component = {{ component.type }}(name="{{ component.name }}")
+    component.run()
+
+
+{{ component.name }} = PythonOperator(
+    task_id="{{ component.name }}",
+    python_callable={{ component.name }}_task,
+    dag=dag
+)
+
+{% endfor %}
+
+# Set dependencies
+{% for component in components %}
+{% if component.depends_on %}
+{% for dep in component.depends_on %}
+{{ dep }} >> {{ component.name }}
+{% endfor %}
+{% endif %}
+{% endfor %}

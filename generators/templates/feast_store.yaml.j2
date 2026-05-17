@@ -1,0 +1,20 @@
+# Auto-generated Feast feature store configuration
+# DO NOT EDIT - Generated from features/definitions.py
+# Run `nanorec generate` to regenerate
+
+project: nanorec
+provider: local
+
+registry:
+  path: /data/feast/registry.db
+  cache_ttl_seconds: 60
+
+online_store:
+  type: redis
+  connection_string: redis:6379
+
+offline_store:
+  type: file
+  path: /data/feast/offline_store
+
+entity_key_serialization_version: 2

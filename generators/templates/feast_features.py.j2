@@ -1,0 +1,44 @@
+"""
+Auto-generated Feast feature definitions.
+
+DO NOT EDIT - Generated from features/definitions.py
+Run `nanorec generate` to regenerate.
+"""
+from feast import Entity, FeatureView, Field
+from feast.types import Int64, String, Float32
+from datetime import timedelta
+
+
+# Type mapping
+TYPE_MAP = {
+    "int": Int64,
+    "string": String,
+    "float": Float32
+}
+
+
+{% for entity in entities %}
+# Entity: {{ entity.name }}
+{{ entity.name }} = Entity(
+    name="{{ entity.name }}",
+    description="Auto-generated entity for {{ entity.name }}"
+)
+
+{% endfor %}
+
+{% for view in feature_views %}
+# Feature View: {{ view.name }}
+{{ view.name }} = FeatureView(
+    name="{{ view.name }}",
+    entities=[{{ view.entity }}],
+    ttl=timedelta(days=1),
+    schema=[
+        {% for feature in view.features %}
+        Field(name="{{ feature.name }}", dtype=TYPE_MAP["{{ feature.type }}"]),
+        {% endfor %}
+    ],
+    online=True,
+    source=None  # Populated by Flink streaming job
+)
+
+{% endfor %}
