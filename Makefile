@@ -1,11 +1,13 @@
-.PHONY: setup run test infra-up infra-down infra-status infra-test help
+.PHONY: setup run test demo demo-restore infra-up infra-down infra-status infra-test help
 
 help:
 	@echo "NanoML Framework Commands"
 	@echo ""
 	@echo "Quick Start (No Docker Required):"
 	@echo "  make setup         - Install NanoML and dependencies"
-	@echo "  make run           - Run example locally (no Docker needed)"
+	@echo "  make run           - Run example (shows placeholders by default)"
+	@echo "  make demo          - Activate demo mode (fills skeleton with working code)"
+	@echo "  make demo-restore  - Restore skeleton code"
 	@echo "  make test          - Run tests"
 	@echo ""
 	@echo "Full Infrastructure (Requires Docker):"
@@ -38,6 +40,14 @@ test:
 	@echo "Running tests..."
 	python3 -m pytest tests/ -v --cov=nanoml
 	@echo "✅ Tests passed"
+
+demo:
+	@echo "Activating demo mode..."
+	@python3 skills/demo-fill/activate.py
+
+demo-restore:
+	@echo "Restoring skeleton code..."
+	@python3 skills/demo-fill/restore.py
 
 infra-up:
 	@echo "Starting NanoRec infrastructure..."

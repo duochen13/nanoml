@@ -33,11 +33,15 @@ cd my-recommender
 # 1. Install framework
 make setup
 
-# 2. Run example locally
+# 2. Run example (shows placeholders)
 make run
+
+# 3. [Optional] See working demo with real results
+make demo    # Fill skeleton with working code
+make run     # Now shows actual ML pipeline results!
 ```
 
-That's it! The example runs locally without any infrastructure.
+**By default**, the example shows skeleton code with placeholders. Use `make demo` to see it actually work!
 
 ### Cloud Deployment (Requires Docker)
 
