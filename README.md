@@ -29,6 +29,8 @@ cd my-recommender
 
 ### Local Development
 
+**Prerequisites:** Install [Docker](https://docs.docker.com/get-docker/) and Docker Compose before proceeding.
+
 ```bash
 make setup  # Install dependencies
 make run    # Start Docker Compose (11 services)
