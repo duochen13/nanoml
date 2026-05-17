@@ -84,6 +84,10 @@ npm start
 # Dashboard will be available at http://localhost:3001
 ```
 
+The dashboard displays:
+- **ML Pipeline DAG** - Visual flow of your pipeline stages (Raw Data → Data Processing → Feature Store → Model Training → Model Serving)
+- **Infrastructure Services** - Quick links to MLflow, Airflow, Flink, and Lineage tracking
+
 ### Deploy to Cloud
 
 ```bash
