@@ -38,14 +38,19 @@ def generate(clean: bool):
     project_root = Path.cwd()
     config_path = project_root / "nanorec.yaml"
 
+    # Fallback to config.yaml if nanorec.yaml doesn't exist
     if not config_path.exists():
-        click.echo("No nanorec.yaml found in current directory", err=True)
+        config_path = project_root / "config.yaml"
+
+    if not config_path.exists():
+        click.echo("❌ No nanorec.yaml or config.yaml found in current directory", err=True)
         click.echo("Run this command from a NanoRec project root", err=True)
         raise click.Abort()
 
     # Load config
     config = load_config(config_path)
-    click.echo(f"Generating code for project: {config['name']}")
+    project_name = config.get('name') or config.get('project', {}).get('name', 'unknown')
+    click.echo(f"Generating code for project: {project_name}")
 
     # Initialize generated directory
     manager = GeneratedManager(project_root)

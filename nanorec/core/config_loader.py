@@ -46,3 +46,18 @@ class ConfigLoader:
             ) from e
 
         return config
+
+
+# Convenience function for backward compatibility
+def load_config(config_path: Path) -> Dict[str, Any]:
+    """
+    Load and validate a config file.
+
+    Args:
+        config_path: Path to config file
+
+    Returns:
+        Validated configuration dictionary
+    """
+    loader = ConfigLoader()
+    return loader.load(config_path)
