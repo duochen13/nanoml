@@ -1,0 +1,27 @@
+environment: local
+
+project:
+  name: test-project
+  version: 1.0.0
+
+local:
+  storage:
+    type: localstack
+    endpoint: http://localhost:4566
+  features:
+    feast:
+      offline_store:
+        type: file
+      online_store:
+        type: redis
+        host: localhost:6379
+
+ml:
+  features:
+    required_features:
+      - user:user_avg_rating
+      - item:item_popularity
+  training:
+    hyperparameters:
+      embedding_dim: 64
+      learning_rate: 0.001
