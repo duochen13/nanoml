@@ -80,18 +80,21 @@ python examples/movie_recommendations/pipeline.py
 ### Start Frontend Dashboard
 
 ```bash
-# Easy way (after make setup)
-make dashboard
+# Start both dashboard and lineage API
+make dev
 
-# Or manually
-cd infrastructure/dashboard
-npm start
-# Dashboard will be available at http://localhost:3001
+# Or start individually
+make lineage-api    # Starts API at http://localhost:9000
+make dashboard      # Starts dashboard at http://localhost:3001
 ```
 
 The dashboard displays:
-- **ML Pipeline DAG** - Visual flow of your pipeline stages (Raw Data → Data Processing → Feature Store → Model Training → Model Serving)
+- **ML Pipeline DAG** - Dynamically generated from your component definitions
+  - Training Pipeline (Batch): Raw Data → Data Processing → Feature Store → Model Training
+  - Serving Pipeline (Real-time): User Request → Feature Store → Model Serving → Response
 - **Infrastructure Services** - Quick links to MLflow, Airflow, Flink, and Lineage tracking
+
+**Key Feature:** The pipeline DAG updates automatically when you add or modify components. No hardcoding needed!
 
 ### Deploy to Cloud
 
@@ -135,6 +138,21 @@ nanoml deploy
 11. Frontend Dashboard
 
 **Zero Duplication:** All infrastructure centralized, cloud providers in single files.
+
+### Dynamic Pipeline Generation
+
+The dashboard automatically discovers your pipeline structure by introspecting component definitions:
+
+1. **Lineage API** (`/pipeline` endpoint) scans your `components/` directory
+2. **Loads each component** and extracts metadata (name, dependencies, schedule)
+3. **Builds DAG** based on component relationships
+4. **Dashboard fetches** and renders the pipeline in real-time
+
+**Benefits:**
+- Add a new component → Pipeline DAG updates automatically
+- No manual configuration or hardcoding
+- Works with any user-defined pipeline structure
+- Clear separation between training (batch) and serving (real-time) pipelines
 
 ## What You Customize vs What's Provided
 
