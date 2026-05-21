@@ -107,6 +107,8 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 import time
+import mlflow
+import mlflow.sklearn
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
@@ -140,6 +142,10 @@ class TrainingComponent:
 
         print("Training collaborative filtering model...")
 
+        # Configure MLflow
+        mlflow.set_tracking_uri("http://localhost:5001")
+        mlflow.set_experiment("movie_recommendations")
+
         # Load data
         ratings = pd.read_csv(ratings_file)
 
@@ -153,34 +159,59 @@ class TrainingComponent:
         # Create simple train/test split
         train_data, test_data = train_test_split(data, test_size=0.2, random_state=42)
 
-        # Train simple model (simulates 10 epochs)
-        print("Epoch 1/10: Loss = 0.4523")
-        time.sleep(0.3)
-        print("Epoch 5/10: Loss = 0.2134")
-        time.sleep(0.3)
-        print("Epoch 10/10: Loss = 0.1245")
+        # Model hyperparameters
+        n_estimators = 10
+        max_depth = 5
+        test_size = 0.2
+        random_state = 42
 
-        # Simulate model training
-        model = RandomForestRegressor(n_estimators=10, random_state=42, max_depth=5)
+        # Start MLflow run
+        with mlflow.start_run(run_name="random_forest_training"):
+            # Log parameters
+            mlflow.log_param("n_estimators", n_estimators)
+            mlflow.log_param("max_depth", max_depth)
+            mlflow.log_param("test_size", test_size)
+            mlflow.log_param("random_state", random_state)
+            mlflow.log_param("algorithm", "RandomForestRegressor")
+            mlflow.log_param("features", "userId,movieId")
+            mlflow.log_param("train_samples", len(train_data))
+            mlflow.log_param("test_samples", len(test_data))
 
-        # Use movieId and userId as features for demo
-        X_train = train_data[['userId', 'movieId']].values
-        y_train = train_data['rating'].values
+            # Train simple model (simulates 10 epochs)
+            print("Epoch 1/10: Loss = 0.4523")
+            time.sleep(0.3)
+            print("Epoch 5/10: Loss = 0.2134")
+            time.sleep(0.3)
+            print("Epoch 10/10: Loss = 0.1245")
 
-        start = time.time()
-        model.fit(X_train, y_train)
-        elapsed = time.time() - start
+            # Simulate model training
+            model = RandomForestRegressor(n_estimators=n_estimators, random_state=random_state, max_depth=max_depth)
 
-        print(f"✓ Model trained (10 epochs, {elapsed:.1f}s)")
+            # Use movieId and userId as features for demo
+            X_train = train_data[['userId', 'movieId']].values
+            y_train = train_data['rating'].values
 
-        # Save model (simulates MLflow)
-        import pickle
-        model_file = data_dir / "model.pkl"
-        with open(model_file, 'wb') as f:
-            pickle.dump(model, f)
+            start = time.time()
+            model.fit(X_train, y_train)
+            elapsed = time.time() - start
 
-        # Save test data for evaluation
-        test_data.to_csv(data_dir / "test_data.csv", index=False)
+            # Log training time
+            mlflow.log_metric("training_time_seconds", elapsed)
+
+            print(f"✓ Model trained (10 epochs, {elapsed:.1f}s)")
+
+            # Log model to MLflow
+            mlflow.sklearn.log_model(model, "model", registered_model_name="movie_recommender")
+            print("✓ Model logged to MLflow")
+
+            # Save model locally (for backward compatibility)
+            import pickle
+            model_file = data_dir / "model.pkl"
+            with open(model_file, 'wb') as f:
+                pickle.dump(model, f)
+
+            # Save test data for evaluation
+            test_data.to_csv(data_dir / "test_data.csv", index=False)
 
         return model
 '''
@@ -193,6 +224,7 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import pickle
+import mlflow
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
@@ -222,6 +254,10 @@ class EvaluationComponent:
             print("  ⚠ Model or test data not found")
             return
 
+        # Configure MLflow
+        mlflow.set_tracking_uri("http://localhost:5001")
+        mlflow.set_experiment("movie_recommendations")
+
         # Load model and test data
         with open(model_file, 'rb') as f:
             model = pickle.load(f)
@@ -230,22 +266,31 @@ class EvaluationComponent:
 
         print(f"Evaluating on test set ({len(test_data)} ratings)...")
 
-        # Make predictions
-        X_test = test_data[['userId', 'movieId']].values
-        y_test = test_data['rating'].values
-        y_pred = model.predict(X_test)
+        # Start MLflow run for evaluation
+        with mlflow.start_run(run_name="model_evaluation"):
+            # Make predictions
+            X_test = test_data[['userId', 'movieId']].values
+            y_test = test_data['rating'].values
+            y_pred = model.predict(X_test)
 
-        # Compute metrics
-        rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-        mae = mean_absolute_error(y_test, y_pred)
+            # Compute metrics
+            rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+            mae = mean_absolute_error(y_test, y_pred)
 
-        # Simulate accuracy@5
-        accuracy_at_5 = 0.82  # Simulated for demo
+            # Simulate accuracy@5
+            accuracy_at_5 = 0.82  # Simulated for demo
 
-        print(f"  • RMSE: {rmse:.2f}")
-        print(f"  • MAE: {mae:.2f}")
-        print(f"  • Accuracy@5: {accuracy_at_5:.2f}")
-        print("✓ Evaluation complete")
+            # Log metrics to MLflow
+            mlflow.log_metric("rmse", rmse)
+            mlflow.log_metric("mae", mae)
+            mlflow.log_metric("accuracy_at_5", accuracy_at_5)
+            mlflow.log_metric("test_samples", len(test_data))
+
+            print(f"  • RMSE: {rmse:.2f}")
+            print(f"  • MAE: {mae:.2f}")
+            print(f"  • Accuracy@5: {accuracy_at_5:.2f}")
+            print("✓ Evaluation complete")
+            print("✓ Metrics logged to MLflow")
 
         return {"rmse": rmse, "mae": mae, "accuracy_at_5": accuracy_at_5}
 '''

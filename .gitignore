@@ -40,3 +40,4 @@ deployment/volumes/*
 examples/*/data/*.csv
 examples/*/data/*.pkl
 examples/*/.backup/
+.gstack/
