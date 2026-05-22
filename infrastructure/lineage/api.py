@@ -11,6 +11,10 @@ import sys
 from pathlib import Path
 import inspect
 
+# Import workflows feature router
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from features.workflows.router import router as workflows_router
+
 app = FastAPI(title="NanoML Lineage API")
 
 # Enable CORS for dashboard
@@ -21,6 +25,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include feature routers
+app.include_router(workflows_router, prefix="/api")
 
 
 class Artifact(BaseModel):
