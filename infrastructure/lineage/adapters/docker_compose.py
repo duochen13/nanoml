@@ -16,7 +16,18 @@ class DockerComposeParser:
             compose_file_path: Path to docker-compose.yaml file
         """
         self.compose_file_path = Path(compose_file_path)
-        self.docker_client = docker.from_env()
+        self._docker_client = None
+
+    @property
+    def docker_client(self):
+        """Lazy-load Docker client."""
+        if self._docker_client is None:
+            try:
+                self._docker_client = docker.from_env()
+            except Exception as e:
+                # Docker not available - return None and handle gracefully
+                return None
+        return self._docker_client
 
     def parse_compose_file(self) -> Dict[str, Any]:
         """Parse docker-compose.yaml file.
@@ -43,9 +54,14 @@ class DockerComposeParser:
         """Get all running Docker containers.
 
         Returns:
-            List of running container objects
+            List of running container objects, empty list if Docker unavailable
         """
-        return self.docker_client.containers.list()
+        if self.docker_client is None:
+            return []
+        try:
+            return self.docker_client.containers.list()
+        except Exception:
+            return []
 
     def match_service_to_container(
         self,

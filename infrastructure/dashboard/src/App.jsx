@@ -1,8 +1,8 @@
 import React from 'react';
-import WorkflowsPage from './features/workflows';
+import LineagePage from './features/lineage';
 
 function App() {
-  return <WorkflowsPage />;
+  return <LineagePage />;
 }
 
 export default App;

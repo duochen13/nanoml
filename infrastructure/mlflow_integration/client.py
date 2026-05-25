@@ -1,7 +1,7 @@
 """MLflow client wrapper."""
 
 import mlflow
-from mlflow.tracking import MlflowClient as BaseMlflowClient
+from mlflow import MlflowClient as BaseMlflowClient
 from typing import List, Dict, Any, Optional
 
 

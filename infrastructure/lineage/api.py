@@ -11,8 +11,10 @@ import sys
 from pathlib import Path
 import inspect
 
-# Import workflows feature router
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add both infrastructure and lineage directories to path
+sys.path.insert(0, str(Path(__file__).parent.parent))  # infrastructure/
+sys.path.insert(0, str(Path(__file__).parent))  # infrastructure/lineage/
+
 from features.workflows.router import router as workflows_router
 
 # Import discovery module

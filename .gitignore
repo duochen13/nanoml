@@ -31,6 +31,9 @@ Thumbs.db
 # Project specific
 .nanorec/
 
+# Environment variables (contains secrets)
+.env
+
 # Docker volumes (runtime data - do NOT commit)
 deployment/volumes/*
 !deployment/volumes/.gitkeep
